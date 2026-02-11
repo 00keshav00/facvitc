@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Club Members - Art Club</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#2d2e30;
+  --panel:#3a3a3b;
+  --muted:#bfc1c3;
+  --accent:#e6e6e6;
+  --card-border: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.04);
+  --max-width:1300px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html, body{
+  height:100%;
+}
+
+body{
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto;
+  background:#000;
+  color:var(--accent);
+  padding:20px;
+  display:flex;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* MAIN CONTAINER */
+.site{
+  width:100%;
+  max-width:var(--max-width);
+  height:100%;
+  border-radius:15px;
+  background:transparent;
+  overflow:hidden;
+  box-shadow:0 6px 30px rgba(0,0,0,0.6);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+
+/* BACKGROUND VIDEO */
+.site-background-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-1;
+  filter:brightness(0.35);
+}
+
+/* SCROLL CONTAINER */
+.site-content{
+  flex-grow:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:none;
+}
+.site-content::-webkit-scrollbar{
+  display:none;
+}
+
+/* NAV (same style) */
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 28px;
+  background:rgba(0,0,0,0.55);
+  border-bottom:1px solid var(--card-border);
+  backdrop-filter:blur(10px);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand .logo{
+  width:38px;height:38px;
+  border-radius:6px;
+  background:linear-gradient(135deg,#ececec,#bfbfbf);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#222;
+  font-weight:700;
+}
+.brand h1{
+  font-size:16px;
+}
+
+/* PAGE CONTENT */
+.members-page{
+  padding:46px 56px;
+}
+
+/* TITLE */
+.members-page h2{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:24px;
+  text-align:center;
+}
+
+/* TABLE WRAPPER */
+.members-table-wrap{
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  background:rgba(255,255,255,0.02);
+  overflow-x:auto;
+}
+
+/* TABLE */
+.members-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+
+.members-table thead{
+  background:rgba(255,255,255,0.04);
+}
+
+.members-table th,
+.members-table td{
+  padding:14px 16px;
+  text-align:left;
+  font-size:14px;
+}
+
+.members-table th{
+  font-weight:700;
+  color:var(--accent);
+  border-bottom:1px solid var(--card-border);
+}
+
+.members-table td{
+  color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+
+.members-table tbody tr:hover{
+  background:rgba(255,255,255,0.04);
+}
+
+.members-table tbody tr:last-child td{
+  border-bottom:none;
+}
+
+/* FOOTER BUTTON */
+.footer{
+  padding:40px 56px 60px;
+  display:flex;
+  justify-content:center;
+  border-top:1px solid var(--card-border);
+}
+.btn-secondary{
+  padding:10px 18px;
+  border-radius:6px;
+  border:1px solid var(--card-border);
+  background:transparent;
+  color:var(--accent);
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.06);
+}
+/* SEARCH + FILTER BAR */
+.members-controls{
+  display:flex;
+  gap:16px;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+/* SEARCH INPUT */
+.members-search{
+  flex:1;
+  min-width:240px;
+  padding:10px 14px;
+  border-radius:8px;
+  border:1px solid var(--card-border);
+  background:rgba(255,255,255,0.04);
+  color:var(--accent);
+  font-size:14px;
+  outline:none;
+}
+
+.members-search::placeholder{
+  color:var(--muted);
+}
+
+/* FILTER BUTTONS */
+.members-filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  padding:8px 14px;
+  border-radius:20px;
+  border:1px solid var(--card-border);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted);
+  font-size:13px;
+  cursor:pointer;
+  transition:all 0.25s ease;
+}
+
+.filter-btn:hover{
+  background:rgba(255,255,255,0.08);
+  color:var(--accent);
+}
+
+.filter-btn.active{
+  background:rgba(255,255,255,0.12);
+  color:var(--accent);
+}
+
+</style>
+</head>
+
+<body>
+<div class="site">
+
+  <!-- Background video -->
+  <video class="site-background-video"
+    src="https://placehold.co/videos/1920x1080.mp4"
+    autoplay loop muted playsinline></video>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="brand">
+      <div class="logo">AC</div>
+      <h1>Art Club</h1>
+    </div>
+  </header>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="site-content">
+
+    <main class="members-page">
+      <h2>All Club Members</h2>
+      <!-- SEARCH + FILTER BAR -->
+<div class="members-controls">
+
+  <input
+    type="text"
+    id="memberSearch"
+    placeholder="Search by name or specialization..."
+    class="members-search"
+  >
+
+  <div class="members-filters">
+    <button class="filter-btn active" data-year="all">All</button>
+    <button class="filter-btn" data-year="1">1st Year</button>
+    <button class="filter-btn" data-year="2">2nd Year</button>
+    <button class="filter-btn" data-year="3">3rd Year</button>
+    <button class="filter-btn" data-year="4">4th Year</button>
+  </div>
+
+</div>
+
+
+      <div class="members-table-wrap">
+        <table class="members-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Year</th>
+              <th>Art Specialization</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Aditya Sharma</td><td>4th Year</td><td>Watercolor</td></tr>
+            <tr><td>Kavya Reddy</td><td>3rd Year</td><td>Digital Illustration</td></tr>
+            <tr><td>Vikram Singh</td><td>2nd Year</td><td>Charcoal Sketching</td></tr>
+            <tr><td>Ananya Das</td><td>3rd Year</td><td>3D Digital Art</td></tr>
+            <tr><td>Karan Malhotra</td><td>4th Year</td><td>Abstract Art</td></tr>
+            <tr><td>Simran Kaur</td><td>2nd Year</td><td>Fantasy Art</td></tr>
+            <tr><td>Neha Gupta</td><td>1st Year</td><td>Portrait Drawing</td></tr>
+            <tr><td>Rahul Verma</td><td>3rd Year</td><td>Acrylic Painting</td></tr>
+            <tr><td>Prannav Raj VS</td><td>2nd Year</td><td>Charcoal Sketching</td></tr>
+            <tr><td>Samyukktha KP</td><td>2nd Year</td><td>Acrylic Painting, Charcoal Sketching</td></tr>
+            <tr><td>Shreya Bharati</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Subhasri Balachandiran</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Raseika Subramanian</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Vanshita Patil</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Aditya Nair</td><td>3rd Year</td><td> </td></tr>
+            <tr><td>Manasa Ganesh</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Moumin Zaara</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Madhumitha S</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Harini P</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Nivetha BK</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Prithivisree S</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Reshma</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Reyna Jeprison</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Pragnya P</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Arya Amte</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Tanya Vasudevan</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Sreyas Sanil</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Kartikey Singh</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Tiya Sur</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Harini Kamatchi</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Preethika G</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Ayush Kumar</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Vidhula P</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Prathamesh Avinashrao Burange</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Ashwika S</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Mridula B</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Nandhana S R</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>R Sanjaysriram</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Ankana Datta</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Arathi Manukumar</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Sumedha</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>N Divya Shri</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Vidhi Mehta</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Sree Saindhavi</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Riddhima Singhal</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Sharon Ramkumar</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Neelima Bipin</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Vishrutha G M</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Varsha Kondamadugula</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Prakruthi H</td><td>2nd Year</td><td> </td></tr>
+            <tr><td>Rituparna Shaw</td><td>2nd Year</td><td> </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script>
+const searchInput = document.getElementById('memberSearch');
+const filterButtons = document.querySelectorAll('.filter-btn');
+const rows = document.querySelectorAll('.members-table tbody tr');
+
+let activeYear = 'all';
+
+function filterTable(){
+  const searchText = searchInput.value.toLowerCase();
+
+  rows.forEach(row => {
+    const name = row.cells[0].textContent.toLowerCase();
+    const yearText = row.cells[1].textContent;
+    const specialization = row.cells[2].textContent.toLowerCase();
+
+    const yearMatch =
+      activeYear === 'all' || yearText.startsWith(activeYear);
+
+    const searchMatch =
+      name.includes(searchText) ||
+      specialization.includes(searchText);
+
+    row.style.display = (yearMatch && searchMatch) ? '' : 'none';
+  });
+}
+
+/* SEARCH */
+searchInput.addEventListener('input', filterTable);
+
+/* YEAR FILTERS */
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeYear = btn.dataset.year;
+    filterTable();
+  });
+});
+</script>
+
+
+  </div>
+</div>
+</body>
+</html>

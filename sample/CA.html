@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Concept Art - Art Club</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+ --bg:#2d2e30;
+ --panel:#3a3a3b;
+ --muted:#bfc1c3;
+ --accent:#e6e6e6;
+ --card-border: rgba(255,255,255,0.06);
+ --glass: rgba(255,255,255,0.04);
+ --max-width: 1300px; /* --- MODIFIED: Was 1150px --- */
+ }
+*{box-sizing:border-box;margin:0;padding:0}
+ 
+ /* --- MODIFIED --- */
+ html{
+  scroll-behavior:smooth;
+  height: 100%;
+ }
+ body{
+ font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+ /* --- MODIFIED: Set to solid black --- */
+ background: #000;
+ color:var(--accent);
+ line-height:1.45;
+ padding: 20px; /* --- MODIFIED: Was 36px 20px --- */
+ display:flex;
+ justify-content:center;
+ /* --- MODIFIED --- */
+ height: 100%;
+ overflow: hidden; /* Stops the body from scrolling */
+}
+.site {
+ width:100%;
+ max-width:var(--max-width);
+ border-radius: 15px; /* --- ADDED: From your other file --- */
+ /* --- MODIFIED: Made transparent for video --- */
+ background: transparent;
+ overflow:hidden;
+ box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+ 
+ /* --- ADDED: For layout and video --- */
+ height: 100%;
+ display: flex;
+ flex-direction: column;
+ position: relative;
+}
+
+/* --- ADDED: Background Video styles --- */
+.site-background-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.4);
+}
+
+/* --- ADDED: New scrollable content wrapper --- */
+.site-content {
+  flex-grow: 1; /* Fills the remaining space */
+  overflow-y: auto; /* Makes this element scrollable */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  
+  /* --- ADDED: Hide scrollbar --- */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+/* --- ADDED: Hide scrollbar for Chrome, Safari --- */
+.site-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* (Original navbar styles left untouched as requested) */
+.nav {
+display:flex;align-items:center;justify-content:space-between;
+padding:18px 28px;
+background:rgba(0,0,0,0.55);
+border-bottom:1px solid var(--card-border);
+position:sticky;top:0;z-index:100;
+backdrop-filter: blur(10px);
+}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand .logo{
+width:38px;height:38px;border-radius:6px;
+background:linear-gradient(135deg,#ececec,#bfbfbf);
+display:flex;align-items:center;justify-content:center;
+color:#222;font-weight:700;font-size:18px;
+}
+.brand h1{font-size:16px;letter-spacing:0.6px}
+.nav-links{display:flex;gap:22px;align-items:center;color:var(--muted);font-weight:600;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;padding:8px 6px;}
+.nav-links a:hover{color:var(--accent)}
+.search{width:36px;height:36px;border-radius:6px;border:1px solid var(--card-border);
+display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--glass);}
+.footer{padding:40px 56px 60px;display:flex;justify-content:center;border-top:1px solid var(--card-border);}
+.btn-secondary{padding:10px 18px;border-radius:6px;border:1px solid var(--card-border);background:transparent;color:var(--accent);font-weight:600;}
+
+
+/* ===== NEW STYLES FOR GALLERY PAGE ===== */
+
+/* Main content area */
+.gallery-page {
+padding: 46px 56px; 
+border-top: 1px solid var(--card-border);
+}
+.gallery-page h2 {
+font-size: 28px;
+font-weight: 700;
+margin-bottom: 24px;
+text-align: center;
+}
+
+/* The 3-column grid */
+.image-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr); 
+gap: 16px;
+}
+
+/* Each grid item */
+.grid-item {
+position: relative;
+overflow: hidden;
+border-radius: 8px;
+aspect-ratio: 1 / 1; 
+border: 1px solid var(--card-border);
+background: var(--panel);
+}
+
+/* The image inside */
+.grid-item img {
+width: 100%;
+height: 100%;
+object-fit: cover; 
+transition: transform 0.3s ease;
+}
+
+/* The caption (hidden by default) */
+.grid-item .caption {
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+background: linear-gradient(0deg, rgba(0,0,0,0.8), transparent);
+color: var(--accent);
+padding: 24px 12px 12px;
+font-weight: 600;
+font-size: 14px;
+opacity: 0;
+transform: translateY(20px);
+transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* HOVER EFFECT */
+ .grid-item:hover .caption {
+opacity: 1;
+transform: translateY(0);
+ }
+ .grid-item:hover img {
+transform: scale(1.05);
+}
+
+ /* Responsive: 2 columns on tablets */
+ @media (max-width: 768px) {
+.image-grid {
+ grid-template-columns: repeat(2, 1fr);
+ gap: 12px;
+ }
+.gallery-page {
+ padding: 30px 24px;
+ }
+ }
+/* Responsive: 1 column on phones */
+ @media (max-width: 480px) {
+ .image-grid {
+ grid-template-columns: 1fr;
+gap: 12px;
+}
+}
+</style>
+</head>
+<body>
+<div class="site">
+
+ <video class="site-background-video" src="https://placehold.co/videos/1920x1080.mp4" poster="images/hero.jpg" autoplay loop muted playsinline></video>
+
+ <div class="site-content">
+
+   <main class="gallery-page">
+     <h2>Concept Art</h2>
+  
+    <div class="image-grid">
+          </div>
+   </main>
+   
+  <footer class="footer">
+  <button class="btn-secondary">Back to Top</button>
+   </footer>
+  
+ </div> </div>
+
+<script>
+  // --- MODIFIED: Script now targets the scrolling container ---
+  const scrollContainer = document.querySelector('.site-content');
+  
+  document.querySelector('.btn-secondary').onclick = () => {
+    scrollContainer.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+<script>
+async function loadConceptArtImages() {
+  const grid = document.querySelector(".image-grid");
+  if (!grid) return;
+
+  const API_URL = "https://image.vps1.followapp.co.in/api/media/all";
+  const AUTH_HEADER = "Basic " + btoa("admin:123456789");
+  const PAGE_KEY = "concept_art";
+
+  try {
+    const res = await fetch(API_URL, {
+      headers: { Authorization: AUTH_HEADER }
+    });
+
+    if (!res.ok) throw new Error("API error");
+
+    const result = await res.json();
+    grid.innerHTML = "";
+
+    result.data
+      .filter(item => {
+        const key = PAGE_KEY;
+        return (
+          (item.alt && item.alt.toLowerCase().includes(key)) ||
+          (item.name && item.name.toLowerCase().includes(key)) ||
+          (item.url && item.url.toLowerCase().includes(key))
+        );
+      })
+      .forEach(item => {
+        const card = document.createElement("div");
+        card.className = "grid-item";
+        card.innerHTML = `<img src="${item.url}" alt="">`;
+        grid.appendChild(card);
+      });
+
+  } catch (err) {
+    console.error("Concept Art load error:", err);
+  }
+}
+
+loadConceptArtImages();
+</script>
+
+</body>
+</html>

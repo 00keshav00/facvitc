@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>College Art Club</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --bg:#2d2e30;
+      --panel:#3a3a3b;
+      --muted:#bfc1c3;
+      --accent:#e6e6e6;
+      --card-border: rgba(255,255,255,0.08);
+      --glass: rgba(255,255,255,0.04);
+      --max-width: 1300px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    
+    html{ height: 100%; }
+    
+    body{
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: #000;
+      color:var(--accent);
+      line-height:1.45;
+      padding: 20px;
+      display:flex;
+      justify-content:center;
+      height: 100%;
+      overflow: hidden; 
+    }
+
+    .site {
+      width:100%;
+      max-width:var(--max-width);
+      border-radius: 15px;
+      background: transparent;
+      overflow:hidden;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+      height: 100%; 
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .site-background-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.5); 
+    }
+    
+    .site-content {
+      flex-grow: 1; 
+      overflow-y: auto; 
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .site-content::-webkit-scrollbar { display: none; }
+
+    /* NAVBAR */
+    .nav {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 20px;
+      background: transparent;
+      border-bottom: 1px solid var(--card-border);
+      border-radius: 0;
+      backdrop-filter: blur(10px);
+      flex-shrink: 0; 
+      position: relative; 
+      z-index: 100;
+    }
+    .brand{display:flex;align-items:center;gap:12px;}
+    .brand .logo{
+      width:38px;height:38px;border-radius:6px;
+      background:linear-gradient(135deg,#ececec,#bfbfbf);
+      display:flex;align-items:center;justify-content:center;
+      color:#222;font-weight:700;font-size:18px;
+    }
+    .brand h1{font-size:16px;letter-spacing:0.6px}
+    .nav-links{display:flex;gap:22px;align-items:center;color:var(--muted);font-weight:600;}
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      padding:8px 12px;
+      border-radius: 6px;
+      transition: color 0.2s ease, background-color 0.2s ease;
+    }
+    .nav-links a:hover{ color: #000; background: #fff; }
+
+    /* HERO */
+    .hero{
+      position:relative;height:420px;display:flex;align-items:center;
+      padding:36px 48px;gap:40px;overflow:hidden;
+    }
+    .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;
+      filter:contrast(0.95) saturate(0.9) brightness(0.7);z-index:0;}
+    .hero-content{position:relative;z-index:2;max-width:56%;}
+    .hero h2{font-size:44px;line-height:1.02;margin-bottom:12px;color:var(--accent);}
+    .hero p{color:var(--muted);margin-bottom:18px;max-width:48ch;}
+    .cta{display:inline-block;padding:10px 16px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);
+      background:rgba(15,15,15,0.45);color:var(--accent);text-decoration:none;font-weight:600;}
+
+    /* ABOUT */
+    .panel{
+      padding:46px 56px;
+      border-top:1px solid var(--card-border);
+      display:flex;gap:40px;align-items:flex-start;
+      background:linear-gradient(180deg,rgba(255,255,255,0.005),transparent);
+    }
+    .section-title{font-weight:700;font-size:20px;margin-bottom:12px;color:var(--accent);}
+    .about-text{color:var(--muted);font-size:15px;max-width:48ch;}
+    
+    /* ABOUT GRID & ANIMATIONS */
+    .about-grid{
+      display:grid;
+      grid-template-columns: 0.9fr 1.8fr;
+      grid-template-rows: 110px 110px;
+      gap:12px;
+      margin-left:204px;
+    }
+    @keyframes floatVideo {
+      0%   { --fy: 0px; } 25%  { --fy: -6px; } 50%  { --fy: -14px; } 75%  { --fy: -6px; } 100% { --fy: 0px; }
+    }
+    @keyframes floatImage {
+      0%   { --fy: 0px; } 25%  { --fy: -4px; } 50%  { --fy: -9px; } 75%  { --fy: -4px; } 100% { --fy: 0px; }
+    }
+    .about-video-box{
+      grid-row:1 / span 2; position:relative; overflow:hidden; border-radius:18px; border:1.4px solid #5A3E2B; background:black;
+      --scale: 1.06; --fy: 0px;
+      transform: translateY(var(--fy)) scale(var(--scale));
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      animation: floatVideo 7s cubic-bezier(0.45,0,0.55,1) infinite; animation-delay: .6s; z-index:2;
+    }
+    .about-video-box video{ width:100%; height:100%; object-fit:cover; }
+    .about-grid img{
+      width:100%; height:100%; object-fit:cover; border-radius:12px; border:1.4px solid #5A3E2B;
+      --scale: 0.82; --fy: 0px;
+      transform: translateY(var(--fy)) scale(var(--scale));
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      animation: floatImage 9s cubic-bezier(0.45,0,0.55,1) infinite;
+    }
+    .about-grid img:nth-of-type(1){ animation-delay: 0s; }
+    .about-grid img:nth-of-type(2){ animation-delay: 1.4s; }
+    .about-grid img:nth-of-type(3){ animation-delay: 2.8s; }
+    .about-grid:has(.about-video-box:hover) .about-video-box{ --scale: 1.22; z-index:5; opacity:1; }
+    .about-grid:has(.about-video-box:hover) img{ --scale: 0.7; opacity:0.55; }
+    .about-grid img:hover{ --scale: 0.88; opacity:1; }
+    .mute-btn{
+      position:absolute; bottom:10px; right:10px; width:34px; height:34px; border-radius:50%; border:none;
+      background:rgba(0,0,0,0.6); color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      backdrop-filter: blur(6px); z-index:10;
+    }
+    .mute-btn:hover{ background:rgba(0,0,0,0.8); }
+
+    /* ART CARD */
+    .art-card {  
+        width: 850px;  
+        height: 400px;  
+        background: rgba(0, 0, 0, 0.6); 
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 24px;  
+        display: flex;  
+        align-items: center;  
+        padding: 20px;  
+        gap: 40px;  
+        margin: 0 auto 50px auto; 
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);  
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        position: relative;
+        z-index: 5;
+    }  
+    .art-image-container {  
+        flex: 0 0 45%; 
+        height: 100%;  
+        overflow: hidden;  
+        border-radius: 16px;  
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);  
+    }  
+    .art-image {  
+        width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;  
+    }  
+    .art-image-container:hover .art-image { transform: scale(1.05); }  
+    .art-content {  
+        flex: 1;  
+        color: #eaddcf; 
+        display: flex; flex-direction: column; justify-content: center;  
+        padding-right: 20px; text-align: left;
+    }  
+    .art-content .label {  
+        font-size: 1.1rem; font-weight: 600; color: #ffffff; margin-bottom: 5px; letter-spacing: 0.5px;  
+    }  
+    .art-content .title {  
+        font-size: 2.2rem; font-weight: 700; margin: 0 0 20px 0; color: #ffffff; line-height: 1.2;  
+    }  
+    .art-content .description {  
+        font-size: 0.95rem; line-height: 1.6; color: rgba(255, 255, 255, 0.85); margin-bottom: 30px;  
+    }  
+    .art-content .view-btn {  
+        width: 100%; padding: 14px 0; background: transparent;  
+        border: 1px solid rgba(255, 255, 255, 0.4);  
+        color: #fff;  
+        font-size: 1rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;  
+        border-radius: 12px; cursor: pointer; transition: all 0.3s ease;  
+    }  
+    .art-content .view-btn:hover {  
+        background: rgba(255, 255, 255, 0.1); border-color: #fff; transform: translateY(-2px);  
+    }  
+
+    /* SLIDER */
+    .gallery-section{
+      padding:60px 56px;
+      border-top:1px solid var(--card-border);
+      text-align:center;
+      background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);
+      position:relative;
+      overflow:visible;
+    }
+    .gallery-section h2{margin-bottom:40px; font-size: 2rem;}
+
+    .slider-container{
+      position:relative; width:100%; max-width:950px; height:520px;
+      margin:0 auto; border:1px solid var(--card-border); border-radius:10px;
+      overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+      box-shadow:0 6px 30px rgba(0,0,0,0.4);
+    }
+    .slider-videos{ position:absolute; inset:0; width:100%; height:100%; overflow:hidden; z-index:1; }
+    .slider-videos .bgvid{ 
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;
+      opacity:0; transition:opacity .45s ease; pointer-events:none; filter:brightness(0.55) saturate(0.9);
+    }
+    .slider-videos .bgvid.active{ opacity:1; } 
+    .content1{
+      position:relative; z-index:4; width:92%; max-width:920px; margin:0 auto;
+      text-align:center; color:var(--accent); top:50%; transform:translateY(-50%); padding:20px 10px;
+    }
+    .content1 .model{display:none;font-size:34px;margin-bottom:10px;font-weight:700}
+    .content1 .model.active{display:block}
+    .content1 .pa1{color:var(--muted);font-size:15px;line-height:1.6;max-width:760px;margin:0 auto 26px;}
+    .gallery {
+      width:84%; margin:0 auto; background:rgba(0,0,0,0.25); border-radius:14px;
+      padding:18px 8px; box-shadow:0 8px 30px rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index:5;
+    }
+    .swiper { width:100%; padding:10px 0; }
+    .swiper-wrapper { align-items:center; }
+    .swiper-slide { width:auto; display:flex; justify-content:center; align-items:center; cursor:pointer; }
+    
+    /* ADDED THIS FOR LINKS IN SLIDER */
+    .swiper-slide a { display: block; width: 100%; height: 100%; text-decoration: none; }
+
+    .swiper-slide img{
+      width:230px; height:150px; border-radius:12px; object-fit:cover; object-position:center;
+      border:1px solid rgba(255,255,255,0.06); transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .swiper-slide-active img, .swiper-slide-thumb-active img{ transform:scale(1.06); box-shadow:0 10px 30px rgba(0,0,0,0.6); }
+    .swiper-pagination-bullets { bottom: 6px; }
+
+    /* EVENTS */
+    .events{ 
+      padding:60px 56px; border-top:1px solid var(--card-border); 
+      display: flex; flex-direction: column; align-items: center; gap: 60px; 
+    }
+    .event-container {  
+        position: relative; width: 800px; height: 450px;  
+        background: rgba(0, 0, 0, 0.5);   
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: 24px;  
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);  
+        display: flex; justify-content: center; align-items: center; overflow: hidden;   
+    }  
+    .floating-img {  
+        position: absolute; width: 200px; height: 120px; border-radius: 12px;  
+        object-fit: cover; z-index: 1; border: 1px solid rgba(255, 255, 255, 0.2);  
+        transition: transform 0.4s ease;  
+    }  
+    .img-left { bottom: 40px; left: 40px; transform: rotate(-3deg); }  
+    .img-right { top: 40px; right: 40px; transform: rotate(3deg); }  
+    .glass-card {  
+        position: relative; z-index: 10; width: 420px; padding: 40px; text-align: center; color: #fff;  
+        background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);   
+        border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);  
+    }  
+    .glass-card .description {  
+        font-size: 1rem; line-height: 1.6; margin-bottom: 25px; color: rgba(255, 255, 255, 0.9);  
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);   
+    }  
+    .techno-btn {  
+        background: transparent; border: 1px solid rgba(255, 255, 255, 0.5); color: white;  
+        padding: 12px 30px; font-size: 1rem; font-weight: 700; letter-spacing: 1px;  
+        border-radius: 50px; cursor: pointer; text-transform: uppercase;  
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        text-decoration: none; display: inline-block;
+    }  
+    .techno-btn:hover {  
+        transform: scale(1.15); background: rgba(255, 255, 255, 0.1); border-color: #fff; box-shadow: none; 
+    }  
+
+    /* MODAL STYLES */
+    .modal {
+      display: none; 
+      position: fixed; 
+      z-index: 9999; 
+      left: 0;
+      top: 0;
+      width: 100%; 
+      height: 100%; 
+      overflow: auto; 
+      background-color: rgba(0,0,0,0.9); 
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 900px;
+      max-height: 90vh;
+      object-fit: contain;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+      z-index: 10000;
+      line-height: 1;
+    }
+    .close-modal:hover,
+    .close-modal:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* MEMBERS SECTION */
+    .testimonials {
+      padding: 60px 56px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px; 
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.03));
+    }
+
+    .members-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .test-card {
+      width: 320px; 
+      max-width: 100%; 
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.45); }
+    
+    .member-image { width: 100%; height: 200px; overflow: hidden; }
+    .member-image img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .person { display: flex; flex-direction: column; gap: 2px; padding: 14px 18px 6px; }
+    .person strong { font-size: 16px; color: var(--accent); }
+    .role { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .quote { padding: 0 18px 18px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    .members-cta { display: flex; justify-content: center; margin: 30px 0; }
+    .members-btn {
+      padding: 10px 22px; border-radius: 8px; border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04); color: var(--accent); text-decoration: none;
+      font-weight: 600; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+    .members-btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+    /* FOOTER & CONNECT */
+    .connect-section{ padding:40px 56px 60px; display:flex; justify-content:center; border-top:1px solid var(--card-border); }
+    .connect-card{
+      width:100%; max-width:900px; padding:34px 28px; border-radius:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border:1px solid var(--card-border); text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.45);
+    }
+    .connect-card h2{ font-size:22px; font-weight:700; color:var(--accent); margin-bottom:8px; }
+    .connect-card p{ font-size:14px; color:var(--muted); margin-bottom:22px; }
+    .connect-icons{ display:flex; justify-content:center; gap:16px; }
+    .connect-icons a{
+      width:44px; height:44px; border-radius:50%; display:flex; align-items:center;
+      justify-content:center; text-decoration:none; font-size:18px;
+      background:rgba(255,255,255,0.04); border:1px solid var(--card-border);
+      color:var(--accent); transition:all 0.3s ease;
+    }
+    .connect-icons a:hover{ background:rgba(255,255,255,0.1); transform:translateY(-3px); }
+    .footer{padding:40px 56px 60px;display:flex;justify-content:center;border-top:1px solid var(--card-border);}
+    .btn-secondary{padding:10px 18px;border-radius:6px;border:1px solid var(--card-border);background:transparent;color:var(--accent);font-weight:600;}
+    
+    .reveal{ opacity:0; transform:translateY(8px); transition:all 600ms ease; }
+    .reveal.visible{ opacity:1; transform:none; }
+    
+    @media (max-width: 900px){
+      .members-row { flex-direction: column; align-items: center; }
+      .test-card { width: 100%; max-width: 400px; }
+
+      .slider-container{height:440px}
+      .swiper-slide img{width:180px;height:120px}
+      .content1 .model{font-size:28px}
+    }
+    @media (max-width: 560px){
+      .slider-container{height:420px}
+      .swiper-slide img{width:150px;height:100px}
+    }
+  </style>
+</head>
+<body>
+  <div class="site">
+    
+    <video class="site-background-video" src="texture8.mp4" poster="images/hero.jpg" autoplay loop muted playsinline></video>
+
+    <header class="nav">
+      <div class="brand">
+        <div class="logo">FAC</div>
+        <div><h1>Fine Arts Club</h1></div>
+      </div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#events">Events</a>
+        <a href="#members">Members</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      </header>
+  
+    <main class="site-content">
+  
+      <section class="hero" id="home">
+        <div class="hero-bg" style="background-image:url('images/hero.jpg');"></div>
+        <div class="hero-content reveal">
+          <h2>Creativity Lives Here.</h2>
+          <p>Celebrate the passion and artistry of our students. Explore our gallery and meet the artists shaping our campus culture.</p>
+          <a class="cta" href="#gallery">Discover Our Art</a>
+        </div>
+      </section>
+
+      <section class="panel" id="about">
+        <div>
+          <div class="section-title">About Our Club</div>
+          <p class="about-text">We bring together creative minds to learn, share and exhibit. Our workshops, exhibitions, and community events provide a platform for everyone passionate about art.</p>
+        </div>
+        <div class="about-grid">
+          <img src="technoph.jpeg" alt="">
+          <div class="about-video-box">
+            <video id="aboutVideo" src="fac1.mp4" muted loop></video>
+            <button class="mute-btn" onclick="toggleMute(event)">🔇</button>
+          </div>
+          <img src="vibe1.webp" alt="">
+          <img src="ph4.jpeg" alt="">
+          <img src="wall.webp" alt="">
+        </div>
+      </section>
+
+      <section class="gallery-section" id="gallery">
+        <h2>Featured Artworks</h2>
+        
+        <div class="art-card">
+            <div class="art-image-container">  
+                <img src="https://images.unsplash.com/photo-1578301978693-85e6c0f67992?q=80&w=800&auto=format&fit=crop"   
+                     alt="Starry Night Style Artwork"   
+                     class="art-image"
+                     id="featured-art-img">  
+            </div>  
+            <div class="art-content">  
+                <div class="label">Artwork of the Week:</div>  
+                <h2 class="title">"Celestial Dance"</h2>  
+                <p class="description">  
+                    An exploration of movement and light using charcoal and digital overlays. Created by member Aarav Gupta. 
+                </p>  
+                <button class="view-btn" id="viewPieceBtn">VIEW PIECE</button>  
+            </div>  
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-videos">
+            <img class="bgvid games active" src="tops.png"></img>
+            <img class="bgvid anime" src="themed.jpeg"></img>
+            <img class="bgvid rifle" src="themed.jpeg"></img>
+            <img class="bgvid volley" src="port.jpeg"></img>
+            <img class="bgvid lin" src="digital.png"></img>
+          </div>
+
+          <div class="content1">
+            <h1 class="model games active">Top Picks</h1>
+            <h1 class="model anime">Art for a Cause</h1>
+            <h1 class="model rifle">Concept Art</h1>
+            <h1 class="model volley">Portraits</h1>
+            <h1 class="model lin">Digital Artworks</h1>
+
+            <p id="dynamicText" class="pa1">
+             The artworks showcased below reflect a range of imaginative concepts, visual narratives, and creative interpretations, highlighting the artists’ ability to translate ideas into compelling visuals.
+            </p>
+
+            <div class="gallery">
+              <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                  
+                  <div class="swiper-slide" data-name="games">
+                    <a href="TopPicks.html">
+                      <img src="mp1.jpg" alt="games" />
+                    </a>
+                  </div>
+
+                  <div class="swiper-slide" data-name="anime">
+                    <a href="AfaC.html">
+                      <img src="afc1.jpg" alt="anime" />
+                    </a>
+                  </div>
+
+                  <div class="swiper-slide" data-name="rifle">
+                    <a href="CA.html">
+                      <img src="c1.jpg" alt="rifle" />
+                    </a>
+                  </div>
+
+                  <div class="swiper-slide" data-name="volley">
+                    <a href="P.html">
+                      <img src="p1.jpeg" alt="volley" />
+                    </a>
+                  </div>
+
+                  <div class="swiper-slide" data-name="lin">
+                    <a href="DA.html">
+                      <img src="da1.jpg" alt="lin" />
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </section>
+
+      <section class="events" id="events">
+        <div class="section-title" style="align-self: flex-start;">Events</div>
+
+        <div class="event-container">  
+            <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=400&auto=format&fit=crop"   
+                 class="floating-img img-left" alt="Event Left">  
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=400&auto=format&fit=crop"   
+                 class="floating-img img-right" alt="Event Right">  
+            <div class="glass-card">  
+                <p class="description">  
+                    Our flagship tech-art festival featuring installations, digital mapping, and interactive exhibits.
+                </p>  
+                <a href="techno2.html" class="techno-btn">TECHNOVIT</a>  
+            </div>  
+        </div>
+
+        <div class="event-container">  
+            <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=400&auto=format&fit=crop"   
+                 class="floating-img img-left" alt="Abstract Art">  
+            <img src="https://images.unsplash.com/photo-1561214115-f2f134cc4912?q=80&w=400&auto=format&fit=crop"   
+                 class="floating-img img-right" alt="Gallery Wall">  
+            <div class="glass-card">  
+                <p class="description">  
+                   A celebration of color and traditional media. Join us for the annual painting and sculpture showcase.
+                </p>  
+                <a href="vibrance2.html" class="techno-btn">VIBRANCE</a>  
+            </div>  
+        </div>
+
+        <div class="event-container">  
+            <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400&auto=format&fit=crop"   
+                 class="floating-img img-left" alt="Hands Painting">  
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=400&auto=format&fit=crop"   
+                 class="floating-img img-right" alt="Friends laughing">  
+            <div class="glass-card">  
+                <p class="description">  
+                    Weekly hands-on sessions. Learn pottery, sketching, and digital design from industry experts.
+                </p>  
+                <a href="workshops2.html" class="techno-btn">WORKSHOPS</a>  
+            </div>  
+        </div>
+
+      </section>
+      
+      <section class="testimonials" id="members">
+
+  <!-- FACULTY -->
+  <div class="members-row">
+    <div class="test-card reveal">
+      <div class="member-image">
+        <img src="images/faculty.jpg" alt="Faculty">
+      </div>
+
+      <div class="person">
+        <strong>
+          Dr. Anjali Sharma
+          <a href="#" class="member-link" target="_blank" aria-label="Profile link">🔗</a>
+        </strong>
+        <span class="role">Faculty Coordinator</span>
+      </div>
+
+      <div class="quote">
+        Guiding the club with vision and academic excellence.
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE TEAM -->
+  <div class="members-row">
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="president.jpg" alt="President"></div>
+      <div class="person">
+        <strong>
+          Prasenjit Choudhury
+          <a href="https://www.instagram.com/_artfulexpression_?igsh=MXhramwyc3F2OGhnag==" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">President</span>
+      </div>
+      <div class="quote">Passionate about traditional and contemporary art forms.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="vicepresident.jpg" alt="VP"></div>
+      <div class="person">
+        <strong>
+          Abhinav Santosh Kumar
+          <a href="https://www.instagram.com/ask_artwork?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Vice President</span>
+      </div>
+      <div class="quote">Exploring digital art and motion graphics.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="vicechairperson.jpg" alt="VCP"></div>
+      <div class="person">
+        <strong>
+          Shubhangi Joshi
+          <a href="" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Vice Chairperson</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="socialmedialead.png" alt="SL"></div>
+      <div class="person">
+        <strong>
+          Aditya Jha
+          <a href="https://www.linkedin.com/in/aditya-jha-25819727b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Social Media Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="managementlead.jpg" alt="ML1"></div>
+      <div class="person">
+        <strong>
+          Shreya Ranjitha M
+          <a href="" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Management Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="managementlead1.jpg" alt="ML2"></div>
+      <div class="person">
+        <strong>
+          Kaustuv Bhattacharjee
+          <a href="https://www.linkedin.com/in/kaustuv-bhattacharjee-27a7b7244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Management Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="marketinglead.jpg" alt="MkL1"></div>
+      <div class="person">
+        <strong>
+          Saurabh Kumar Verma
+          <a href="" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Marketing Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="marketinglead1.jpg" alt="MkL2"></div>
+      <div class="person">
+        <strong>
+          P. Fabion
+          <a href="https://www.instagram.com/fabion._1725/?utm_source=ig_web_button_share_sheet" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Marketing Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="designlead1.jpg" alt="DL1"></div>
+      <div class="person">
+        <strong>
+          Shreeya Kollipara
+          <a href="" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Design Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="designlead.jpg" alt="DL2"></div>
+      <div class="person">
+        <strong>
+          Srinithi RM
+          <a href="https://youtube.com/@heartspink1?si=IX0YAIxELWUBu0gn" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Design Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="editoriallead.jpg" alt="EL"></div>
+      <div class="person">
+        <strong>
+          Snehal Sushibine
+          <a href="" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Editorial Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="socialmedialead.png" alt="SL"></div>
+      <div class="person">
+        <strong>
+          Suyash Jaysawal
+          <a href="https://www.instagram.com/_ssuyash04_/?utm_source=ig_web_button_share_sheet" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Social Media Lead</span>
+      </div>
+      <div class="quote">Focused on concept art and visual storytelling.</div>
+    </div>
+
+  </div>
+
+  <!-- DEV TEAM -->
+  <div class="members-row">
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="images/dev1.jpg" alt="Dev 1"></div>
+      <div class="person">
+        <strong>
+          Rohan Das
+          <a href="#" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Lead Developer</span>
+      </div>
+      <div class="quote">Full-stack wizard ensuring smooth user experience.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="images/dev2.jpg" alt="Dev 2"></div>
+      <div class="person">
+        <strong>
+          Sarah Lee
+          <a href="#" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">UI/UX Designer</span>
+      </div>
+      <div class="quote">Crafting the visual interface and animations.</div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="member-image"><img src="images/dev3.jpg" alt="Dev 3"></div>
+      <div class="person">
+        <strong>
+          Arjun V
+          <a href="#" class="member-link" target="_blank">🔗</a>
+        </strong>
+        <span class="role">Backend Engineer</span>
+      </div>
+      <div class="quote">Managing databases and server logic.</div>
+    </div>
+
+  </div>
+
+</section>
+
+      <div class="members-cta">
+        <a href="members.html" class="members-btn">View All FAC Members</a>
+      </div>
+
+      <section class="connect-section" id="contact">
+        <div class="connect-card">
+          <h2>Connect With Us</h2>
+          <p>Follow our journey and stay updated with the latest events and exhibitions.</p>
+          <div class="connect-icons">
+            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" target="_blank"><i class="fa-brands fa-threads"></i></a>
+            <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-solid fa-envelope"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <button class="btn-secondary">Back to Top</button>
+      </footer>
+      
+    </main> 
+  </div>
+
+  <div id="artModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImg">
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    const scrollContainer = document.querySelector('.site-content');
+  
+    const reveals = document.querySelectorAll('.reveal');
+    const scrollHandler = () => {
+      const h = window.innerHeight;
+      reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < h - 60) el.classList.add('visible');
+      });
+    };
+    
+    scrollContainer.addEventListener('scroll', scrollHandler);
+    scrollHandler(); 
+
+    document.querySelector('.btn-secondary').onclick = () => {
+      scrollContainer.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // MODAL LOGIC
+    const modal = document.getElementById("artModal");
+    const img = document.getElementById("featured-art-img");
+    const modalImg = document.getElementById("modalImg");
+    const viewBtn = document.getElementById("viewPieceBtn");
+    const span = document.getElementsByClassName("close-modal")[0];
+
+    viewBtn.onclick = function() {
+      modal.style.display = "block";
+      modalImg.src = img.src;
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    // Close modal if user clicks outside the image
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // SLIDER LOGIC
+    function changeVideo(name) {
+      if (!name) return;
+      const vids = document.querySelectorAll('.slider-videos .bgvid');
+      const models = document.querySelectorAll('.content1 .model');
+      const textEl = document.getElementById('dynamicText');
+      // Removed browseBtn reference as element is deleted
+
+      const descriptions = {
+        games: "Gaming isn't just a hobby, it's a lifestyle. Whether it's FPS, strategy, or open-world, I immerse myself fully. My reflexes are sharp, teamwork is solid, and I thrive under pressure.",
+        anime: "Anime shaped the way I think visually and emotionally. From complex plots to powerful characters, I find inspiration in every episode. It fuels my creativity and teaches me values through vibrant worlds.",
+        rifle: "As a rifle shooter, I rely on precision, patience, and laser-sharp focus. Hitting a target from a distance demands mental clarity, discipline, and consistency.",
+        volley: "Volleyball drives my passion for teamwork and athleticism. Whether it’s setting, spiking, or diving for a save, I give my all on the court.",
+        lin: "I use Arch, by the way. Linux empowers me to control every part of my system. From terminal commands to automation, I'm in full command."
+      };
+    
+      vids.forEach(v => {
+        v.classList.remove('active');
+        if (v.classList.contains(name)) v.classList.add('active');
+      });
+
+      models.forEach(m => {
+        m.classList.remove('active');
+        if (m.classList.contains(name)) m.classList.add('active');
+      });
+
+      if (descriptions[name]) textEl.textContent = descriptions[name];
+    }
+
+    const swiper = new Swiper('.mySwiper', {
+      slidesPerView: 3,
+      spaceBetween: 28,
+      centeredSlides: true,
+      grabCursor: true,
+      loop: true,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        0: { slidesPerView: 1.1, spaceBetween: 14 },
+        640: { slidesPerView: 2.1, spaceBetween: 20 },
+        900: { slidesPerView: 3, spaceBetween: 28 },
+      },
+      on: {
+        slideChange: function () {
+          const activeSlide = this.slides[this.activeIndex];
+          const name = activeSlide && activeSlide.getAttribute('data-name');
+          if (name) changeVideo(name);
+        }
+      }
+    });
+
+    document.querySelectorAll('.swiper-slide').forEach((slide, idx) => {
+      slide.addEventListener('click', () => {
+        const name = slide.getAttribute('data-name');
+        if (name) changeVideo(name);
+        swiper.slideToLoop(idx); 
+      });
+    });
+
+    window.addEventListener('load', () => {
+      const initial = document.querySelector('.swiper-slide[data-name]');
+      const name = initial ? initial.getAttribute('data-name') : 'games';
+      changeVideo(name);
+    });
+
+    const sliderContainer = document.querySelector('.slider-container');
+    sliderContainer.addEventListener('mouseenter', () => swiper.autoplay.stop());
+    sliderContainer.addEventListener('mouseleave', () => swiper.autoplay.start());
+
+    const aboutVideo = document.getElementById('aboutVideo');
+    aboutVideo.parentElement.addEventListener('mouseenter', () => {
+      aboutVideo.play();
+    });
+    aboutVideo.parentElement.addEventListener('mouseleave', () => {
+      aboutVideo.pause();
+    });
+
+    function toggleMute(e){
+      e.stopPropagation(); 
+      aboutVideo.muted = !aboutVideo.muted;
+      e.target.textContent = aboutVideo.muted ? '🔇' : '🔊';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+
+> facvitc@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.29.4:3000
+- Environments: .env.local, .env
+
+✓ Starting...
+✓ Ready in 1509ms
+ POST /api/seed 200 in 1503ms (compile: 1314ms, render: 189ms)
+ GET /api/members 200 in 144ms (compile: 122ms, render: 22ms)
+ GET / 200 in 2.8s (compile: 2.6s, render: 282ms)
+ POST /api/seed 200 in 51ms (compile: 5ms, render: 47ms)
+ GET /api/members 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /api/content 200 in 120ms (compile: 110ms, render: 10ms)
+ GET / 200 in 106ms (compile: 3ms, render: 103ms)
+ GET /api/auth/signin 200 in 1784ms (compile: 1763ms, render: 21ms)
