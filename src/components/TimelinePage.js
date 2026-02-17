@@ -53,47 +53,12 @@ export default function TimelinePage({ data }) {
         <div className="w-full max-w-[1300px] mx-auto px-6 md:px-14">
           <AnimatePresence mode="wait">
             {activeContent && (
-              <motion.div
-                key={activeYear}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4 }}
-              >
-                <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-[rgba(255,255,255,0.1)] shadow-sm">
-                  {activeContent.title || `${data.page} ${activeYear}`}
-                </h2>
-
-                {activeContent.description && (
-                  <p className="mb-8 text-[#bfc1c3] text-lg max-w-3xl leading-relaxed">
-                    {activeContent.description}
-                  </p>
-                )}
-
-                {(!activeContent.images || activeContent.images.length === 0) ? (
-                   <p className="mt-5 text-[#bfc1c3] italic">No images available.</p>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[300px]">
-                    {/* First image large (Bento style logic simplified) */}
-                    {activeContent.images.map((img, idx) => (
-                      <div 
-                        key={idx} 
-                        className={`relative rounded-xl overflow-hidden border border-[rgba(255,255,255,0.1)] shadow-lg bg-black group cursor-pointer
-                          ${idx === 0 ? 'md:col-span-2 md:row-span-2' : ''}
-                        `}
-                        onClick={() => openLightbox(img)}
-                      >
-                        <img 
-                          src={img} 
-                          onError={handleImageError}
-                          alt="" 
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
+              <TimelineContent 
+                key={activeYear} 
+                content={activeContent} 
+                openLightbox={setLightboxImg} 
+                setLightboxOpen={setLightboxOpen} 
+              />
             )}
           </AnimatePresence>
         </div>
@@ -113,12 +78,133 @@ export default function TimelinePage({ data }) {
           </button>
           <img 
             src={lightboxImg} 
-            onError={handleImageError}
+            onError={(e) => e.target.src = 'https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1000'}
             className="max-w-[90%] max-h-[90%] rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.5)] object-contain"
             alt="Full screen" 
           />
         </div>
       )}
     </div>
+  );
+}
+
+function TimelineContent({ content, openLightbox, setLightboxOpen }) {
+  // Check if we have multiple blocks, otherwise fallback to legacy structure
+  const blocks = (content.blocks && content.blocks.length > 0) 
+    ? content.blocks 
+    : [{
+        template: content.template || 'A',
+        title: content.title || '',
+        description: content.description || '',
+        images: content.images || []
+      }];
+
+  const handleImageClick = (src) => {
+    openLightbox(src);
+    setLightboxOpen(true);
+  };
+
+  const DescriptionBox = ({ title, description }) => (
+    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-xl flex flex-col justify-center h-full shadow-lg group hover:-translate-y-2 transition duration-300">
+      <h3 className="text-2xl font-bold mb-4 text-white">{title || 'Untitled'}</h3>
+      <p className="text-[#bfc1c3] text-lg leading-relaxed">{description}</p>
+    </div>
+  );
+
+  const ImageBox = ({ src, className }) => (
+    <div 
+      className={`relative rounded-xl overflow-hidden border border-white/10 shadow-lg bg-black group cursor-pointer ${className}`}
+      onClick={() => handleImageClick(src)}
+    >
+      <img 
+        src={src} 
+        onError={(e) => e.target.src = 'https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1000'}
+        alt="" 
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+      />
+    </div>
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.4 }}
+    >
+      <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-[rgba(255,255,255,0.1)]">
+        {content.year}
+      </h2>
+
+      <div className="flex flex-col gap-12">
+        {blocks.map((block, index) => (
+          <div key={index}>
+            {/* TEMPLATE A: Stack (Top Row: Img + Desc, Bottom: 3 Imgs) */}
+            {block.template === 'A' && (
+              <div className="flex flex-col gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[400px]">
+                  {block.images && block.images[0] ? <ImageBox src={block.images[0]} className="md:col-span-1" /> : <div className="hidden md:block"></div>}
+                  <div className="md:col-span-2 h-full"><DescriptionBox title={block.title} description={block.description} /></div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[250px]">
+                  {block.images && block.images.slice(1, 4).map((img, i) => (
+                    <ImageBox key={i} src={img} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TEMPLATE B: Split (Left: Large Img, Right: Desc + 2 Small Imgs) */}
+            {block.template === 'B' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-auto md:h-[600px]">
+                {block.images && block.images[0] ? <ImageBox src={block.images[0]} className="h-[400px] md:h-full" /> : <div></div>}
+                <div className="flex flex-col gap-6 h-full">
+                  <div className="flex-1"><DescriptionBox title={block.title} description={block.description} /></div>
+                  <div className="flex gap-6 h-[200px]">
+                    {block.images && block.images.slice(1, 3).map((img, i) => (
+                      <ImageBox key={i} src={img} className="flex-1" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TEMPLATE C: Grid (Standard) */}
+            {block.template === 'C' && (
+              <>
+                <div className="mb-8"><DescriptionBox title={block.title} description={block.description} /></div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {block.images && block.images.map((img, i) => (
+                    <ImageBox key={i} src={img} className="aspect-square" />
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* TEMPLATE D: Text Only */}
+            {block.template === 'D' && (
+              <div className="max-w-3xl mx-auto py-10">
+                <DescriptionBox title={block.title} description={block.description} />
+              </div>
+            )}
+
+            {/* TEMPLATE E: L-Shape (Top: Desc + Side Img, Bottom: Row Imgs) */}
+            {block.template === 'E' && (
+              <div className="flex flex-col gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[350px]">
+                  <div className="md:col-span-2"><DescriptionBox title={block.title} description={block.description} /></div>
+                  {block.images && block.images[0] && <ImageBox src={block.images[0]} className="md:col-span-1" />}
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-[200px]">
+                  {block.images && block.images.slice(1).map((img, i) => (
+                    <ImageBox key={i} src={img} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </motion.div>
   );
 }

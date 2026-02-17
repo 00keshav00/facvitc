@@ -6,7 +6,8 @@ import TimelinePage from '@/components/TimelinePage';
 
 export async function generateMetadata({ params }) {
   await dbConnect();
-  const page = await PageContent.findOne({ page: params.slug });
+  const { slug } = await params;
+  const page = await PageContent.findOne({ page: slug });
   
   if (!page) {
     return {
@@ -21,14 +22,24 @@ export async function generateMetadata({ params }) {
 
 export default async function DynamicPage({ params }) {
   await dbConnect();
+  const { slug } = await params;
   
-  const pageContent = await PageContent.findOne({ page: params.slug });
+  console.log('Fetching content for slug:', slug);
+  const pageContent = await PageContent.findOne({ page: slug });
+  console.log('Found content:', pageContent ? 'Yes' : 'No');
 
   if (!pageContent) {
+    // If we're looking for a valid page but it has no content yet, 
+    // we might want to return an empty structure or handle it gracefully.
+    // However, if the page is truly invalid (not in our list), 404 is correct.
+    // For now, let's assume if it's not found in DB, it's a 404.
+    // But wait, the user said "content is there".
+    // If the content exists in DB, this should find it.
     notFound();
   }
 
   // Serialize the data to pass to client component
+  // Using JSON.parse(JSON.stringify()) to handle MongoDB objects
   const serializedContent = JSON.parse(JSON.stringify(pageContent));
 
   return <TimelinePage data={serializedContent} />;

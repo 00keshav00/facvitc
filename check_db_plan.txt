@@ -1,0 +1,12 @@
+const mongoose = require('mongoose');
+const PageContent = require('./src/models/PageContent'); // Adjust path as needed
+
+// Need to load environment variables? Usually Next.js handles this.
+// Assuming connection string is in .env or hardcoded in db.js
+// Let's peek at db.js first to see how it connects.
+
+// Actually, let's just use the existing dbConnect from lib/db.js
+// But that's an ES module. I'll need to run this with `node` which might need .mjs or setup.
+
+// Simpler: Just make a temporary API route to list all content pages.
+// Or just check the logs from the server when I reload the page.

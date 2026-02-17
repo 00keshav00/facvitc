@@ -107,6 +107,72 @@ export async function POST() {
             ]
           }
         ]
+      },
+      {
+        page: "top-picks",
+        timeline: [
+          {
+            year: "2025",
+            title: "Top Picks",
+            description: "Curated selection of the best artworks from our community.",
+            images: [
+              "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=1000",
+              "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400"
+            ]
+          }
+        ]
+      },
+      {
+        page: "afac",
+        timeline: [
+          {
+            year: "2025",
+            title: "Art for a Cause",
+            description: "Artworks dedicated to social causes and community impact.",
+            images: [
+              "https://images.unsplash.com/photo-1605106702734-205df224ecce?q=80&w=400"
+            ]
+          }
+        ]
+      },
+      {
+        page: "ca",
+        timeline: [
+          {
+            year: "2025",
+            title: "Concept Art",
+            description: "Imaginative and conceptual designs for characters and environments.",
+            images: [
+              "https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=400"
+            ]
+          }
+        ]
+      },
+      {
+        page: "p",
+        timeline: [
+          {
+            year: "2025",
+            title: "Portraits",
+            description: "Capturing the essence of human expression.",
+            images: [
+              "https://images.unsplash.com/photo-1515462277126-2dd0c162007a?q=80&w=400"
+            ]
+          }
+        ]
+      },
+      {
+        page: "da",
+        timeline: [
+          {
+            year: "2025",
+            title: "Digital Artworks",
+            description: "Exploring the digital medium with creativity and precision.",
+            images: [
+              "https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1?q=80&w=400"
+            ]
+          }
+        ]
       }
     ];
 

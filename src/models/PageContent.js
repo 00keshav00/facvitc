@@ -48,9 +48,18 @@ const PageContentSchema = new mongoose.Schema({
   },
   timeline: [{
     year: String,
+    // Legacy fields (maintained for backward compatibility if needed, or migration)
     title: String,
     description: String,
-    images: [String]
+    images: [String],
+    template: { type: String, default: 'A' },
+    // New: Multiple blocks per year
+    blocks: [{
+      template: { type: String, default: 'A' },
+      title: String,
+      description: String,
+      images: [String]
+    }]
   }]
 });
 
