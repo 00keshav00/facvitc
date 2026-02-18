@@ -13,20 +13,40 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        await connectMongoDB();
-        const user = await User.findOne({ email: credentials.email });
-        if (user && (await bcrypt.compare(credentials.password, user.password))) {
-          return { id: user._id, name: "Admin", email: user.email };
+        console.log("Attempting to authorize user:", credentials.email);
+        try {
+          await connectMongoDB();
+          const user = await User.findOne({ email: credentials.email });
+
+          if (!user) {
+            console.log("Authorization failed: User not found.");
+            return null;
+          }
+
+          console.log("User found. Comparing passwords...");
+          const passwordsMatch = await bcrypt.compare(credentials.password, user.password);
+
+          if (passwordsMatch) {
+            console.log("Authorization successful.");
+            return { id: user._id, name: "Admin", email: user.email };
+          } else {
+            console.log("Authorization failed: Passwords do not match.");
+            return null;
+          }
+        } catch (error) {
+          console.error("Error in authorize function:", error);
+          return null;
         }
-        return null;
       }
     })
   ],
-  // Default pages will be used
+  pages: {
+    signIn: "/admin/login",
+  },
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET || "secret", // Use env in production
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
