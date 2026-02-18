@@ -1,7 +1,5 @@
+import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
-import path from 'path';
-import { writeFile } from 'fs/promises';
-import fs from 'fs';
 
 export async function POST(req) {
   const formData = await req.formData();
@@ -23,23 +21,17 @@ export async function POST(req) {
     return NextResponse.json({ error: 'File too large. Maximum size is 10MB.' }, { status: 400 });
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const filename =  Date.now() + '_' + file.name.replaceAll(" ", "_");
-  
-  // Ensure directory exists
-  const uploadDir = path.join(process.cwd(), 'public/uploads');
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
-
   try {
-    await writeFile(
-      path.join(uploadDir, filename),
-      buffer
-    );
+    const filename = Date.now() + '_' + file.name.replaceAll(" ", "_");
+    
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: 'public',
+    });
+
     return NextResponse.json({ 
       message: 'Success', 
-      url: `/uploads/${filename}` 
+      url: blob.url 
     });
   } catch (error) {
     console.log('Error occured ', error);
