@@ -29,7 +29,13 @@ body {
   display: flex;
   justify-content: center;
   height: 100vh;
-  padding: 20px;
+  padding: 10px;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 20px;
+  }
 }
 
 /* Global Layout Utilities */

@@ -1,12 +1,26 @@
 import "./globals.css";
 import SiteLayout from "@/components/SiteLayout";
+import dbConnect from "@/lib/db";
+import Setting from "@/models/Setting";
 
 export const metadata = {
-  title: "College Art Club",
+  title: "Fine Arts Club - VIT Vellore",
   description: "A platform for creative minds to learn, share and exhibit.",
 };
 
-export default function RootLayout({ children }) {
+async function getSettings() {
+  try {
+    await dbConnect();
+    const settings = await Setting.findOne().lean();
+    return JSON.parse(JSON.stringify(settings || {}));
+  } catch (error) {
+    return {};
+  }
+}
+
+export default async function RootLayout({ children }) {
+  const settings = await getSettings();
+
   return (
     <html lang="en">
       <head>
@@ -14,7 +28,7 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
       </head>
       <body>
-        <SiteLayout>
+        <SiteLayout settings={settings}>
           {children}
         </SiteLayout>
       </body>

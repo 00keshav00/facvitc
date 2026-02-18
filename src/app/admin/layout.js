@@ -14,16 +14,34 @@ export default function AdminLayout({ children }) {
         <div className="p-6 border-b border-[rgba(255,255,255,0.08)]">
           <h1 className="text-xl font-bold">Admin Panel</h1>
         </div>
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           <Link href="/admin" className={`block px-4 py-2 rounded-md ${pathname === '/admin' ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
             Dashboard
           </Link>
-          <Link href="/admin/members" className={`block px-4 py-2 rounded-md ${pathname === '/admin/members' ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
-            Manage Members
+          
+          <div className="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Sections
+          </div>
+          <Link href="/admin/home" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/home') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            Home
           </Link>
-          <Link href="/admin/content" className={`block px-4 py-2 rounded-md ${pathname === '/admin/content' ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
-            Page Content
+          <Link href="/admin/gallery" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/gallery') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            Gallery
           </Link>
+          <Link href="/admin/events" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/events') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            Events
+          </Link>
+          <Link href="/admin/members" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/members') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            Members
+          </Link>
+          
+          <div className="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            System
+          </div>
+          <Link href="/admin/settings" className={`block px-4 py-2 rounded-md ${pathname === '/admin/settings' ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            Settings
+          </Link>
+
           <Link href="/" target="_blank" className="block px-4 py-2 rounded-md text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white mt-10">
             View Site ↗
           </Link>

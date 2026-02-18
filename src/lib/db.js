@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/artclub';
+const MONGODB_URI = process.env.MONGODB_CONNECTION_STRING || process.env.MONGODB_URI || 'mongodb://localhost:27017/artclub';
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -24,8 +24,13 @@ async function dbConnect() {
       bufferCommands: false,
     };
 
+    console.log('Connecting to MongoDB...');
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log('MongoDB Connected');
       return mongoose;
+    }).catch(err => {
+      console.error('MongoDB Connection Error:', err);
+      throw err;
     });
   }
   cached.conn = await cached.promise;

@@ -7,25 +7,24 @@ import MembersSection from '@/components/MembersSection';
 import ConnectSection from '@/components/ConnectSection';
 import Footer from '@/components/Footer';
 import dbConnect from '@/lib/db';
-import PageContent from '@/models/PageContent';
-import Member from '@/models/Member';
+import HomeModel from '@/models/Home';
+import Setting from '@/models/Setting';
 
 async function getData() {
   await dbConnect();
-  const content = await PageContent.findOne({ page: 'home' }).lean();
-  const members = await Member.find({}).sort({ order: 1 }).limit(4).lean();
+  const homeData = await HomeModel.findOne().lean();
+  const settings = await Setting.findOne().lean();
   
-  // Serialize Mongo objects
   return {
-    content: JSON.parse(JSON.stringify(content)),
-    members: JSON.parse(JSON.stringify(members))
+    home: JSON.parse(JSON.stringify(homeData || {})),
+    settings: JSON.parse(JSON.stringify(settings || {}))
   };
 }
 
-export const dynamic = 'force-dynamic'; // Ensure dynamic rendering
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  let data = { content: null, members: [] };
+  let data = { home: {}, settings: {} };
   
   try {
     data = await getData();
@@ -33,25 +32,29 @@ export default async function Home() {
     console.error("Failed to fetch data:", error);
   }
 
-  const { content, members } = data;
+  const { home, settings } = data;
 
   return (
     <>
       <Hero 
-        title={content?.hero?.title}
-        subtitle={content?.hero?.subtitle}
-        ctaText={content?.hero?.ctaText}
-        ctaLink={content?.hero?.ctaLink}
+        title={home?.hero?.heading}
+        subtitle={home?.hero?.subheading}
+        logo={home?.hero?.logo}
       />
       <About 
-        title={content?.about?.title}
-        text={content?.about?.text}
+        title={home?.about?.title}
+        text={home?.about?.description}
+        images={home?.about?.images}
+        video={home?.about?.video}
       />
-      <GallerySection />
-      <EventsSection />
-      <MembersSection members={members} />
-      <ConnectSection />
-      <Footer />
+      <GallerySection 
+        preview={home?.galleryPreview} 
+        artwork={home?.artworkOfTheWeek}
+      />
+      <EventsSection preview={home?.eventsPreview} />
+      <MembersSection members={home?.membersPreview} />
+      <ConnectSection contact={home?.contact} settings={settings} />
+      <Footer settings={settings} />
     </>
   );
 }

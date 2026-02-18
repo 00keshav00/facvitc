@@ -2,10 +2,14 @@ import dbConnect from '@/lib/db';
 import Member from '@/models/Member';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req) {
   await dbConnect();
+  const { searchParams } = new URL(req.url);
+  const type = searchParams.get('type');
+  
+  const query = type ? { type } : {};
   try {
-    const members = await Member.find({}).sort({ order: 1 });
+    const members = await Member.find(query).sort({ order: 1 });
     return NextResponse.json(members);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch members' }, { status: 500 });

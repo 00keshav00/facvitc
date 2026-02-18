@@ -5,43 +5,59 @@ import Link from 'next/link';
 
 const MemberCard = ({ img, name, role, quote, link, revealDelay }) => {
   return (
-    <div className={`test-card w-[320px] max-w-full bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-[10px] overflow-hidden transition-all duration-300 shadow-xl flex flex-col hover:-translate-y-1.5 hover:shadow-2xl reveal visible`} style={{transitionDelay: revealDelay}}>
-      <div className="member-image w-full h-[200px] overflow-hidden">
-        <img src={img || '/placeholder_member.jpg'} alt={role} className="w-full h-full object-cover" />
+    <div className={`test-card w-[calc(50%-8px)] sm:w-[300px] md:w-[320px] bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-[10px] overflow-hidden transition-all duration-300 shadow-xl flex flex-col hover:-translate-y-1.5 hover:shadow-2xl reveal visible`} style={{transitionDelay: revealDelay}}>
+      <div className="member-image w-full h-32 sm:h-[200px] overflow-hidden">
+        <img src={img || '/placeholder_member.jpg'} alt={role} loading="lazy" className="w-full h-full object-cover" />
       </div>
-      <div className="person flex flex-col gap-0.5 px-[18px] py-3.5 pb-1.5">
-        <strong className="text-base text-[#e6e6e6]">
+      <div className="person flex flex-col gap-0.5 px-3 py-2.5 sm:px-[18px] sm:py-3.5 sm:pb-1.5">
+        <strong className="text-sm sm:text-base text-[#e6e6e6] truncate">
           {name}
           {link && <a href={link} className="member-link ml-2 no-underline" target="_blank">🔗</a>}
         </strong>
-        <span className="role text-[13px] font-semibold text-[#bfc1c3]">{role}</span>
+        <span className="role text-[11px] sm:text-[13px] font-semibold text-[#bfc1c3] truncate">{role}</span>
       </div>
-      <div className="quote px-[18px] pb-[18px] text-[#bfc1c3] text-[14px] leading-relaxed">
-        {quote}
-      </div>
+      {quote && (
+        <div className="quote px-3 pb-3 sm:px-[18px] sm:pb-[18px] text-[#bfc1c3] text-[12px] sm:text-[14px] leading-relaxed line-clamp-2 sm:line-clamp-none">
+          {quote}
+        </div>
+      )}
     </div>
   );
 };
 
 export default function MembersSection({ members = [] }) {
+  const safeMembers = Array.isArray(members) ? members : [];
+  const facultyMember = safeMembers.find(m => m.isFaculty);
+  const leadMembers = safeMembers.filter(m => !m.isFaculty).sort((a, b) => a.order - b.order);
+
   // If no members passed, default to static list or empty
-  const displayMembers = members.length > 0 ? members : [
-    { name: "Dr. Anjali Sharma", role: "Faculty Coordinator", quote: "Guiding the club with vision and academic excellence.", image: "/images/faculty.jpg" },
+  const displayFaculty = facultyMember || { name: "Dr. Anjali Sharma", role: "Faculty Coordinator", quote: "Guiding the club with vision and academic excellence.", image: "/images/faculty.jpg" };
+  const displayLeads = leadMembers.length > 0 ? leadMembers : [
     { name: "Prasenjit Choudhury", role: "President", quote: "Passionate about traditional and contemporary art forms.", image: "/president.jpg" }
   ];
 
   return (
-    <section className="testimonials py-16 px-14 border-t border-[rgba(255,255,255,0.08)] flex flex-col items-center gap-12 bg-gradient-to-b from-transparent to-[rgba(0,0,0,0.03)]" id="members">
+    <section className="testimonials py-12 md:py-16 px-4 md:px-14 border-t border-[rgba(255,255,255,0.08)] flex flex-col items-center gap-8 md:gap-12 bg-gradient-to-b from-transparent to-[rgba(0,0,0,0.03)]" id="members">
       
-      <div className="members-row flex justify-center gap-6 flex-wrap w-full">
-         {displayMembers.slice(0, 4).map((m, i) => (
+      <div className="faculty-row flex justify-center w-full mb-4">
+         <MemberCard 
+           img={displayFaculty.image} 
+           name={displayFaculty.name} 
+           role={displayFaculty.role} 
+           quote={displayFaculty.quote} 
+           link={displayFaculty.instagram}
+         />
+      </div>
+
+      <div className="members-row flex justify-center gap-4 md:gap-6 flex-wrap w-full">
+         {displayLeads.map((m, i) => (
            <MemberCard 
              key={i}
              img={m.image} 
              name={m.name} 
              role={m.role} 
-             quote={m.quote} 
-             link={m.socialLink}
+             quote={m.quote || m.bio} 
+             link={m.socialLink || m.instagram}
            />
          ))}
       </div>
