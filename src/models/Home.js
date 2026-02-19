@@ -21,7 +21,9 @@ const HomeSchema = new mongoose.Schema({
   },
   galleryPreview: [{
     title: String,
-    image: String
+    image: String,
+    frontImage: String,
+    backImage: String
   }],
   eventsPreview: [{
     title: { type: String, required: true }, // Fixed: TechnoVit, Vibrance, Others
@@ -35,6 +37,7 @@ const HomeSchema = new mongoose.Schema({
     role: String,
     image: String,
     instagram: String,
+    linkedin: String,
     isFaculty: { type: Boolean, default: false },
     order: Number
   }],

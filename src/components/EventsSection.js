@@ -8,22 +8,45 @@ import { motion } from 'framer-motion';
 const EventCard = ({ imgLeft, imgRight, text, link, linkText }) => {
   return (
     <motion.div 
-      whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2 }}
-      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-      className="event-container relative w-full max-w-[800px] min-h-[400px] md:h-[450px] bg-[rgba(0,0,0,0.5)] backdrop-blur-md rounded-3xl border border-[rgba(255,255,255,0.1)] shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex justify-center items-center overflow-hidden p-6 md:p-0"
+      initial="initial"
+      whileHover="hover"
+      variants={{
+        initial: { scale: 1, rotateX: 0, rotateY: 0 },
+        hover: { 
+          scale: 1.02, 
+          rotateX: 2, 
+          rotateY: -2,
+          transition: { duration: 0.5, ease: "easeOut" }
+        }
+      }}
+      className="event-container relative w-full max-w-[850px] min-h-[400px] md:h-[480px] bg-[rgba(0,0,0,0.5)] backdrop-blur-md rounded-3xl border border-[rgba(255,255,255,0.1)] shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex justify-center items-center overflow-hidden p-6 md:p-0"
     >
       <motion.img 
-        initial={{ x: -20, rotate: -3 }}
-        whileHover={{ x: -30, rotate: -5, scale: 1.1 }}
+        variants={{
+          initial: { x: -20, rotate: -3, scale: 1 },
+          hover: { 
+            x: -35, 
+            rotate: -8, 
+            scale: 1.1,
+            transition: { duration: 0.5, ease: "easeOut" }
+          }
+        }}
         src={imgLeft || "https://via.placeholder.com/400x300"} 
-        className="floating-img absolute w-[120px] h-[80px] md:w-[200px] md:h-[120px] rounded-xl object-cover z-[1] border border-[rgba(255,255,255,0.2)] transition-transform duration-400 bottom-4 left-4 md:bottom-10 md:left-10 opacity-40 md:opacity-100" 
+        className="floating-img absolute w-[120px] h-[80px] md:w-[180px] md:h-[110px] rounded-xl object-cover z-[1] border border-[rgba(255,255,255,0.2)] transition-transform duration-400 bottom-4 left-4 md:bottom-12 md:left-28 opacity-40 md:opacity-100" 
         alt="Event Left" 
       />
       <motion.img 
-        initial={{ x: 20, rotate: 3 }}
-        whileHover={{ x: 30, rotate: 5, scale: 1.1 }}
+        variants={{
+          initial: { x: 20, rotate: 3, scale: 1 },
+          hover: { 
+            x: 35, 
+            rotate: 8, 
+            scale: 1.1,
+            transition: { duration: 0.5, ease: "easeOut" }
+          }
+        }}
         src={imgRight || "https://via.placeholder.com/400x300"} 
-        className="floating-img absolute w-[120px] h-[80px] md:w-[200px] md:h-[120px] rounded-xl object-cover z-[1] border border-[rgba(255,255,255,0.2)] transition-transform duration-400 top-4 right-4 md:top-10 md:right-10 opacity-40 md:opacity-100" 
+        className="floating-img absolute w-[120px] h-[80px] md:w-[180px] md:h-[110px] rounded-xl object-cover z-[1] border border-[rgba(255,255,255,0.2)] transition-transform duration-400 top-4 right-4 md:top-12 md:right-28 opacity-40 md:opacity-100" 
         alt="Event Right" 
       />
       

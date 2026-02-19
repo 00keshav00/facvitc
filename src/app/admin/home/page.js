@@ -206,24 +206,47 @@ export default function HomeAdmin() {
             <h3 className="text-lg font-bold">Gallery Categories Preview</h3>
             {['Digital Art', 'Sketch', 'Painting', 'Art for a Cause', 'Concept Art'].map((cat, idx) => {
               const safeData = Array.isArray(data) ? data : [];
-              const item = safeData.find(d => d.title === cat) || { title: cat, image: '' };
+              const item = safeData.find(d => d.title === cat) || { title: cat, frontImage: '', backImage: '' };
               return (
-                <div key={cat} className="p-4 border border-[#3a3a3b] rounded">
+                <div key={cat} className="p-4 border border-[#3a3a3b] rounded space-y-4">
                   <h4 className="font-semibold mb-2">{cat}</h4>
-                  <ImageUpload 
-                    label="Cover Image" 
-                    onUpload={(url) => {
-                      const exists = safeData.some(d => d.title === cat);
-                      let newData;
-                      if (exists) {
-                        newData = safeData.map(d => d.title === cat ? { ...d, image: url } : d);
-                      } else {
-                        newData = [...safeData, { title: cat, image: url }];
-                      }
-                      setData(newData);
-                    }} 
-                  />
-                  {item.image && <img src={item.image} className="w-32 h-20 object-cover rounded" />}
+                  
+                  {/* Front Image Upload */}
+                  <div>
+                    <ImageUpload 
+                      label="Front Image (Small Card)" 
+                      onUpload={(url) => {
+                        const exists = safeData.some(d => d.title === cat);
+                        let newData;
+                        if (exists) {
+                          newData = safeData.map(d => d.title === cat ? { ...d, frontImage: url } : d);
+                        } else {
+                          newData = [...safeData, { title: cat, frontImage: url }];
+                        }
+                        setData(newData);
+                      }} 
+                    />
+                    {item.frontImage && <img src={item.frontImage} className="w-32 h-20 object-cover rounded mt-2" />}
+                  </div>
+
+                  {/* Back Image Upload */}
+                  <div>
+                    <ImageUpload 
+                      label="Back Image (Big Card)" 
+                      onUpload={(url) => {
+                        const exists = safeData.some(d => d.title === cat);
+                        let newData;
+                        if (exists) {
+                          newData = safeData.map(d => d.title === cat ? { ...d, backImage: url } : d);
+                        } else {
+                          newData = [...safeData, { title: cat, backImage: url }];
+                        }
+                        setData(newData);
+                      }} 
+                    />
+                    {item.backImage && <img src={item.backImage} className="w-32 h-20 object-cover rounded mt-2" />}
+                  </div>
+
                 </div>
               );
             })}
@@ -312,6 +335,12 @@ export default function HomeAdmin() {
                           : [...safeMembers, { ...facultyMember, role: e.target.value }];
                         setData(newData);
                       }} />
+                      <input className="w-full bg-[#1e1e1f] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="LinkedIn URL" value={facultyMember.linkedin || ''} onChange={(e) => {
+                        const newData = safeMembers.some(m => m.isFaculty) 
+                          ? safeMembers.map(m => m.isFaculty ? { ...m, linkedin: e.target.value } : m)
+                          : [...safeMembers, { ...facultyMember, linkedin: e.target.value }];
+                        setData(newData);
+                      }} />
                       <ImageUpload label="Profile Image" onUpload={(url) => {
                         const newData = safeMembers.some(m => m.isFaculty) 
                           ? safeMembers.map(m => m.isFaculty ? { ...m, image: url } : m)
@@ -381,6 +410,10 @@ export default function HomeAdmin() {
                     }} />
                     <input className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="Instagram URL" value={mem.instagram || ''} onChange={(e) => {
                       const newData = safeMembers.map(m => m === mem ? { ...m, instagram: e.target.value } : m);
+                      setData(newData);
+                    }} />
+                    <input className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="LinkedIn URL" value={mem.linkedin || ''} onChange={(e) => {
+                      const newData = safeMembers.map(m => m === mem ? { ...m, linkedin: e.target.value } : m);
                       setData(newData);
                     }} />
                     <ImageUpload label="Profile Image" onUpload={(url) => {

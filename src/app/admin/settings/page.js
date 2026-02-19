@@ -55,15 +55,39 @@ export default function SettingsAdmin() {
            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
              <span className="w-1.5 h-6 bg-blue-500 rounded-full"></span> Site Identity
            </h3>
-           <div className="flex flex-col md:flex-row gap-8 items-start">
+           
+           <div className="mb-8">
+             <label className="block text-sm text-[#bfc1c3] mb-2 font-medium">Site Title (Browser Tab)</label>
+             <input 
+               className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-3 rounded-lg text-sm transition-all focus:border-blue-500 outline-none" 
+               placeholder="Fine Arts Club - VIT Chennai"
+               value={data.siteTitle || ''} 
+               onChange={(e) => setData({...data, siteTitle: e.target.value})} 
+             />
+           </div>
+
+           <div className="flex flex-col md:flex-row gap-8 items-start mb-8 border-b border-[#3a3a3b] pb-8">
               <div className="flex-1 space-y-4">
-                <ImageUpload label="Update Logo" onUpload={(url) => setData({...data, logo: url})} />
+                <ImageUpload label="Update Logo (Navbar)" onUpload={(url) => setData({...data, logo: url})} />
                 <p className="text-xs text-[#bfc1c3]">Recommended: Transparent PNG, SVG, or high-quality WebP.</p>
               </div>
               {data.logo && (
                 <div className="bg-black/20 p-6 rounded-xl border border-white/5 flex flex-col items-center">
                   <p className="text-xs text-[#bfc1c3] mb-4 font-mono uppercase tracking-wider">Current Logo</p>
                   <img src={data.logo} className="h-20 w-auto object-contain" />
+                </div>
+              )}
+           </div>
+
+           <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="flex-1 space-y-4">
+                <ImageUpload label="Update Favicon (Browser Tab)" onUpload={(url) => setData({...data, favicon: url})} />
+                <p className="text-xs text-[#bfc1c3]">Recommended: Square PNG (32x32 or 512x512) or .ico file.</p>
+              </div>
+              {data.favicon && (
+                <div className="bg-black/20 p-6 rounded-xl border border-white/5 flex flex-col items-center">
+                  <p className="text-xs text-[#bfc1c3] mb-4 font-mono uppercase tracking-wider">Current Favicon</p>
+                  <img src={data.favicon} className="h-10 w-10 object-contain" />
                 </div>
               )}
            </div>
@@ -134,7 +158,7 @@ export default function SettingsAdmin() {
               <label className="block text-sm text-[#bfc1c3] mb-2 font-medium">Physical Address</label>
               <textarea 
                 className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-3 rounded-lg text-sm transition-all focus:border-green-500 outline-none h-24 resize-none" 
-                placeholder="VIT Vellore, Tamil Nadu, India"
+                placeholder="VIT Chennai, Tamil Nadu, India"
                 value={data.contactDetails?.address || ''} 
                 onChange={(e) => setData({...data, contactDetails: {...(data.contactDetails || {}), address: e.target.value}})} 
               />
@@ -149,7 +173,7 @@ export default function SettingsAdmin() {
            <label className="block text-sm text-[#bfc1c3] mb-2 font-medium">Footer Copyright / Credits Text</label>
            <input 
               className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-3 rounded-lg text-sm transition-all focus:border-yellow-500 outline-none" 
-              placeholder="© 2024 Fine Arts Club, VIT Vellore. All Rights Reserved."
+              placeholder="© 2024 Fine Arts Club, VIT Chennai. All Rights Reserved."
               value={data.footerText || ''} 
               onChange={(e) => setData({...data, footerText: e.target.value})} 
            />

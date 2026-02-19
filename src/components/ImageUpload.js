@@ -19,12 +19,17 @@ export default function ImageUpload({ onUpload, label }) {
         body: formData,
       });
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Upload failed');
+      }
+
       if (data.url) {
         onUpload(data.url);
       }
     } catch (error) {
       console.error('Upload failed', error);
-      alert('Upload failed');
+      alert(error.message || 'Upload failed');
     } finally {
       setUploading(false);
     }

@@ -13,7 +13,7 @@ export default function Footer({ settings }) {
   return (
     <footer className="footer py-10 px-6 md:px-14 flex flex-col items-center gap-6 border-t border-[rgba(255,255,255,0.08)]">
       <div className="text-[13px] text-[#bfc1c3] font-medium text-center">
-        {settings?.footerText || "© 2024 Fine Arts Club, VIT Vellore. All Rights Reserved."}
+        {settings?.footerText || "© 2024 Fine Arts Club, VIT Chennai. All Rights Reserved."}
       </div>
       <button 
         onClick={scrollToTop}

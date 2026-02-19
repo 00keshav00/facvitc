@@ -62,8 +62,8 @@ export default async function CategoryPage({ params }) {
 
   return (
     <div className="px-6 md:px-14 py-12 min-h-screen">
-      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#e6e6e6] capitalize text-center">{dbCategory}</h1>
-      <p className="text-[#bfc1c3] mb-12 text-center max-w-2xl mx-auto">Explore our collection of {dbCategory.toLowerCase()} created by the talented members of FAC VIT Vellore.</p>
+      <h1 className="text-3xl md:text-44px font-bold mb-4 text-[#e6e6e6] capitalize text-center">{dbCategory}</h1>
+      <p className="text-[#bfc1c3] mb-12 text-center max-w-2xl mx-auto">Explore our collection of {dbCategory.toLowerCase()} created by the talented members of FAC VIT Chennai.</p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {items.map((item) => (

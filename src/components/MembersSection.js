@@ -2,18 +2,32 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 
-const MemberCard = ({ img, name, role, quote, link, revealDelay }) => {
+const MemberCard = ({ img, name, role, quote, instagram, linkedin, revealDelay }) => {
   return (
     <div className={`test-card w-[calc(50%-8px)] sm:w-[300px] md:w-[320px] bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-[10px] overflow-hidden transition-all duration-300 shadow-xl flex flex-col hover:-translate-y-1.5 hover:shadow-2xl reveal visible`} style={{transitionDelay: revealDelay}}>
       <div className="member-image w-full h-32 sm:h-[200px] overflow-hidden">
         <img src={img || '/placeholder_member.jpg'} alt={role} loading="lazy" className="w-full h-full object-cover" />
       </div>
       <div className="person flex flex-col gap-0.5 px-3 py-2.5 sm:px-[18px] sm:py-3.5 sm:pb-1.5">
-        <strong className="text-sm sm:text-base text-[#e6e6e6] truncate">
-          {name}
-          {link && <a href={link} className="member-link ml-2 no-underline" target="_blank">🔗</a>}
-        </strong>
+        <div className="flex justify-between items-center w-full">
+          <strong className="text-sm sm:text-base text-[#e6e6e6] truncate pr-2">
+            {name}
+          </strong>
+          <div className="flex gap-2 shrink-0">
+            {instagram && (
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors">
+                <FaInstagram size={14} />
+              </a>
+            )}
+            {linkedin && (
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-blue-500 transition-colors">
+                <FaLinkedin size={14} />
+              </a>
+            )}
+          </div>
+        </div>
         <span className="role text-[11px] sm:text-[13px] font-semibold text-[#bfc1c3] truncate">{role}</span>
       </div>
       {quote && (
@@ -45,7 +59,8 @@ export default function MembersSection({ members = [] }) {
            name={displayFaculty.name} 
            role={displayFaculty.role} 
            quote={displayFaculty.quote} 
-           link={displayFaculty.instagram}
+           instagram={displayFaculty.instagram}
+           linkedin={displayFaculty.linkedin}
          />
       </div>
 
@@ -57,7 +72,8 @@ export default function MembersSection({ members = [] }) {
              name={m.name} 
              role={m.role} 
              quote={m.quote || m.bio} 
-             link={m.socialLink || m.instagram}
+             instagram={m.instagram}
+             linkedin={m.linkedin}
            />
          ))}
       </div>

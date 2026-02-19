@@ -23,7 +23,13 @@ export async function PUT(req) {
 
     const updatedGallery = body.map(newItem => {
       const existingItem = existingGallery.find(item => item.title === newItem.title);
-      return { ...existingItem, ...newItem };
+      const existingObj = existingItem ? (existingItem.toObject ? existingItem.toObject() : existingItem) : {};
+      
+      const { _id, ...rest } = existingObj;
+      const merged = { ...rest, ...newItem };
+      if (_id) merged._id = _id;
+      
+      return merged;
     });
 
     const updatedHome = await Home.findOneAndUpdate(

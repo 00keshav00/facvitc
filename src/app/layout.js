@@ -3,10 +3,18 @@ import SiteLayout from "@/components/SiteLayout";
 import dbConnect from "@/lib/db";
 import Setting from "@/models/Setting";
 
-export const metadata = {
-  title: "Fine Arts Club - VIT Vellore",
-  description: "A platform for creative minds to learn, share and exhibit.",
-};
+export async function generateMetadata() {
+  const settings = await getSettings();
+  
+  return {
+    title: settings.siteTitle || "Fine Arts Club - VIT Chennai",
+    description: "A platform for creative minds to learn, share and exhibit.",
+    icons: {
+      icon: settings.favicon ? `${settings.favicon}?v=${Date.now()}` : '/favicon.ico',
+      apple: settings.favicon ? `${settings.favicon}?v=${Date.now()}` : '/favicon.ico',
+    },
+  };
+}
 
 async function getSettings() {
   try {

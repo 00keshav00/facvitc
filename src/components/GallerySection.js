@@ -66,12 +66,19 @@ export default function GallerySection({ preview, artwork }) {
       <div className="slider-container relative w-full max-w-[950px] h-[450px] md:h-[520px] mx-auto border border-[rgba(255,255,255,0.08)] rounded-[10px] overflow-hidden bg-gradient-to-b from-[rgba(255,255,255,0.01)] to-[rgba(255,255,255,0.02)] shadow-2xl">
         <div className="slider-videos absolute inset-0 w-full h-full overflow-hidden z-[1]">
           {['digital', 'sketch', 'painting', 'afac', 'concept'].map((cat, idx) => {
-             const previewItem = preview && preview[idx];
+             const titleMap = {
+               'digital': 'Digital Art',
+               'sketch': 'Sketch',
+               'painting': 'Painting',
+               'afac': 'Art for a Cause',
+               'concept': 'Concept Art'
+             };
+             const previewItem = preview && preview.find(p => p.title === titleMap[cat]);
              return (
                <img 
                  key={cat}
                  className={`bgvid absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 pointer-events-none brightness-[0.55] saturate-[0.9] ${activeCategory === cat ? 'opacity-100' : 'opacity-0'}`}
-                 src={previewItem?.image || (cat === 'digital' ? '/tops.png' : cat === 'sketch' ? '/ph4.jpeg' : cat === 'painting' ? '/port.jpeg' : '/themed.jpeg')} 
+                 src={previewItem?.backImage || previewItem?.image || (cat === 'digital' ? '/tops.png' : cat === 'sketch' ? '/ph4.jpeg' : cat === 'painting' ? '/port.jpeg' : '/themed.jpeg')} 
                  alt={cat}
                />
              )
@@ -81,7 +88,7 @@ export default function GallerySection({ preview, artwork }) {
         <div className="content1 relative z-[4] w-[95%] md:w-[92%] max-w-[920px] mx-auto text-center text-[#e6e6e6] top-1/2 -translate-y-1/2 p-2 md:p-5">
            {['Digital Art', 'Sketch', 'Painting', 'Art for a Cause', 'Concept Art'].map((title, idx) => {
              const cat = ['digital', 'sketch', 'painting', 'afac', 'concept'][idx];
-             const previewItem = preview && preview[idx];
+             const previewItem = preview && preview.find(p => p.title === title);
              return (
                <h1 key={cat} className={`model text-2xl md:text-[34px] mb-2 font-bold ${activeCategory === cat ? 'block' : 'hidden'}`}>{previewItem?.title || title}</h1>
              )
@@ -116,13 +123,13 @@ export default function GallerySection({ preview, artwork }) {
                  { cat: 'afac', link: '/gallery/Art for a Cause' },
                  { cat: 'concept', link: '/gallery/Concept Art' }
                ].map((item, idx) => {
-                 const previewItem = preview && preview[idx];
+                 const previewItem = preview && preview.find(p => p.title === item.link.split('/').pop());
                  const fallbackImg = item.cat === 'digital' ? '/mp1.jpg' : item.cat === 'sketch' ? '/ph4.jpeg' : item.cat === 'painting' ? '/p1.jpeg' : '/afc1.jpg';
                  return (
                  <SwiperSlide key={idx} data-name={item.cat} className="flex justify-center items-center cursor-pointer">
                     <Link href={item.link} className="block w-full h-full">
                       <img 
-                        src={previewItem?.image || fallbackImg} 
+                        src={previewItem?.frontImage || previewItem?.image || fallbackImg} 
                         alt={item.cat} 
                         className={`w-full max-w-[230px] h-[100px] md:h-[150px] rounded-xl object-cover border border-[rgba(255,255,255,0.06)] transition-all duration-250 ${activeCategory === item.cat ? 'scale-105 shadow-xl' : ''}`}
                       />

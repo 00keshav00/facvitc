@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
 const SettingSchema = new mongoose.Schema({
+  siteTitle: String,
   logo: String,
+  favicon: String,
   socialLinks: {
     instagram: String,
     facebook: String,

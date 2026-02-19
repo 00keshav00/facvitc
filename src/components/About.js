@@ -38,7 +38,7 @@ export default function About({ title, text, images, video }) {
           {text}
         </p>
       </div>
-      <div className="about-grid w-full lg:flex-1 grid grid-cols-2 grid-rows-[80px_80px_80px] gap-3">
+      <div className="about-grid w-full lg:flex-1 grid grid-cols-2 grid-rows-[140px_140px_140px] md:grid-rows-[200px_200px_200px] gap-4">
         <div 
           className="about-video-box col-span-1 row-span-2 relative overflow-hidden rounded-[18px] border border-[#5A3E2B] bg-black z-10 transition-all duration-350 hover:scale-[1.03] lg:hover:scale-[1.1] hover:z-20"
           onMouseEnter={handleMouseEnter}
