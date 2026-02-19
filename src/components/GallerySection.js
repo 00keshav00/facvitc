@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import Link from 'next/link';
 
 export default function GallerySection({ preview, artwork }) {
@@ -100,7 +101,12 @@ export default function GallerySection({ preview, artwork }) {
 
            <div className="gallery w-full md:w-[84%] mx-auto bg-[rgba(0,0,0,0.25)] rounded-xl p-3 md:p-4 shadow-xl backdrop-blur-md z-[5]">
              <Swiper
-               modules={[Autoplay, Pagination]}
+               style={{
+                 "--swiper-navigation-color": "#fff",
+                 "--swiper-pagination-color": "#fff",
+               }}
+               modules={[Autoplay, Pagination, Navigation]}
+               navigation={true}
                slidesPerView={3}
                spaceBetween={28}
                centeredSlides={true}
