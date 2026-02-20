@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaYoutube, FaLink } from 'react-icons/fa';
 
-const MemberCard = ({ img, name, role, quote, instagram, linkedin, revealDelay }) => {
+const MemberCard = ({ img, name, role, quote, instagram, linkedin, youtube, other, revealDelay }) => {
   return (
     <div className={`test-card w-[calc(50%-8px)] sm:w-[300px] md:w-[320px] bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-[10px] overflow-hidden transition-all duration-300 shadow-xl flex flex-col hover:-translate-y-1.5 hover:shadow-2xl reveal visible`} style={{transitionDelay: revealDelay}}>
       <div className="member-image w-full h-32 sm:h-[200px] overflow-hidden">
@@ -24,6 +24,16 @@ const MemberCard = ({ img, name, role, quote, instagram, linkedin, revealDelay }
             {linkedin && (
               <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-blue-500 transition-colors">
                 <FaLinkedin size={14} />
+              </a>
+            )}
+            {youtube && (
+              <a href={youtube} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-red-500 transition-colors">
+                <FaYoutube size={14} />
+              </a>
+            )}
+            {other && (
+              <a href={other} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
+                <FaLink size={14} />
               </a>
             )}
           </div>
@@ -61,6 +71,8 @@ export default function MembersSection({ members = [] }) {
            quote={displayFaculty.quote} 
            instagram={displayFaculty.instagram}
            linkedin={displayFaculty.linkedin}
+           youtube={displayFaculty.youtube}
+           other={displayFaculty.other}
          />
       </div>
 
@@ -74,6 +86,8 @@ export default function MembersSection({ members = [] }) {
              quote={m.quote || m.bio} 
              instagram={m.instagram}
              linkedin={m.linkedin}
+             youtube={m.youtube}
+             other={m.other}
            />
          ))}
       </div>

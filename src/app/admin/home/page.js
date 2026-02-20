@@ -341,6 +341,18 @@ export default function HomeAdmin() {
                           : [...safeMembers, { ...facultyMember, linkedin: e.target.value }];
                         setData(newData);
                       }} />
+                      <input className="w-full bg-[#1e1e1f] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="YouTube URL" value={facultyMember.youtube || ''} onChange={(e) => {
+                        const newData = safeMembers.some(m => m.isFaculty) 
+                          ? safeMembers.map(m => m.isFaculty ? { ...m, youtube: e.target.value } : m)
+                          : [...safeMembers, { ...facultyMember, youtube: e.target.value }];
+                        setData(newData);
+                      }} />
+                      <input className="w-full bg-[#1e1e1f] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="Other URL" value={facultyMember.other || ''} onChange={(e) => {
+                        const newData = safeMembers.some(m => m.isFaculty) 
+                          ? safeMembers.map(m => m.isFaculty ? { ...m, other: e.target.value } : m)
+                          : [...safeMembers, { ...facultyMember, other: e.target.value }];
+                        setData(newData);
+                      }} />
                       <ImageUpload label="Profile Image" onUpload={(url) => {
                         const newData = safeMembers.some(m => m.isFaculty) 
                           ? safeMembers.map(m => m.isFaculty ? { ...m, image: url } : m)
@@ -414,6 +426,14 @@ export default function HomeAdmin() {
                     }} />
                     <input className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="LinkedIn URL" value={mem.linkedin || ''} onChange={(e) => {
                       const newData = safeMembers.map(m => m === mem ? { ...m, linkedin: e.target.value } : m);
+                      setData(newData);
+                    }} />
+                    <input className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="YouTube URL" value={mem.youtube || ''} onChange={(e) => {
+                      const newData = safeMembers.map(m => m === mem ? { ...m, youtube: e.target.value } : m);
+                      setData(newData);
+                    }} />
+                    <input className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" placeholder="Other URL" value={mem.other || ''} onChange={(e) => {
+                      const newData = safeMembers.map(m => m === mem ? { ...m, other: e.target.value } : m);
                       setData(newData);
                     }} />
                     <ImageUpload label="Profile Image" onUpload={(url) => {

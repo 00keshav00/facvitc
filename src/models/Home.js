@@ -38,6 +38,8 @@ const HomeSchema = new mongoose.Schema({
     image: String,
     instagram: String,
     linkedin: String,
+    youtube: String,
+    other: String,
     isFaculty: { type: Boolean, default: false },
     order: Number
   }],
