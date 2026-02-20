@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import path from 'path';
+import { put } from '@vercel/blob';
 
 export async function POST(req) {
   const formData = await req.formData();
@@ -26,20 +25,17 @@ export async function POST(req) {
     // Sanitize filename: remove special chars, spaces to underscores
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filename = Date.now() + '_' + safeName;
-    
-    // Save locally to public/uploads
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    const filePath = path.join(uploadDir, filename);
-    
-    await writeFile(filePath, buffer);
-    
-    const url = `/uploads/${filename}`;
-    console.log(`Saved file locally: ${url}`);
+
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: 'public',
+    });
+
+    console.log(`Saved file to blob: ${blob.url}`);
 
     return NextResponse.json({ 
       message: 'Success', 
-      url: url 
+      url: blob.url 
     });
   } catch (error) {
     console.log('Error occured ', error);
