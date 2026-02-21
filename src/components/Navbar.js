@@ -18,7 +18,7 @@ export default function Navbar({ settings }) {
   };
 
   return (
-    <header className="nav flex items-center justify-between px-5 py-2.5 bg-transparent border-b border-[rgba(255,255,255,0.08)] backdrop-blur-md z-50 shrink-0 relative">
+    <header className="nav flex items-center justify-between px-5 py-2.5 bg-transparent border-b border-[rgba(255,255,255,0.08)] backdrop-blur-md z-[100] shrink-0 relative">
       <div className="brand flex items-center gap-3">
         <Link href="/" className="flex items-center gap-3 no-underline" onClick={closeMenu}>
           {settings?.logo ? (
@@ -80,7 +80,7 @@ export default function Navbar({ settings }) {
 
       {/* Mobile Dropdown Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-[#1a1a1b] border-b border-[rgba(255,255,255,0.08)] backdrop-blur-xl flex flex-col items-center py-4 space-y-4 md:hidden z-40 shadow-xl">
+        <div className="absolute top-full left-0 w-full bg-[#1a1a1b] border-b border-[rgba(255,255,255,0.08)] backdrop-blur-xl flex flex-col items-center py-4 space-y-4 md:hidden z-[100] shadow-xl">
           <Link href="/#home" onClick={closeMenu} className="text-[#bfc1c3] text-base font-semibold py-2 w-full text-center hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
             Home
           </Link>
