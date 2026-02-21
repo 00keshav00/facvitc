@@ -4,7 +4,7 @@ export default function SiteDesigners({ designers }) {
   if (!designers || designers.length === 0 || !designers[0]?.name) return null;
 
   return (
-    <div className="w-full bg-[#111] border-t border-[rgba(255,255,255,0.08)] py-8 px-6 md:px-14">
+    <div className="w-full bg-[rgba(0,0,0,0.4)] backdrop-blur-md border-t border-[rgba(255,255,255,0.08)] py-8 px-6 md:px-14">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <h3 className="text-[#bfc1c3] font-bold text-lg whitespace-nowrap">Site Designing Team:</h3>
         
