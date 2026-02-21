@@ -29,33 +29,24 @@ export default function TimelinePage({ data }) {
   };
 
   return (
-    <div className="site flex flex-col min-h-screen bg-black text-[#e6e6e6] relative font-sans">
+    <div className="site flex flex-col h-screen bg-black text-[#e6e6e6] relative overflow-hidden font-sans">
       
       {/* Background Video */}
       <video 
         ref={bgVideoRef}
-        className="fixed inset-0 w-full h-full object-cover -z-10 opacity-50 brightness-50"
+        className="absolute inset-0 w-full h-full object-cover -z-10 opacity-50 brightness-50"
         src="/videos/background.mp4"
         autoPlay loop muted playsInline
       />
 
       {/* Timeline Nav */}
-      <nav className="w-full py-5 px-8 border-b border-[rgba(255,255,255,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-md flex gap-4 overflow-x-auto z-50 justify-center scrollbar-hide sticky top-0">
-        <style jsx>{`
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-        `}</style>
+      <nav className="w-full py-5 px-8 border-b border-[rgba(255,255,255,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-md flex flex-wrap gap-4 z-50 justify-center">
         {timeline.map((item) => (
           <button
             key={item.year}
             onClick={() => setActiveYear(item.year)}
             className={`px-4 py-2 rounded-full text-base transition-all whitespace-nowrap border border-transparent
-              ${activeYear === item.year 
+              ${String(activeYear) === String(item.year) 
                 ? 'bg-[#3a3a3b] text-white font-bold border-[rgba(255,255,255,0.1)]' 
                 : 'text-[#bfc1c3] hover:text-[#e6e6e6] hover:bg-[rgba(255,255,255,0.1)]'
               }`}
@@ -66,8 +57,19 @@ export default function TimelinePage({ data }) {
       </nav>
 
       {/* Content Area */}
-      <div className="flex-grow py-10">
-        <div className="w-full max-w-[1300px] mx-auto px-6 md:px-14">
+      <div id="timeline-scroll-container" className="flex-grow overflow-y-auto overflow-x-hidden no-scrollbar relative flex flex-col">
+        <style jsx>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
+        
+        {/* Main Content Wrapper with enough bottom padding so the sticky footer doesn't overlap the last item when fully scrolled */}
+        <div className="w-full max-w-[1300px] mx-auto px-6 md:px-14 py-10 pb-32 flex-grow">
           <AnimatePresence mode="wait">
             {activeContent && (
               <TimelineContent 
@@ -79,16 +81,21 @@ export default function TimelinePage({ data }) {
             )}
           </AnimatePresence>
         </div>
-      </div>
 
-      {/* Back to Top Bar - Now as a standard footer to avoid overlapping */}
-      <div className="w-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm p-8 border-t border-[rgba(255,255,255,0.05)] flex justify-center mt-auto">
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg"
-        >
-          <i className="fas fa-arrow-up mr-2"></i> Back to Top
-        </button>
+        {/* Back to Top Bar - Sticky Footer */}
+        <div className="sticky bottom-0 left-0 w-full bg-[rgba(0,0,0,0.8)] backdrop-blur-lg p-4 z-50 flex justify-center border-t border-[rgba(255,255,255,0.05)] mt-auto">
+          <button
+            onClick={() => {
+              const container = document.getElementById('timeline-scroll-container');
+              if (container) {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="bg-white/10 hover:bg-white/20 text-white px-8 py-2.5 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2"
+          >
+            <i className="fas fa-arrow-up"></i> Back to Top
+          </button>
+        </div>
       </div>
 
       {/* Lightbox */}
