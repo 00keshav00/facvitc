@@ -143,12 +143,21 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
   );
 
   const MediaBox = ({ src, className = "" }) => {
+    if (!src) return null;
     const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
     
     if (isVideo) {
       return (
         <div className={`relative rounded-xl overflow-hidden border border-white/10 shadow-lg bg-black ${className}`}>
-          <video src={src} className="w-full h-full object-cover" controls />
+          <video 
+            src={src} 
+            className="w-full h-full object-cover cursor-pointer transition-transform duration-500 hover:scale-105" 
+            controls 
+            muted 
+            loop
+            onMouseEnter={(e) => e.target.play()}
+            onMouseLeave={(e) => e.target.pause()}
+          />
         </div>
       );
     }
@@ -183,9 +192,10 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
       <div className="flex flex-col gap-16">
         {blocks.map((block, index) => {
           const layout = block.template;
+          const hasSubImages = block.images?.length > 1;
           
           return (
-            <div key={index} className="w-full flex flex-col gap-8">
+            <div key={index} className="w-full flex flex-col gap-6">
               {/* 1. TEXT_LEFT_IMAGE_RIGHT */}
               {layout === 'TEXT_LEFT_IMAGE_RIGHT' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
@@ -202,10 +212,26 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
                 </div>
               )}
 
+              {/* Display sub-images if the user selected a basic layout but still provided sub-images */}
+              {(layout === 'TEXT_LEFT_IMAGE_RIGHT' || layout === 'TEXT_RIGHT_IMAGE_LEFT') && hasSubImages && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                  {block.images.slice(1).map((img, i) => (
+                    <MediaBox key={i} src={img} className="h-48" />
+                  ))}
+                </div>
+              )}
+
               {/* 3. IMAGE_ONLY */}
               {layout === 'IMAGE_ONLY' && (
-                <div className="max-w-4xl mx-auto">
+                <div className="flex flex-col gap-4 max-w-4xl mx-auto w-full">
                   <MediaBox src={block.images?.[0]} className="h-[500px] w-full" />
+                  {hasSubImages && (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {block.images.slice(1).map((img, i) => (
+                        <MediaBox key={i} src={img} className="h-48" />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -214,9 +240,9 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
                   <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full" />
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1" />
-                  <div className="md:col-span-3 md:row-span-1 grid grid-cols-3 gap-4">
-                    {block.images?.slice(1, 4).map((img, i) => (
-                      <MediaBox key={i} src={img} className="h-full" />
+                  <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {(block.images?.slice(1, 4) || []).map((img, i) => (
+                      <MediaBox key={i} src={img} className="h-full min-h-[150px]" />
                     ))}
                   </div>
                 </div>
@@ -227,9 +253,9 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1 md:order-1" />
                   <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full md:order-2" />
-                  <div className="md:col-span-3 md:row-span-1 grid grid-cols-3 gap-4 md:order-3">
-                    {block.images?.slice(1, 4).map((img, i) => (
-                      <MediaBox key={i} src={img} className="h-full" />
+                  <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 md:grid-cols-3 gap-4 md:order-3">
+                    {(block.images?.slice(1, 4) || []).map((img, i) => (
+                      <MediaBox key={i} src={img} className="h-full min-h-[150px]" />
                     ))}
                   </div>
                 </div>
