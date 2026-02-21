@@ -2,7 +2,7 @@ import dbConnect from '@/lib/db';
 import Home from '@/models/Home';
 import { NextResponse } from 'next/server';
 
-export async function POST(req) {
+export async function PUT(req) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -12,7 +12,7 @@ export async function POST(req) {
     }
     
     // Once saved, do not allow updates (as per requirement)
-    if (home.siteDesigners && home.siteDesigners.length > 0) {
+    if (home.siteDesigners && home.siteDesigners.length === 4 && home.siteDesigners[0].name) {
        return NextResponse.json({ error: 'Site designers already set and cannot be modified.' }, { status: 403 });
     }
 

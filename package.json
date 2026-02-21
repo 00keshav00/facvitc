@@ -12,6 +12,7 @@
     "@vercel/blob": "^2.2.0",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^12.34.0",
+    "json5": "^2.2.3",
     "modules": "^0.4.0",
     "mongoose": "^9.2.0",
     "next": "16.1.6",

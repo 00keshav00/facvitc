@@ -35,13 +35,13 @@ export default function HomeAdmin() {
       
       let json;
       try {
-        json = text ? JSON.parse(text) : (tab.includes('Preview') ? [] : {});
+        json = text ? JSON.parse(text) : (tab.includes('Preview') || tab === 'Site Designers' ? [] : {});
       } catch (e) {
         console.error('JSON Parse error:', e, 'Text:', text);
-        json = tab.includes('Preview') ? [] : {};
+        json = tab.includes('Preview') || tab === 'Site Designers' ? [] : {};
       }
       
-      if (tab.includes('Preview')) {
+      if (tab.includes('Preview') || tab === 'Site Designers') {
         setData(Array.isArray(json) ? json : []);
       } else {
         setData(json && typeof json === 'object' && !Array.isArray(json) ? json : {});
@@ -255,15 +255,17 @@ export default function HomeAdmin() {
         );
 
       case 'Events Preview':
-        const fixedTitles = ['TechnoVit', 'Vibrance', 'Others'];
+        const fixedTitles = ['TECHNO', 'VIBRANCE', 'WALL PAINTING', 'OTHERS'];
         const safeEvents = Array.isArray(data) ? data : [];
         const displayEvents = fixedTitles.map(title => {
-          return safeEvents.find(e => e.title === title) || { title, imageA: '', imageB: '', description: '', link: `/events/${title.toLowerCase()}` };
+          let slug = title.toLowerCase().replace(' ', '-');
+          if (slug === 'techno') slug = 'technovit';
+          return safeEvents.find(e => e.title === title) || { title, imageA: '', imageB: '', description: '', link: `/events/${slug}` };
         });
 
         return (
           <div className="space-y-6 max-w-4xl">
-            <h3 className="text-lg font-bold">Fixed Events Preview (3 Cards)</h3>
+            <h3 className="text-lg font-bold">Fixed Events Preview (4 Cards)</h3>
             <div className="grid grid-cols-1 gap-6">
               {displayEvents.map((card, idx) => (
                 <div key={idx} className="p-6 border border-[#3a3a3b] rounded-xl bg-[#1e1e1f] space-y-4">
