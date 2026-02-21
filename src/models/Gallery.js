@@ -13,6 +13,7 @@ const GalleryItemSchema = new mongoose.Schema({
   instagram: String,
   otherLink1: String,
   otherLink2: String,
+  orientation: { type: String, enum: ['horizontal', 'vertical', 'square'], default: 'horizontal' },
   order: { type: Number, default: 0 }
 }, { timestamps: true });
 

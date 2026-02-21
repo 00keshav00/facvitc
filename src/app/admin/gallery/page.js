@@ -9,7 +9,7 @@ export default function GalleryAdmin() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newItem, setNewItem] = useState({ title: '', artist: '', description: '', image: '', category: categories[0], instagram: '', otherLink1: '', otherLink2: '' });
+  const [newItem, setNewItem] = useState({ title: '', artist: '', description: '', image: '', category: categories[0], instagram: '', otherLink1: '', otherLink2: '', orientation: 'horizontal' });
 
   useEffect(() => {
     setNewItem({ ...newItem, category: selectedCategory });
@@ -39,7 +39,7 @@ export default function GalleryAdmin() {
         body: JSON.stringify(newItem)
       });
       if (res.ok) {
-        setNewItem({ title: '', artist: '', description: '', image: '', category: selectedCategory, instagram: '', otherLink1: '', otherLink2: '' });
+        setNewItem({ title: '', artist: '', description: '', image: '', category: selectedCategory, instagram: '', otherLink1: '', otherLink2: '', orientation: 'horizontal' });
         fetchGallery();
       }
     } catch (err) {
@@ -141,6 +141,18 @@ export default function GalleryAdmin() {
                 onChange={(e) => setNewItem({...newItem, otherLink2: e.target.value})}
                 placeholder="https://..."
               />
+            </div>
+            <div>
+              <label className="block text-sm text-[#bfc1c3] mb-1">Image Orientation</label>
+              <select
+                className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded"
+                value={newItem.orientation}
+                onChange={(e) => setNewItem({...newItem, orientation: e.target.value})}
+              >
+                <option value="horizontal">Horizontal (Landscape)</option>
+                <option value="vertical">Vertical (Portrait)</option>
+                <option value="square">Square</option>
+              </select>
             </div>
             <div>
               <label className="block text-sm text-[#bfc1c3] mb-1">Description</label>
