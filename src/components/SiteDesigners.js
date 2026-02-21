@@ -13,7 +13,10 @@ export default function SiteDesigners({ designers }) {
             if (!designer.name) return null;
             return (
               <div key={idx} className="flex items-center gap-3">
-                <span className="text-[#e6e6e6] font-semibold">{designer.name}</span>
+                <div className="flex flex-col">
+                  <span className="text-[#e6e6e6] font-semibold">{designer.name}</span>
+                  {designer.role && <span className="text-[#666] text-xs">{designer.role}</span>}
+                </div>
                 <div className="flex gap-2 text-[#bfc1c3]">
                   {designer.linkedin && (
                     <a href={designer.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">

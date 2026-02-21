@@ -200,32 +200,35 @@ export default function EventsAdmin() {
                           setSelectedYear({...selectedYear, sections: newSections});
                         }} />
                       </div>
-                      <div>
-                        <ImageUpload label="Upload MP4 Video (optional)" onUpload={(url) => {
-                          const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, video: url } : s);
-                          setSelectedYear({...selectedYear, sections: newSections});
-                        }} />
-                        {section.video && <video src={section.video} className="w-full h-32 mt-2 object-cover rounded" controls />}
-                      </div>
                     </div>
 
                     <div className="space-y-4">
-                       <ImageUpload label="Main Image" onUpload={(url) => {
+                       <ImageUpload label="Main Media (Image or Video)" onUpload={(url) => {
                           const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, mainImage: url } : s);
                           setSelectedYear({...selectedYear, sections: newSections});
                        }} />
-                       {section.mainImage && <img src={section.mainImage} className="w-full h-32 object-cover rounded" />}
+                       {section.mainImage && (
+                         section.mainImage.toLowerCase().endsWith('.mp4') || section.mainImage.toLowerCase().endsWith('.webm') ? (
+                           <video src={section.mainImage} className="w-full h-32 object-cover rounded" controls />
+                         ) : (
+                           <img src={section.mainImage} className="w-full h-32 object-cover rounded" />
+                         )
+                       )}
                        
                        <div>
-                         <label className="block text-sm text-[#bfc1c3] mb-1">Sub Images</label>
-                         <ImageUpload label="Add Sub Image" onUpload={(url) => {
+                         <label className="block text-sm text-[#bfc1c3] mb-1">Sub Media (Images or Videos)</label>
+                         <ImageUpload label="Add Sub Media" onUpload={(url) => {
                             const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, subImages: [...(s.subImages || []), url] } : s);
                             setSelectedYear({...selectedYear, sections: newSections});
                          }} />
                          <div className="flex gap-2 flex-wrap">
-                           {(section.subImages || []).map((img, i) => (
+                           {(section.subImages || []).map((media, i) => (
                              <div key={i} className="relative">
-                               <img src={img} className="w-16 h-16 object-cover rounded" />
+                               {media.toLowerCase().endsWith('.mp4') || media.toLowerCase().endsWith('.webm') ? (
+                                 <video src={media} className="w-16 h-16 object-cover rounded" />
+                               ) : (
+                                 <img src={media} className="w-16 h-16 object-cover rounded" />
+                               )}
                                <button 
                                 onClick={() => {
                                   const newSections = selectedYear.sections.map((s, si) => si === idx ? { ...s, subImages: s.subImages.filter((_, sidx) => sidx !== i) } : s);

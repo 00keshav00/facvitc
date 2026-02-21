@@ -66,7 +66,6 @@ export default async function EventPage({ params }) {
         title: s.title,
         description: s.description,
         images: [s.mainImage, ...(s.subImages || [])].filter(Boolean),
-        video: s.video,
         template: s.layout // Map layout to template
       }))
     }))

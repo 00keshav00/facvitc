@@ -45,6 +45,7 @@ const HomeSchema = new mongoose.Schema({
   }],
   siteDesigners: [{
     name: String,
+    role: String,
     linkedin: String,
     otherLink: String
   }],

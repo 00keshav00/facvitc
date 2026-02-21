@@ -460,7 +460,7 @@ export default function HomeAdmin() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[0, 1, 2, 3].map((idx) => {
-                const member = designers[idx] || { name: '', linkedin: '', otherLink: '' };
+                const member = designers[idx] || { name: '', role: '', linkedin: '', otherLink: '' };
                 return (
                   <div key={idx} className="p-4 border border-[#3a3a3b] rounded bg-[#1e1e1f] space-y-3">
                     <h4 className="font-semibold text-[#bfc1c3]">Designer {idx + 1}</h4>
@@ -472,6 +472,17 @@ export default function HomeAdmin() {
                       onChange={(e) => {
                         const newData = [...designers];
                         newData[idx] = { ...member, name: e.target.value };
+                        setData(newData);
+                      }} 
+                    />
+                    <input 
+                      className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm disabled:opacity-50" 
+                      placeholder="Role (e.g. Lead Designer)" 
+                      value={member.role || ''} 
+                      disabled={isSaved}
+                      onChange={(e) => {
+                        const newData = [...designers];
+                        newData[idx] = { ...member, role: e.target.value };
                         setData(newData);
                       }} 
                     />

@@ -142,6 +142,20 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
     </div>
   );
 
+  const MediaBox = ({ src, className = "" }) => {
+    const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
+    
+    if (isVideo) {
+      return (
+        <div className={`relative rounded-xl overflow-hidden border border-white/10 shadow-lg bg-black ${className}`}>
+          <video src={src} className="w-full h-full object-cover" controls />
+        </div>
+      );
+    }
+
+    return <ImageBox src={src} className={className} />;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -159,6 +173,13 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
         </div>
       )}
 
+      {/* Banner Media */}
+      {content.images?.[0] && (
+        <div className="mb-12">
+          <MediaBox src={content.images[0]} className="w-full h-[400px] md:h-[600px]" />
+        </div>
+      )}
+
       <div className="flex flex-col gap-16">
         {blocks.map((block, index) => {
           const layout = block.template;
@@ -169,14 +190,14 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {layout === 'TEXT_LEFT_IMAGE_RIGHT' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-2" />
-                  <ImageBox src={block.images?.[0]} className="h-[400px] md:col-span-1" />
+                  <MediaBox src={block.images?.[0]} className="h-[400px] md:col-span-1" />
                 </div>
               )}
 
               {/* 2. TEXT_RIGHT_IMAGE_LEFT */}
               {layout === 'TEXT_RIGHT_IMAGE_LEFT' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-                  <ImageBox src={block.images?.[0]} className="h-[400px] md:order-1 md:col-span-1" />
+                  <MediaBox src={block.images?.[0]} className="h-[400px] md:order-1 md:col-span-1" />
                   <DescriptionBox title={block.title} description={block.description} className="md:order-2 md:col-span-2" />
                 </div>
               )}
@@ -184,18 +205,18 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {/* 3. IMAGE_ONLY */}
               {layout === 'IMAGE_ONLY' && (
                 <div className="max-w-4xl mx-auto">
-                  <ImageBox src={block.images?.[0]} className="h-[500px] w-full" />
+                  <MediaBox src={block.images?.[0]} className="h-[500px] w-full" />
                 </div>
               )}
 
               {/* 4. SPLIT_WITH_STACK (Image Left) */}
               {layout === 'SPLIT_WITH_STACK' && (
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
-                  <ImageBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full" />
+                  <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full" />
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1" />
                   <div className="md:col-span-3 md:row-span-1 grid grid-cols-3 gap-4">
                     {block.images?.slice(1, 4).map((img, i) => (
-                      <ImageBox key={i} src={img} className="h-full" />
+                      <MediaBox key={i} src={img} className="h-full" />
                     ))}
                   </div>
                 </div>
@@ -205,19 +226,12 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {layout === 'SPLIT_WITH_STACK_REVERSE' && (
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1 md:order-1" />
-                  <ImageBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full md:order-2" />
+                  <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full md:order-2" />
                   <div className="md:col-span-3 md:row-span-1 grid grid-cols-3 gap-4 md:order-3">
                     {block.images?.slice(1, 4).map((img, i) => (
-                      <ImageBox key={i} src={img} className="h-full" />
+                      <MediaBox key={i} src={img} className="h-full" />
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* Video rendering if available */}
-              {block.video && (
-                <div className="w-full mt-2 bg-black/60 border border-white/10 rounded-xl overflow-hidden shadow-lg backdrop-blur-md">
-                  <video src={block.video} className="w-full max-h-[600px] object-contain" controls />
                 </div>
               )}
             </div>
