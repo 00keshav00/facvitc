@@ -9,6 +9,9 @@ export async function generateMetadata() {
   return {
     title: settings.siteTitle || "Fine Arts Club - VIT Chennai",
     description: "A platform for creative minds to learn, share and exhibit.",
+    verification: {
+      google: "QSYbrK5A0iSvW5Q39AJYyx54gyERTh8G1OkMBuMZrkA",
+    },
     icons: {
       icon: settings.favicon ? `${settings.favicon}?v=${Date.now()}` : '/favicon.ico',
       apple: settings.favicon ? `${settings.favicon}?v=${Date.now()}` : '/favicon.ico',
