@@ -79,6 +79,25 @@ export default async function CategoryPage({ params }) {
             <div className="p-5">
               <h3 className="text-xl font-bold text-[#e6e6e6] mb-1">{item.title || 'Untitled'}</h3>
               <p className="text-sm text-[#bfc1c3] mb-3">by {item.artist || 'FAC Member'}</p>
+              {(item.instagram || item.otherLink1 || item.otherLink2) && (
+                <div className="flex flex-wrap gap-3 mb-3">
+                  {item.instagram && (
+                    <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
+                      <span>📸 Instagram</span>
+                    </a>
+                  )}
+                  {item.otherLink1 && (
+                    <a href={item.otherLink1} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
+                      <span>🔗 Link 1</span>
+                    </a>
+                  )}
+                  {item.otherLink2 && (
+                    <a href={item.otherLink2} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
+                      <span>🔗 Link 2</span>
+                    </a>
+                  )}
+                </div>
+              )}
               {item.description && <p className="text-sm text-[rgba(191,193,195,0.8)] line-clamp-2">{item.description}</p>}
             </div>
           </div>

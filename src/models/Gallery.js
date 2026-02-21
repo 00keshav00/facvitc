@@ -10,6 +10,9 @@ const GalleryItemSchema = new mongoose.Schema({
   title: String,
   description: String,
   artist: String,
+  instagram: String,
+  otherLink1: String,
+  otherLink2: String,
   order: { type: Number, default: 0 }
 }, { timestamps: true });
 

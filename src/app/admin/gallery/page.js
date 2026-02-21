@@ -9,7 +9,7 @@ export default function GalleryAdmin() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newItem, setNewItem] = useState({ title: '', artist: '', description: '', image: '', category: categories[0] });
+  const [newItem, setNewItem] = useState({ title: '', artist: '', description: '', image: '', category: categories[0], instagram: '', otherLink1: '', otherLink2: '' });
 
   useEffect(() => {
     setNewItem({ ...newItem, category: selectedCategory });
@@ -39,7 +39,7 @@ export default function GalleryAdmin() {
         body: JSON.stringify(newItem)
       });
       if (res.ok) {
-        setNewItem({ title: '', artist: '', description: '', image: '', category: selectedCategory });
+        setNewItem({ title: '', artist: '', description: '', image: '', category: selectedCategory, instagram: '', otherLink1: '', otherLink2: '' });
         fetchGallery();
       }
     } catch (err) {
@@ -113,6 +113,33 @@ export default function GalleryAdmin() {
                 className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded"
                 value={newItem.artist}
                 onChange={(e) => setNewItem({...newItem, artist: e.target.value})}
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-[#bfc1c3] mb-1">Instagram Link</label>
+              <input 
+                className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded"
+                value={newItem.instagram}
+                onChange={(e) => setNewItem({...newItem, instagram: e.target.value})}
+                placeholder="https://instagram.com/..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-[#bfc1c3] mb-1">Other Link 1</label>
+              <input 
+                className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded"
+                value={newItem.otherLink1}
+                onChange={(e) => setNewItem({...newItem, otherLink1: e.target.value})}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-[#bfc1c3] mb-1">Other Link 2</label>
+              <input 
+                className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded"
+                value={newItem.otherLink2}
+                onChange={(e) => setNewItem({...newItem, otherLink2: e.target.value})}
+                placeholder="https://..."
               />
             </div>
             <div>
