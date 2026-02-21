@@ -29,18 +29,18 @@ export default function TimelinePage({ data }) {
   };
 
   return (
-    <div className="site flex flex-col min-h-screen bg-black text-[#e6e6e6] relative overflow-hidden font-sans">
+    <div className="site flex flex-col min-h-screen bg-black text-[#e6e6e6] relative font-sans">
       
       {/* Background Video */}
       <video 
         ref={bgVideoRef}
-        className="absolute inset-0 w-full h-full object-cover -z-10 opacity-50 brightness-50"
+        className="fixed inset-0 w-full h-full object-cover -z-10 opacity-50 brightness-50"
         src="/videos/background.mp4"
         autoPlay loop muted playsInline
       />
 
       {/* Timeline Nav */}
-      <nav className="w-full py-5 px-8 border-b border-[rgba(255,255,255,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-md flex gap-4 overflow-x-auto z-50 justify-center no-scrollbar">
+      <nav className="w-full py-5 px-8 border-b border-[rgba(255,255,255,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-md flex gap-4 overflow-x-auto z-50 justify-center no-scrollbar sticky top-0">
         {timeline.map((item) => (
           <button
             key={item.year}
@@ -57,7 +57,7 @@ export default function TimelinePage({ data }) {
       </nav>
 
       {/* Content Area */}
-      <div className="flex-grow overflow-y-auto no-scrollbar py-10">
+      <div className="flex-grow py-10 pb-24">
         <div className="w-full max-w-[1300px] mx-auto px-6 md:px-14">
           <AnimatePresence mode="wait">
             {activeContent && (
@@ -152,9 +152,9 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
           <video 
             src={src} 
             className="w-full h-full object-cover cursor-pointer transition-transform duration-500 hover:scale-105" 
-            controls 
             muted 
             loop
+            playsInline
             onMouseEnter={(e) => e.target.play()}
             onMouseLeave={(e) => e.target.pause()}
           />
