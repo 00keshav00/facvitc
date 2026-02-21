@@ -69,7 +69,7 @@ export default function EventsSection({ preview }) {
       imageB: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=400&auto=format&fit=crop",
       description: "Our flagship tech-art festival featuring installations, digital mapping, and interactive exhibits.",
       link: "/events/technovit",
-      title: "TECHNOVIT"
+      title: "TECHNO"
     },
     {
       imageA: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=400&auto=format&fit=crop",
@@ -81,38 +81,50 @@ export default function EventsSection({ preview }) {
     {
       imageA: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400&auto=format&fit=crop",
       imageB: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=400&auto=format&fit=crop",
+      description: "Express your creativity on a larger canvas. Join our wall painting events to beautify our campus.",
+      link: "/events/wall-painting",
+      title: "WALL PAINTING"
+    },
+    {
+      imageA: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400&auto=format&fit=crop",
+      imageB: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=400&auto=format&fit=crop",
       description: "Weekly hands-on sessions. Learn pottery, sketching, and digital design from industry experts.",
       link: "/events/others",
-      title: "WORKSHOPS"
+      title: "OTHERS"
     }
   ];
 
-  const displayEvents = preview && preview.length > 0 ? preview : defaultEvents;
+  // Merge preview with default events if missing
+  const displayEvents = defaultEvents.map(def => {
+    const fromPreview = preview?.find(p => p.title.toUpperCase() === def.title);
+    return fromPreview || def;
+  });
 
   return (
     <section className="events py-12 md:py-16 px-4 md:px-14 border-t border-[rgba(255,255,255,0.08)] flex flex-col items-center gap-10 md:gap-16" id="events">
       <div className="section-title self-start">Events</div>
 
-      {displayEvents.map((event, idx) => {
-        const title = event.title?.toUpperCase();
-        let link = event.link;
-        if (!link || link.startsWith('/techno')) {
-           if (title.includes('TECHNO')) link = '/events/technovit';
-           else if (title.includes('VIBRANCE')) link = '/events/vibrance';
-           else link = '/events/others';
-        }
+      <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-10 place-items-center">
+        {displayEvents.map((event, idx) => {
+          const title = event.title?.toUpperCase();
+          let link = event.link || '/events/others';
+          
+          if (title.includes('TECHNO')) link = '/events/technovit';
+          else if (title.includes('VIBRANCE')) link = '/events/vibrance';
+          else if (title.includes('WALL PAINTING')) link = '/events/wall-painting';
 
-        return (
-          <EventCard 
-            key={idx}
-            imgLeft={event.imageA}
-            imgRight={event.imageB}
-            text={event.description}
-            link={link}
-            linkText={title}
-          />
-        );
-      })}
+          return (
+            <EventCard 
+              key={idx}
+              imgLeft={event.imageA}
+              imgRight={event.imageB}
+              text={event.description}
+              link={link}
+              linkText={title}
+            />
+          );
+        })}
+      </div>
     </section>
   );
 }

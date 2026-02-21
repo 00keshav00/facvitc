@@ -38,12 +38,18 @@ export default function MembersAdmin() {
     data.socialLinks = {
       instagram: data.instagram,
       facebook: data.facebook,
-      linkedin: data.linkedin
+      linkedin: data.linkedin,
+      otherLink: data.otherLink
     };
+    
+    // Add image if uploading
+    if (editingMember?.image) {
+      data.image = editingMember.image;
+    }
 
     try {
-      const url = editingMember ? `/api/members/${editingMember._id}` : '/api/members';
-      const method = editingMember ? 'PUT' : 'POST';
+      const url = editingMember?._id ? `/api/members/${editingMember._id}` : '/api/members';
+      const method = editingMember?._id ? 'PUT' : 'POST';
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -79,20 +85,20 @@ export default function MembersAdmin() {
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">Members Management</h2>
         <button 
-          onClick={() => { setEditingMember(null); setShowForm(true); }}
+          onClick={() => { setEditingMember({}); setShowForm(true); }}
           className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-semibold transition-colors"
         >+ Add {type} Member</button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 justify-between bg-[#1e1e1f] p-4 rounded-xl border border-[#3a3a3b]">
         <div className="flex gap-2">
-          {['Lead', 'General'].map(t => (
+          {['Lead', 'General', 'Site Designer'].map(t => (
             <button 
               key={t}
               onClick={() => setType(t)}
               className={`px-4 py-2 rounded-lg font-semibold transition-colors ${type === t ? 'bg-white text-black' : 'bg-[#2d2e30] text-[#bfc1c3] hover:text-white'}`}
             >
-              {t} Members
+              {t}
             </button>
           ))}
         </div>
@@ -107,8 +113,14 @@ export default function MembersAdmin() {
       {showForm && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#1e1e1f] border border-[#3a3a3b] p-8 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <h3 className="text-2xl font-bold mb-6">{editingMember ? 'Edit' : 'Add'} {type} Member</h3>
+            <h3 className="text-2xl font-bold mb-6">{editingMember?._id ? 'Edit' : 'Add'} {type} Member</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {type === 'Site Designer' && (
+                <div>
+                  <ImageUpload label="Member Image" onUpload={(url) => setEditingMember({...editingMember, image: url})} />
+                  {editingMember?.image && <img src={editingMember.image} className="w-24 h-24 object-cover rounded-full mt-2" />}
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Full Name</label>
@@ -140,6 +152,10 @@ export default function MembersAdmin() {
                  <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">LinkedIn URL</label>
                   <input name="linkedin" className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" defaultValue={editingMember?.socialLinks?.linkedin} />
+                </div>
+                <div>
+                  <label className="block text-sm text-[#bfc1c3] mb-1">Other Link URL</label>
+                  <input name="otherLink" className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" defaultValue={editingMember?.socialLinks?.otherLink} />
                 </div>
               </div>
 

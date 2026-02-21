@@ -54,6 +54,19 @@ export default function Navbar({ settings }) {
         <Link href="/#contact" className="text-sm px-3 py-2 rounded-md transition-colors duration-200 hover:text-black hover:bg-white">
           Contact
         </Link>
+        <div className="relative group cursor-pointer">
+          <span className="text-sm px-3 py-2 rounded-md transition-colors duration-200 group-hover:text-black group-hover:bg-white inline-block">
+            Internal <i className="fas fa-chevron-down text-xs ml-1"></i>
+          </span>
+          <div className="absolute top-full right-0 mt-2 w-48 bg-[#1a1a1b] border border-[rgba(255,255,255,0.08)] rounded-xl shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+            <Link href="/internal/ffcs" className="block px-4 py-3 text-sm text-[#bfc1c3] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors border-b border-[rgba(255,255,255,0.05)]">
+              FFCS Portal
+            </Link>
+            <Link href="/internal/results" className="block px-4 py-3 text-sm text-[#bfc1c3] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+              Result Announcements
+            </Link>
+          </div>
+        </div>
       </nav>
 
       {/* Mobile Menu Button */}
@@ -85,6 +98,14 @@ export default function Navbar({ settings }) {
           </Link>
           <Link href="/#contact" onClick={closeMenu} className="text-[#bfc1c3] text-base font-semibold py-2 w-full text-center hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
             Contact
+          </Link>
+          <div className="w-full h-px bg-[rgba(255,255,255,0.08)] my-2"></div>
+          <p className="text-[#666] text-xs font-bold tracking-widest uppercase mb-1">Internal</p>
+          <Link href="/internal/ffcs" onClick={closeMenu} className="text-[#bfc1c3] text-sm font-semibold py-2 w-full text-center hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+            FFCS Portal
+          </Link>
+          <Link href="/internal/results" onClick={closeMenu} className="text-[#bfc1c3] text-sm font-semibold py-2 w-full text-center hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+            Result Announcements
           </Link>
         </div>
       )}

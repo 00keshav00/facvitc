@@ -34,6 +34,15 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/members" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/members') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
             Members
           </Link>
+          <div className="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Internal
+          </div>
+          <Link href="/admin/ffcs" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/ffcs') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            FFCS Portal
+          </Link>
+          <Link href="/admin/results" className={`block px-4 py-2 rounded-md ${pathname.startsWith('/admin/results') ? 'bg-[#3a3a3b] text-white' : 'text-[#bfc1c3] hover:bg-[#3a3a3b] hover:text-white'}`}>
+            Interview Results
+          </Link>
           
           <div className="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
             System

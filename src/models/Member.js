@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const MemberSchema = new mongoose.Schema({
   name: { type: String, required: true },
   role: { type: String, required: true }, // e.g., President, Member, etc.
-  type: { type: String, enum: ['Lead', 'General'], default: 'General' },
+  type: { type: String, enum: ['Lead', 'General', 'Site Designer'], default: 'General' },
   year: { type: String }, // optional for lead
   department: { type: String },
   bio: { type: String },
@@ -11,7 +11,8 @@ const MemberSchema = new mongoose.Schema({
   socialLinks: {
     instagram: String,
     facebook: String,
-    linkedin: String
+    linkedin: String,
+    otherLink: String
   },
   order: { type: Number, default: 0 },
 }, { timestamps: true });

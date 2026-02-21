@@ -35,6 +35,7 @@ export default function MembersPage() {
 
   const leads = filteredMembers.filter(m => m.type === 'Lead');
   const general = filteredMembers.filter(m => m.type === 'General');
+  const designers = filteredMembers.filter(m => m.type === 'Site Designer');
 
   const MemberTable = ({ title, list }) => (
     <div className="mb-12">
@@ -74,6 +75,43 @@ export default function MembersPage() {
     </div>
   );
 
+  const DesignersSection = ({ list }) => {
+    if (list.length === 0) return null;
+    return (
+      <div className="mb-12">
+        <h3 className="text-2xl font-bold mb-6 text-blue-400 border-b border-blue-400/20 pb-2">Site Designing Team</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {list.map((member, idx) => (
+            <div key={member._id || idx} className="bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)] rounded-2xl overflow-hidden shadow-lg transition-transform hover:-translate-y-2">
+              {member.image ? (
+                <img src={member.image} alt={member.name} className="w-full h-64 object-cover" />
+              ) : (
+                <div className="w-full h-64 bg-[rgba(255,255,255,0.05)] flex items-center justify-center text-[#bfc1c3]">No Image</div>
+              )}
+              <div className="p-6">
+                <h4 className="text-xl font-bold text-[#e6e6e6] mb-1">{member.name}</h4>
+                <p className="text-sm font-semibold text-blue-400 mb-3">{member.role}</p>
+                <p className="text-[#bfc1c3] text-sm mb-4 line-clamp-3">{member.bio}</p>
+                <div className="flex gap-4">
+                  {member.socialLinks?.linkedin && (
+                    <a href={member.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors" title="LinkedIn">
+                      <i className="fab fa-linkedin text-2xl"></i>
+                    </a>
+                  )}
+                  {member.socialLinks?.otherLink && (
+                    <a href={member.socialLinks.otherLink} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center gap-2" title="Other Link">
+                      <i className="fas fa-link text-xl"></i>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="members-page px-6 md:px-14 py-12 min-h-screen flex flex-col">
       <h2 className="text-3xl font-bold mb-8 text-center text-[#e6e6e6]">FAC Club Directory</h2>
@@ -94,6 +132,7 @@ export default function MembersPage() {
       ) : (
         <>
           <MemberTable title="Lead Members" list={leads} />
+          <DesignersSection list={designers} />
           <MemberTable title="General Members" list={general} />
         </>
       )}
