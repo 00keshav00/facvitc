@@ -40,7 +40,16 @@ export default function TimelinePage({ data }) {
       />
 
       {/* Timeline Nav */}
-      <nav className="w-full py-5 px-8 border-b border-[rgba(255,255,255,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-md flex gap-4 overflow-x-auto z-50 justify-center no-scrollbar sticky top-0">
+      <nav className="w-full py-5 px-8 border-b border-[rgba(255,255,255,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-md flex gap-4 overflow-x-auto z-50 justify-center scrollbar-hide sticky top-0">
+        <style jsx>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
         {timeline.map((item) => (
           <button
             key={item.year}
@@ -57,7 +66,7 @@ export default function TimelinePage({ data }) {
       </nav>
 
       {/* Content Area */}
-      <div className="flex-grow py-10 pb-24">
+      <div className="flex-grow py-10">
         <div className="w-full max-w-[1300px] mx-auto px-6 md:px-14">
           <AnimatePresence mode="wait">
             {activeContent && (
@@ -72,13 +81,13 @@ export default function TimelinePage({ data }) {
         </div>
       </div>
 
-      {/* Back to Top Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm p-4 z-50 flex justify-center">
+      {/* Back to Top Bar - Now as a standard footer to avoid overlapping */}
+      <div className="w-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm p-8 border-t border-[rgba(255,255,255,0.05)] flex justify-center mt-auto">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full font-semibold transition-colors"
+          className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg"
         >
-          Back to Top
+          <i className="fas fa-arrow-up mr-2"></i> Back to Top
         </button>
       </div>
 
