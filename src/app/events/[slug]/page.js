@@ -13,6 +13,7 @@ export async function generateMetadata({ params }) {
   const typeMap = {
     'technovit': 'TechnoVit',
     'vibrance': 'Vibrance',
+    'wall-painting': 'Wall Painting',
     'others': 'Workshops'
   };
 
@@ -31,6 +32,7 @@ export default async function EventPage({ params }) {
   const typeMap = {
     'technovit': 'TechnoVit',
     'vibrance': 'Vibrance',
+    'wall-painting': 'Wall Painting',
     'others': 'Workshops'
   };
 
@@ -64,6 +66,7 @@ export default async function EventPage({ params }) {
         title: s.title,
         description: s.description,
         images: [s.mainImage, ...(s.subImages || [])].filter(Boolean),
+        video: s.video,
         template: s.layout // Map layout to template
       }))
     }))

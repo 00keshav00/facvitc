@@ -92,13 +92,13 @@ export default function MembersAdmin() {
 
       <div className="flex flex-col md:flex-row gap-4 justify-between bg-[#1e1e1f] p-4 rounded-xl border border-[#3a3a3b]">
         <div className="flex gap-2">
-          {['Lead', 'General', 'Site Designer'].map(t => (
+          {['Lead', 'General'].map(t => (
             <button 
               key={t}
               onClick={() => setType(t)}
               className={`px-4 py-2 rounded-lg font-semibold transition-colors ${type === t ? 'bg-white text-black' : 'bg-[#2d2e30] text-[#bfc1c3] hover:text-white'}`}
             >
-              {t}
+              {t} Members
             </button>
           ))}
         </div>
@@ -115,12 +115,6 @@ export default function MembersAdmin() {
           <div className="bg-[#1e1e1f] border border-[#3a3a3b] p-8 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <h3 className="text-2xl font-bold mb-6">{editingMember?._id ? 'Edit' : 'Add'} {type} Member</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {type === 'Site Designer' && (
-                <div>
-                  <ImageUpload label="Member Image" onUpload={(url) => setEditingMember({...editingMember, image: url})} />
-                  {editingMember?.image && <img src={editingMember.image} className="w-24 h-24 object-cover rounded-full mt-2" />}
-                </div>
-              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Full Name</label>

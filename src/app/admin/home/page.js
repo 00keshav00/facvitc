@@ -8,7 +8,7 @@ export default function HomeAdmin() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const tabs = ['Hero', 'About', 'Artwork', 'Gallery Preview', 'Events Preview', 'Members Preview', 'Contact'];
+  const tabs = ['Hero', 'About', 'Artwork', 'Gallery Preview', 'Events Preview', 'Members Preview', 'Site Designers', 'Contact'];
 
   useEffect(() => {
     fetchData(activeTab);
@@ -446,6 +446,76 @@ export default function HomeAdmin() {
               ))}
             </div>
             <button onClick={() => handleUpdate()} className="bg-[#4a4a4b] px-6 py-2 rounded font-semibold w-full">Save Members Preview</button>
+          </div>
+        );
+
+      case 'Site Designers':
+        const designers = Array.isArray(data) ? data : [];
+        const isSaved = designers.length >= 4 && designers[0]?._id; // Crude check if they come from DB and exist
+        
+        return (
+          <div className="space-y-6 max-w-4xl">
+            <h3 className="text-lg font-bold">Site Designing Team (Fixed Footer Block)</h3>
+            <p className="text-sm text-yellow-500 mb-4">Note: Once 4 designers are saved, they cannot be updated or deleted from this panel.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[0, 1, 2, 3].map((idx) => {
+                const member = designers[idx] || { name: '', linkedin: '', otherLink: '' };
+                return (
+                  <div key={idx} className="p-4 border border-[#3a3a3b] rounded bg-[#1e1e1f] space-y-3">
+                    <h4 className="font-semibold text-[#bfc1c3]">Designer {idx + 1}</h4>
+                    <input 
+                      className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm disabled:opacity-50" 
+                      placeholder="Name" 
+                      value={member.name || ''} 
+                      disabled={isSaved}
+                      onChange={(e) => {
+                        const newData = [...designers];
+                        newData[idx] = { ...member, name: e.target.value };
+                        setData(newData);
+                      }} 
+                    />
+                    <input 
+                      className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm disabled:opacity-50" 
+                      placeholder="LinkedIn URL" 
+                      value={member.linkedin || ''} 
+                      disabled={isSaved}
+                      onChange={(e) => {
+                        const newData = [...designers];
+                        newData[idx] = { ...member, linkedin: e.target.value };
+                        setData(newData);
+                      }} 
+                    />
+                    <input 
+                      className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm disabled:opacity-50" 
+                      placeholder="Other URL" 
+                      value={member.otherLink || ''} 
+                      disabled={isSaved}
+                      onChange={(e) => {
+                        const newData = [...designers];
+                        newData[idx] = { ...member, otherLink: e.target.value };
+                        setData(newData);
+                      }} 
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            
+            {!isSaved && (
+              <button 
+                onClick={() => {
+                  if (designers.filter(d => d.name).length !== 4) {
+                    alert('Please fill in all 4 designers before saving.');
+                    return;
+                  }
+                  handleUpdate();
+                }} 
+                className="bg-blue-600 px-8 py-3 rounded-lg font-bold w-full"
+              >
+                Save Site Designers Permanently
+              </button>
+            )}
           </div>
         );
 

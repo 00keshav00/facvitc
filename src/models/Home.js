@@ -43,6 +43,11 @@ const HomeSchema = new mongoose.Schema({
     isFaculty: { type: Boolean, default: false },
     order: Number
   }],
+  siteDesigners: [{
+    name: String,
+    linkedin: String,
+    otherLink: String
+  }],
   contact: {
     email: String,
     phone: String,

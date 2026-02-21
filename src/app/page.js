@@ -5,6 +5,7 @@ import GallerySection from '@/components/GallerySection';
 import EventsSection from '@/components/EventsSection';
 import MembersSection from '@/components/MembersSection';
 import ConnectSection from '@/components/ConnectSection';
+import SiteDesigners from '@/components/SiteDesigners';
 import Footer from '@/components/Footer';
 import dbConnect from '@/lib/db';
 import HomeModel from '@/models/Home';
@@ -54,6 +55,7 @@ export default async function Home() {
       <EventsSection preview={home?.eventsPreview} />
       <MembersSection members={home?.membersPreview} />
       <ConnectSection contact={home?.contact} settings={settings} />
+      <SiteDesigners designers={home?.siteDesigners} />
       <Footer settings={settings} />
     </>
   );

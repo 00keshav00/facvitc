@@ -164,7 +164,7 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
           const layout = block.template;
           
           return (
-            <div key={index} className="w-full">
+            <div key={index} className="w-full flex flex-col gap-8">
               {/* 1. TEXT_LEFT_IMAGE_RIGHT */}
               {layout === 'TEXT_LEFT_IMAGE_RIGHT' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
@@ -211,6 +211,13 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
                       <ImageBox key={i} src={img} className="h-full" />
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Video rendering if available */}
+              {block.video && (
+                <div className="w-full mt-2 bg-black/60 border border-white/10 rounded-xl overflow-hidden shadow-lg backdrop-blur-md">
+                  <video src={block.video} className="w-full max-h-[600px] object-contain" controls />
                 </div>
               )}
             </div>

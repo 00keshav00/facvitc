@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import ImageUpload from '@/components/ImageUpload';
 
-const eventTypes = ['TechnoVit', 'Vibrance', 'Others'];
+const eventTypes = ['TechnoVit', 'Vibrance', 'Wall Painting', 'Others'];
 const layouts = ['TEXT_LEFT_IMAGE_RIGHT', 'TEXT_RIGHT_IMAGE_LEFT', 'IMAGE_ONLY', 'SPLIT_WITH_STACK', 'SPLIT_WITH_STACK_REVERSE'];
 
 export default function EventsAdmin() {
@@ -201,11 +201,11 @@ export default function EventsAdmin() {
                         }} />
                       </div>
                       <div>
-                        <label className="block text-sm text-[#bfc1c3] mb-1">Video URL (optional)</label>
-                        <input className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" value={section.video || ''} onChange={(e) => {
-                          const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, video: e.target.value } : s);
+                        <ImageUpload label="Upload MP4 Video (optional)" onUpload={(url) => {
+                          const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, video: url } : s);
                           setSelectedYear({...selectedYear, sections: newSections});
                         }} />
+                        {section.video && <video src={section.video} className="w-full h-32 mt-2 object-cover rounded" controls />}
                       </div>
                     </div>
 

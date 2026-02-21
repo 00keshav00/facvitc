@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const EventYearSchema = new mongoose.Schema({
-  eventType: { type: String, enum: ['TechnoVit', 'Vibrance', 'Workshops', 'Others'], required: true },
+  eventType: { type: String, enum: ['TechnoVit', 'Vibrance', 'Workshops', 'Wall Painting', 'Others'], required: true },
   year: { type: String, required: true },
   title: String,
   description: String,
