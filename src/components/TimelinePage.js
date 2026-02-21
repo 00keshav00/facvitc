@@ -83,7 +83,7 @@ export default function TimelinePage({ data }) {
         </div>
 
         {/* Back to Top Bar - Sticky Footer */}
-        <div className="sticky bottom-0 left-0 w-full bg-[rgba(0,0,0,0.8)] backdrop-blur-lg p-4 z-50 flex justify-center border-t border-[rgba(255,255,255,0.05)] mt-auto">
+        <div className="sticky bottom-0 left-0 w-full bg-[rgba(0,0,0,0.4)] backdrop-blur-md p-4 z-50 flex justify-center border-t border-[rgba(255,255,255,0.05)] mt-auto">
           <button
             onClick={() => {
               const container = document.getElementById('timeline-scroll-container');
