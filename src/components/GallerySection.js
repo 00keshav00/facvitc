@@ -149,9 +149,23 @@ export default function GallerySection({ preview, artwork }) {
 
       {/* Modal */}
       {modalOpen && (
-        <div className="modal fixed inset-0 z-[9999] bg-[rgba(0,0,0,0.9)] backdrop-blur-sm flex justify-center items-center" onClick={() => setModalOpen(false)}>
-          <span className="close-modal absolute top-5 right-8 text-[#f1f1f1] text-[40px] font-bold cursor-pointer hover:text-[#bbb]" onClick={() => setModalOpen(false)}>&times;</span>
-          <img className="modal-content max-w-[80%] max-h-[90vh] object-contain rounded-xl border border-[rgba(255,255,255,0.2)] shadow-[0_0_40px_rgba(0,0,0,0.8)]" src={modalImage} />
+        <div 
+          className="modal fixed inset-0 z-[9999] bg-[rgba(0,0,0,0.9)] backdrop-blur-sm overflow-y-auto" 
+          onClick={() => setModalOpen(false)}
+        >
+          <div className="min-h-full flex flex-col items-center justify-center p-4 py-12 md:p-10">
+            <span 
+              className="fixed top-5 right-8 text-[#f1f1f1] text-[40px] font-bold cursor-pointer hover:text-[#bbb] z-[10000]" 
+              onClick={() => setModalOpen(false)}
+            >
+              &times;
+            </span>
+            <img 
+              className="modal-content max-w-[90%] md:max-w-[80%] h-auto object-contain rounded-xl border border-[rgba(255,255,255,0.2)] shadow-[0_0_40px_rgba(0,0,0,0.8)]" 
+              src={modalImage} 
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
         </div>
       )}
     </section>

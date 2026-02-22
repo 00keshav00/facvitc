@@ -21,6 +21,31 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Global Dark Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--panel);
+  border-radius: 10px;
+  border: 2px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel) var(--background);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -31,6 +56,7 @@ body {
   height: 100vh;
   padding: 0;
   margin: 0;
+  color-scheme: dark;
 }
 
 /* Global Layout Utilities */
