@@ -30,7 +30,7 @@ export default function GalleryGrid({ items }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
         {items.map((item) => (
           <div key={item._id} className="group overflow-hidden rounded-2xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)] shadow-2xl transition-all hover:-translate-y-2 relative flex flex-col">
             <div 
@@ -71,7 +71,17 @@ export default function GalleryGrid({ items }) {
                   )}
                 </div>
               )}
-              {item.description && <p className="text-sm text-[rgba(191,193,195,0.8)] line-clamp-2">{item.description}</p>}
+              {item.description && (
+                <div className="text-sm text-[rgba(191,193,195,0.8)] mt-2">
+                  <p className="line-clamp-2 inline">{item.description}</p>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); openFullscreen(item); }} 
+                    className="text-blue-400 hover:text-blue-300 font-medium mt-1 inline-block"
+                  >
+                    Read more
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -80,11 +90,11 @@ export default function GalleryGrid({ items }) {
       {/* Fullscreen Modal */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4 md:p-10"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-90 p-4 md:p-10"
           onClick={closeFullscreen}
         >
           <button 
-            className="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 z-50 transition-colors"
+            className="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 z-[10000] transition-colors"
             onClick={closeFullscreen}
           >
             &times;

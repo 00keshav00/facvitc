@@ -51,9 +51,6 @@ export default function Navbar({ settings }) {
         <Link href="/#members" className="text-sm px-3 py-2 rounded-md transition-colors duration-200 hover:text-black hover:bg-white">
           Members
         </Link>
-        <Link href="/#contact" className="text-sm px-3 py-2 rounded-md transition-colors duration-200 hover:text-black hover:bg-white">
-          Contact
-        </Link>
         <div className="relative group cursor-pointer">
           <span className="text-sm px-3 py-2 rounded-md transition-colors duration-200 group-hover:text-black group-hover:bg-white inline-block">
             Internal <i className="fas fa-chevron-down text-xs ml-1"></i>
@@ -95,9 +92,6 @@ export default function Navbar({ settings }) {
           </Link>
           <Link href="/#members" onClick={closeMenu} className="text-[#bfc1c3] text-base font-semibold py-2 w-full text-center hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
             Members
-          </Link>
-          <Link href="/#contact" onClick={closeMenu} className="text-[#bfc1c3] text-base font-semibold py-2 w-full text-center hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
-            Contact
           </Link>
           <div className="w-full h-px bg-[rgba(255,255,255,0.08)] my-2"></div>
           <p className="text-[#666] text-xs font-bold tracking-widest uppercase mb-1">Internal</p>
