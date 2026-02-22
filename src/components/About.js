@@ -34,7 +34,7 @@ export default function About({ title, text, images, video }) {
     <section className="flex flex-col lg:flex-row p-6 md:p-14 gap-8 md:gap-10 items-start border-t border-[rgba(255,255,255,0.08)] bg-gradient-to-b from-[rgba(255,255,255,0.005)] to-transparent" id="about">
       <div className="w-full lg:w-1/3">
         <div className="section-title">{title || "About Our Club"}</div>
-        <p className="about-text text-[#bfc1c3] text-sm md:text-[15px] max-w-[48ch]">
+        <p className="about-text text-[#bfc1c3] text-base md:text-lg max-w-[48ch] leading-relaxed">
           {text}
         </p>
       </div>

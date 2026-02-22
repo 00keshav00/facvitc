@@ -32,22 +32,28 @@ export default function MembersAdmin() {
     e.preventDefault();
     const formData = new FormData(e.target);
 
-    // Check if bulk insert for General members
-    if (type === 'General' && !editingMember?._id && formData.get('bulkMembers')) {
+    // Check if bulk insert
+    if (!editingMember?._id && formData.get('bulkMembers')) {
       const bulkText = formData.get('bulkMembers');
       const data = bulkText.split('\n')
         .map(line => line.trim())
         .filter(line => line.length > 0 && line.includes(','))
         .map(line => {
           const parts = line.split(',');
-          const regNo = parts[0]?.trim();
-          const name = parts[1]?.trim();
-          const role = parts.slice(2).join(',').trim() || 'Member';
-          return { name, regNo, role, type: 'General' };
+          if (type === 'Lead') {
+            const name = parts[0]?.trim();
+            const role = parts.slice(1).join(',').trim() || 'Lead Member';
+            return { name, role, type: 'Lead' };
+          } else {
+            const regNo = parts[0]?.trim();
+            const name = parts[1]?.trim();
+            const role = parts.slice(2).join(',').trim() || 'Member';
+            return { name, regNo, role, type: 'General' };
+          }
         });
 
       if (data.length === 0) {
-        alert("No valid members found to add. Ensure format is: RegNo, Name, Role");
+        alert(`No valid members found to add. Ensure format is: ${type === 'Lead' ? 'Name, Role' : 'RegNo, Name, Role'}`);
         return;
       }
 
@@ -154,13 +160,15 @@ export default function MembersAdmin() {
           <div className="bg-[#1e1e1f] border border-[#3a3a3b] p-8 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <h3 className="text-2xl font-bold mb-6">{editingMember?._id ? 'Edit' : 'Add'} {type} Member</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {type === 'General' && !editingMember?._id ? (
+              {!editingMember?._id ? (
                 <div>
-                  <label className="block text-sm text-[#bfc1c3] mb-1">Bulk Add Members (One per line, Format: RegNo, Name, Text(e.g., Role or Department))</label>
+                  <label className="block text-sm text-[#bfc1c3] mb-1">
+                    Bulk Add Members (One per line, Format: {type === 'Lead' ? 'Name, Role' : 'RegNo, Name, Text(e.g., Role or Department)'})
+                  </label>
                   <textarea 
                     name="bulkMembers"
                     className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded h-40 font-mono text-sm"
-                    placeholder="21BCE0000, John Doe, Core Member - CSE&#10;21BCE0001, Jane Smith, FFCS Member"
+                    placeholder={type === 'Lead' ? "John Doe, President\nJane Smith, Vice President" : "21BCE0000, John Doe, Core Member - CSE\n21BCE0001, Jane Smith, FFCS Member"}
                   />
                   <p className="text-xs text-[#bfc1c3] mt-2">Leave blank to add a single member using the form below instead.</p>
                 </div>
@@ -169,7 +177,7 @@ export default function MembersAdmin() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Full Name</label>
-                  <input name="name" required={type !== 'General' || editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" defaultValue={editingMember?.name} />
+                  <input name="name" required={!!editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" defaultValue={editingMember?.name} />
                 </div>
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Reg No</label>
@@ -177,7 +185,7 @@ export default function MembersAdmin() {
                 </div>
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Role</label>
-                  <input name="role" required={type !== 'General' || editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" defaultValue={editingMember?.role} />
+                  <input name="role" required={!!editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" defaultValue={editingMember?.role} />
                 </div>
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Department</label>
