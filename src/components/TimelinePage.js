@@ -269,11 +269,11 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
 
               {/* 4. SPLIT_WITH_STACK (Image Left) */}
               {layout === 'SPLIT_WITH_STACK' && (
-                <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
+                <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:min-h-[500px]">
                   <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full" onClick={handleImageClick} />
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1" />
                   <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {(block.images?.slice(1, 4) || []).map((img, i) => (
+                    {(block.images?.slice(1) || []).map((img, i) => (
                       <MediaBox key={i} src={img} className="h-full min-h-[150px]" onClick={handleImageClick} />
                     ))}
                   </div>
@@ -282,11 +282,11 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
 
               {/* 5. SPLIT_WITH_STACK_REVERSE (Image Right) */}
               {layout === 'SPLIT_WITH_STACK_REVERSE' && (
-                <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
+                <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:min-h-[500px]">
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1 md:order-1" />
                   <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full md:order-2" onClick={handleImageClick} />
                   <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 md:grid-cols-3 gap-4 md:order-3">
-                    {(block.images?.slice(1, 4) || []).map((img, i) => (
+                    {(block.images?.slice(1) || []).map((img, i) => (
                       <MediaBox key={i} src={img} className="h-full min-h-[150px]" onClick={handleImageClick} />
                     ))}
                   </div>
