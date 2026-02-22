@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
     'technovit': 'TechnoVit',
     'vibrance': 'Vibrance',
     'wall-painting': 'Wall Painting',
-    'others': 'Workshops'
+    'others': 'Others'
   };
 
   const eventType = typeMap[slug.toLowerCase()];
@@ -33,7 +33,7 @@ export default async function EventPage({ params }) {
     'technovit': 'TechnoVit',
     'vibrance': 'Vibrance',
     'wall-painting': 'Wall Painting',
-    'others': 'Workshops'
+    'others': 'Others'
   };
 
   const eventType = typeMap[slug.toLowerCase()];
