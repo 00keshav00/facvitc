@@ -71,17 +71,7 @@ export default function GalleryGrid({ items }) {
                   )}
                 </div>
               )}
-              {item.description && (
-                <div className="text-sm text-[rgba(191,193,195,0.8)] mt-2">
-                  <p className="line-clamp-2 inline">{item.description}</p>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); openFullscreen(item); }} 
-                    className="text-blue-400 hover:text-blue-300 font-medium mt-1 inline-block"
-                  >
-                    Read more
-                  </button>
-                </div>
-              )}
+              {item.description && <p className="text-sm text-[rgba(191,193,195,0.8)] line-clamp-2">{item.description}</p>}
             </div>
           </div>
         ))}
