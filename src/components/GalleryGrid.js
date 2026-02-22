@@ -80,25 +80,26 @@ export default function GalleryGrid({ items }) {
       {/* Fullscreen Modal */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-90 p-4 md:p-10"
+          className="fixed inset-0 z-[9999] overflow-y-auto bg-black bg-opacity-90"
           onClick={closeFullscreen}
         >
-          <button 
-            className="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 z-[10000] transition-colors"
-            onClick={closeFullscreen}
-          >
-            &times;
-          </button>
-          
-          <div 
-            className="relative max-w-full max-h-full flex flex-col items-center justify-center outline-none"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img 
-              src={selectedImage.image} 
-              alt={selectedImage.title || 'Artwork'} 
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-            />
+          <div className="min-h-full flex flex-col items-center justify-center p-4 py-12 md:p-10">
+            <button 
+              className="fixed top-4 right-4 md:top-6 md:right-6 text-white text-4xl hover:text-gray-300 z-[10000] transition-colors bg-black/30 md:bg-transparent rounded-full w-12 h-12 flex items-center justify-center"
+              onClick={closeFullscreen}
+            >
+              &times;
+            </button>
+            
+            <div 
+              className="relative max-w-full flex flex-col items-center justify-center outline-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={selectedImage.image} 
+                alt={selectedImage.title || 'Artwork'} 
+                className="max-w-full h-auto object-contain rounded-lg shadow-2xl"
+              />
             
             <div className="mt-6 text-center w-full max-w-3xl bg-[rgba(0,0,0,0.5)] p-4 rounded-xl">
               <h2 className="text-2xl font-bold text-white mb-2">{selectedImage.title || 'Untitled'}</h2>
@@ -129,6 +130,7 @@ export default function GalleryGrid({ items }) {
               )}
             </div>
           </div>
+        </div>
         </div>
       )}
     </>
