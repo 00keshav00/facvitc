@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ImageUpload from '@/components/ImageUpload';
 
 const eventTypes = ['TechnoVit', 'Vibrance', 'Wall Painting', 'Others'];
-const layouts = ['TEXT_LEFT_IMAGE_RIGHT', 'TEXT_RIGHT_IMAGE_LEFT', 'IMAGE_ONLY', 'SPLIT_WITH_STACK', 'SPLIT_WITH_STACK_REVERSE'];
+const layouts = ['TEXT_LEFT_IMAGE_RIGHT', 'TEXT_RIGHT_IMAGE_LEFT', 'IMAGE_ONLY', 'SPLIT_WITH_STACK', 'SPLIT_WITH_STACK_REVERSE', 'GRID'];
 
 export default function EventsAdmin() {
   const [selectedType, setSelectedType] = useState(eventTypes[0]);
