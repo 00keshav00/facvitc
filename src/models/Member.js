@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const MemberSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  regNo: { type: String }, // For bulk additions
   role: { type: String, required: true }, // e.g., President, Member, etc.
   type: { type: String, enum: ['Lead', 'General'], default: 'General' },
   year: { type: String }, // optional for lead

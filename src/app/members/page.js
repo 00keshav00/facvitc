@@ -53,7 +53,7 @@ export default function MembersPage() {
           <tbody>
             {list.map((member, idx) => (
               <tr key={member._id || idx} className="hover:bg-[rgba(255,255,255,0.04)] transition-colors border-b border-[rgba(255,255,255,0.04)] last:border-0">
-                <td className="p-4 text-[#e6e6e6] font-semibold">{member.name}</td>
+                <td className="p-4 text-[#e6e6e6] font-semibold">{member.name} {member.regNo && <span className="text-sm font-normal text-blue-400 ml-2">({member.regNo})</span>}</td>
                 <td className="p-4 text-[#bfc1c3]">{member.role}</td>
                 <td className="p-4 text-[#bfc1c3]">{member.department || '-'} / {member.year || '-'}</td>
                 <td className="p-4 text-[#bfc1c3] text-sm max-w-[300px] leading-relaxed">{member.bio || '-'}</td>
