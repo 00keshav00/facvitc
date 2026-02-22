@@ -2,36 +2,64 @@
 
 import React, { useState } from 'react';
 
-export default function ImageUpload({ onUpload, label }) {
+export default function ImageUpload({ onUpload, label, multiple = false }) {
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
 
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
+      if (multiple) {
+        const uploadedUrls = [];
+        for (const file of files) {
+          const formData = new FormData();
+          formData.append('file', file);
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Upload failed');
-      }
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await res.json();
 
-      if (data.url) {
-        onUpload(data.url);
+          if (!res.ok) {
+            console.error(data.error || 'Upload failed for a file');
+            continue;
+          }
+          if (data.url) {
+            uploadedUrls.push(data.url);
+          }
+        }
+        if (uploadedUrls.length > 0) {
+          onUpload(uploadedUrls);
+        }
+      } else {
+        const file = files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Upload failed');
+        }
+
+        if (data.url) {
+          onUpload(data.url);
+        }
       }
     } catch (error) {
       console.error('Upload failed', error);
       alert(error.message || 'Upload failed');
     } finally {
       setUploading(false);
+      e.target.value = null;
     }
   };
 
@@ -40,6 +68,8 @@ export default function ImageUpload({ onUpload, label }) {
       <label className="block mb-2 text-sm text-[#bfc1c3]">{label}</label>
       <input 
         type="file" 
+        multiple={multiple}
+        accept="image/*,video/*"
         onChange={handleFileChange} 
         disabled={uploading}
         className="block w-full text-sm text-[#bfc1c3]

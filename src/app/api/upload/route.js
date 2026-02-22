@@ -10,9 +10,21 @@ export async function POST(req) {
   }
 
   // Validate file type
-  const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/ico'];
+  const validTypes = [
+    'image/jpeg', 
+    'image/png', 
+    'image/webp', 
+    'image/gif', 
+    'image/svg+xml',
+    'video/mp4', 
+    'video/webm',
+    'video/quicktime',
+    'image/x-icon', 
+    'image/vnd.microsoft.icon', 
+    'image/ico'
+  ];
   if (!validTypes.includes(file.type)) {
-    return NextResponse.json({ error: 'Invalid file type. Only images, .ico and MP4 videos are allowed.' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid file type. Only images (JPG, PNG, WebP, GIF, SVG), .ico and videos (MP4, WebM, MOV) are allowed.' }, { status: 400 });
   }
 
   // Validate file size (e.g., 10MB limit)

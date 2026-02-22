@@ -208,7 +208,9 @@ export default function EventsAdmin() {
                           setSelectedYear({...selectedYear, sections: newSections});
                        }} />
                        {section.mainImage && (
-                         section.mainImage.toLowerCase().endsWith('.mp4') || section.mainImage.toLowerCase().endsWith('.webm') ? (
+                         section.mainImage.toLowerCase().endsWith('.mp4') || 
+                         section.mainImage.toLowerCase().endsWith('.webm') ||
+                         section.mainImage.toLowerCase().endsWith('.mov') ? (
                            <video src={section.mainImage} className="w-full h-32 object-cover rounded" controls />
                          ) : (
                            <img src={section.mainImage} className="w-full h-32 object-cover rounded" />
@@ -217,14 +219,19 @@ export default function EventsAdmin() {
                        
                        <div>
                          <label className="block text-sm text-[#bfc1c3] mb-1">Sub Media (Images or Videos)</label>
-                         <ImageUpload label="Add Sub Media" onUpload={(url) => {
-                            const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, subImages: [...(s.subImages || []), url] } : s);
-                            setSelectedYear({...selectedYear, sections: newSections});
+                         <ImageUpload multiple={true} label="Add Sub Media" onUpload={(urls) => {
+                            const newUrls = Array.isArray(urls) ? urls : [urls];
+                            setSelectedYear(prev => {
+                               const newSections = prev.sections.map((s, i) => i === idx ? { ...s, subImages: [...(s.subImages || []), ...newUrls] } : s);
+                               return { ...prev, sections: newSections };
+                            });
                          }} />
                          <div className="flex gap-2 flex-wrap">
                            {(section.subImages || []).map((media, i) => (
                              <div key={i} className="relative">
-                               {media.toLowerCase().endsWith('.mp4') || media.toLowerCase().endsWith('.webm') ? (
+                               {media.toLowerCase().endsWith('.mp4') || 
+                                media.toLowerCase().endsWith('.webm') ||
+                                media.toLowerCase().endsWith('.mov') ? (
                                  <video src={media} className="w-16 h-16 object-cover rounded" />
                                ) : (
                                  <img src={media} className="w-16 h-16 object-cover rounded" />
