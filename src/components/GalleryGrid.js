@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { FaInstagram, FaLink } from 'react-icons/fa';
 
 export default function GalleryGrid({ items }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -55,18 +56,18 @@ export default function GalleryGrid({ items }) {
               {(item.instagram || item.otherLink1 || item.otherLink2) && (
                 <div className="flex flex-wrap gap-3 mb-3">
                   {item.instagram && (
-                    <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
-                      <span>📸 Instagram</span>
+                    <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors flex items-center gap-1">
+                      <FaInstagram size={18} />
                     </a>
                   )}
                   {item.otherLink1 && (
-                    <a href={item.otherLink1} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
-                      <span>🔗 Link 1</span>
+                    <a href={item.otherLink1} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center gap-1">
+                      <FaLink size={16} />
                     </a>
                   )}
                   {item.otherLink2 && (
-                    <a href={item.otherLink2} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
-                      <span>🔗 Link 2</span>
+                    <a href={item.otherLink2} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center gap-1">
+                      <FaLink size={16} />
                     </a>
                   )}
                 </div>
@@ -112,18 +113,18 @@ export default function GalleryGrid({ items }) {
               {(selectedImage.instagram || selectedImage.otherLink1 || selectedImage.otherLink2) && (
                 <div className="flex flex-wrap justify-center gap-4">
                   {selectedImage.instagram && (
-                    <a href={selectedImage.instagram} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                      📸 Instagram
+                    <a href={selectedImage.instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors">
+                      <FaInstagram size={20} />
                     </a>
                   )}
                   {selectedImage.otherLink1 && (
-                    <a href={selectedImage.otherLink1} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                      🔗 Link 1
+                    <a href={selectedImage.otherLink1} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
+                      <FaLink size={18} />
                     </a>
                   )}
                   {selectedImage.otherLink2 && (
-                    <a href={selectedImage.otherLink2} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                      🔗 Link 2
+                    <a href={selectedImage.otherLink2} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
+                      <FaLink size={18} />
                     </a>
                   )}
                 </div>

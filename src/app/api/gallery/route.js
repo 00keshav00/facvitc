@@ -21,8 +21,13 @@ export async function POST(req) {
   try {
     await dbConnect();
     const body = await req.json();
-    const item = await GalleryItem.create(body);
-    return NextResponse.json(item, { status: 201 });
+    if (Array.isArray(body)) {
+      const items = await GalleryItem.insertMany(body);
+      return NextResponse.json(items, { status: 201 });
+    } else {
+      const item = await GalleryItem.create(body);
+      return NextResponse.json(item, { status: 201 });
+    }
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
