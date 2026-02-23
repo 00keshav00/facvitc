@@ -52,26 +52,28 @@ export default function GalleryGrid({ items }) {
             </div>
             <div className="p-5 flex-grow">
               <h3 className="text-xl font-bold text-[#e6e6e6] mb-1">{item.title || 'Untitled'}</h3>
-              <p className="text-sm text-[#bfc1c3] mb-3">by {item.artist || 'FAC Member'}</p>
-              {(item.instagram || item.otherLink1 || item.otherLink2) && (
-                <div className="flex flex-wrap gap-3 mb-3">
-                  {item.instagram && (
-                    <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors flex items-center gap-1">
-                      <FaInstagram size={18} />
-                    </a>
-                  )}
-                  {item.otherLink1 && (
-                    <a href={item.otherLink1} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center gap-1">
-                      <FaLink size={16} />
-                    </a>
-                  )}
-                  {item.otherLink2 && (
-                    <a href={item.otherLink2} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center gap-1">
-                      <FaLink size={16} />
-                    </a>
-                  )}
-                </div>
-              )}
+              <div className="flex justify-between items-center mb-3">
+                <p className="text-sm text-[#bfc1c3]">by {item.artist || 'FAC Member'}</p>
+                {(item.instagram || item.otherLink1 || item.otherLink2) && (
+                  <div className="flex gap-3">
+                    {item.instagram && (
+                      <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors flex items-center">
+                        <FaInstagram size={18} />
+                      </a>
+                    )}
+                    {item.otherLink1 && (
+                      <a href={item.otherLink1} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center">
+                        <FaLink size={16} />
+                      </a>
+                    )}
+                    {item.otherLink2 && (
+                      <a href={item.otherLink2} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors flex items-center">
+                        <FaLink size={16} />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
               {item.description && <p className="text-sm text-[rgba(191,193,195,0.8)] line-clamp-2">{item.description}</p>}
             </div>
           </div>
@@ -102,32 +104,34 @@ export default function GalleryGrid({ items }) {
                 className="max-w-full h-auto object-contain rounded-lg shadow-2xl"
               />
             
-            <div className="mt-6 text-center w-full max-w-3xl bg-[rgba(0,0,0,0.5)] p-4 rounded-xl">
+            <div className="mt-6 text-left w-full max-w-3xl bg-[rgba(0,0,0,0.5)] p-6 rounded-xl">
               <h2 className="text-2xl font-bold text-white mb-2">{selectedImage.title || 'Untitled'}</h2>
-              <p className="text-lg text-gray-300 mb-3">by {selectedImage.artist || 'FAC Member'}</p>
+              
+              <div className="flex justify-between items-center mb-4">
+                <p className="text-lg text-gray-300">by {selectedImage.artist || 'FAC Member'}</p>
+                {(selectedImage.instagram || selectedImage.otherLink1 || selectedImage.otherLink2) && (
+                  <div className="flex gap-4">
+                    {selectedImage.instagram && (
+                      <a href={selectedImage.instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors">
+                        <FaInstagram size={22} />
+                      </a>
+                    )}
+                    {selectedImage.otherLink1 && (
+                      <a href={selectedImage.otherLink1} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
+                        <FaLink size={20} />
+                      </a>
+                    )}
+                    {selectedImage.otherLink2 && (
+                      <a href={selectedImage.otherLink2} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
+                        <FaLink size={20} />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
               
               {selectedImage.description && (
-                <p className="text-md text-gray-400 mb-4">{selectedImage.description}</p>
-              )}
-              
-              {(selectedImage.instagram || selectedImage.otherLink1 || selectedImage.otherLink2) && (
-                <div className="flex flex-wrap justify-center gap-4">
-                  {selectedImage.instagram && (
-                    <a href={selectedImage.instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors">
-                      <FaInstagram size={20} />
-                    </a>
-                  )}
-                  {selectedImage.otherLink1 && (
-                    <a href={selectedImage.otherLink1} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
-                      <FaLink size={18} />
-                    </a>
-                  )}
-                  {selectedImage.otherLink2 && (
-                    <a href={selectedImage.otherLink2} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
-                      <FaLink size={18} />
-                    </a>
-                  )}
-                </div>
+                <p className="text-md text-gray-400">{selectedImage.description}</p>
               )}
             </div>
           </div>
