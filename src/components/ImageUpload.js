@@ -12,31 +12,13 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
     setUploading(true);
 
     try {
-      if (multiple) {
-        const uploadedUrls = [];
-        for (const file of files) {
-          const formData = new FormData();
-          formData.append('file', file);
+      const maxSize = 25 * 1024 * 1024; // 25MB
 
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          const data = await res.json();
+      const uploadFile = async (file) => {
+        if (file.size > maxSize) {
+          throw new Error(`File "${file.name}" is too large. The permitted limit is 25MB.`);
+        }
 
-          if (!res.ok) {
-            console.error(data.error || 'Upload failed for a file');
-            continue;
-          }
-          if (data.url) {
-            uploadedUrls.push(data.url);
-          }
-        }
-        if (uploadedUrls.length > 0) {
-          onUpload(uploadedUrls);
-        }
-      } else {
-        const file = files[0];
         const formData = new FormData();
         formData.append('file', file);
 
@@ -44,15 +26,43 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
           method: 'POST',
           body: formData,
         });
-        const data = await res.json();
+
+        if (res.status === 413) {
+          throw new Error(`File "${file.name}" is too large for the server. The permitted limit is 25MB.`);
+        }
+
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error(`Server returned an invalid response while uploading "${file.name}". This usually happens if the file exceeds server payload limits (Permitted limit is 25MB).`);
+        }
 
         if (!res.ok) {
-          throw new Error(data.error || 'Upload failed');
+          throw new Error(data?.error || 'Upload failed');
         }
 
-        if (data.url) {
-          onUpload(data.url);
+        return data.url;
+      };
+
+      if (multiple) {
+        const uploadedUrls = [];
+        for (const file of files) {
+          try {
+            const url = await uploadFile(file);
+            if (url) uploadedUrls.push(url);
+          } catch (err) {
+            console.error(err);
+            alert(err.message);
+          }
         }
+        if (uploadedUrls.length > 0) {
+          onUpload(uploadedUrls);
+        }
+      } else {
+        const url = await uploadFile(files[0]);
+        if (url) onUpload(url);
       }
     } catch (error) {
       console.error('Upload failed', error);
