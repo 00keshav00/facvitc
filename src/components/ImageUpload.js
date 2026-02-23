@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { upload } from '@vercel/blob/client';
 
 export default function ImageUpload({ onUpload, label, multiple = false }) {
   const [uploading, setUploading] = useState(false);
@@ -12,38 +13,22 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
     setUploading(true);
 
     try {
-      const maxSize = 25 * 1024 * 1024; // 25MB
+      const maxSize = 5 * 1024 * 1024 * 1024; // 5GB (Vercel Pro Limit)
 
       const uploadFile = async (file) => {
         if (file.size > maxSize) {
-          throw new Error(`File "${file.name}" is too large. The permitted limit is 25MB.`);
+          throw new Error(`File "${file.name}" is too large. The highest permitted size from Vercel is 5GB (Pro).`);
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
+        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const filename = Date.now() + '_' + safeName;
 
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
+        const newBlob = await upload(filename, file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
         });
 
-        if (res.status === 413) {
-          throw new Error(`File "${file.name}" is too large for the server. The permitted limit is 25MB.`);
-        }
-
-        const text = await res.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          throw new Error(`Server returned an invalid response while uploading "${file.name}". This usually happens if the file exceeds server payload limits (Permitted limit is 25MB).`);
-        }
-
-        if (!res.ok) {
-          throw new Error(data?.error || 'Upload failed');
-        }
-
-        return data.url;
+        return newBlob.url;
       };
 
       if (multiple) {

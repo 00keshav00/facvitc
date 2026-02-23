@@ -1,56 +1,45 @@
+import { handleUpload } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
-import { put } from '@vercel/blob';
 
-export async function POST(req) {
-  const formData = await req.formData();
-  const file = formData.get('file');
-
-  if (!file) {
-    return NextResponse.json({ error: 'No files received.' }, { status: 400 });
-  }
-
-  // Validate file type
-  const validTypes = [
-    'image/jpeg', 
-    'image/png', 
-    'image/webp', 
-    'image/gif', 
-    'image/svg+xml',
-    'video/mp4', 
-    'video/webm',
-    'video/quicktime',
-    'image/x-icon', 
-    'image/vnd.microsoft.icon', 
-    'image/ico'
-  ];
-  if (!validTypes.includes(file.type)) {
-    return NextResponse.json({ error: 'Invalid file type. Only images (JPG, PNG, WebP, GIF, SVG), .ico and videos (MP4, WebM, MOV) are allowed.' }, { status: 400 });
-  }
-
-  // Validate file size (e.g., 25MB limit)
-  const maxSize = 25 * 1024 * 1024;
-  if (file.size > maxSize) {
-    return NextResponse.json({ error: 'File too large. Maximum size is 25MB.' }, { status: 400 });
-  }
+export async function POST(request) {
+  const body = await request.json();
 
   try {
-    // Sanitize filename: remove special chars, spaces to underscores
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const filename = Date.now() + '_' + safeName;
-
-    // Upload to Vercel Blob
-    const blob = await put(filename, file, {
-      access: 'public',
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async (pathname) => {
+        // Generate a client token for the browser to upload the file
+        return {
+          allowedContentTypes: [
+            'image/jpeg', 
+            'image/png', 
+            'image/webp', 
+            'image/gif', 
+            'image/svg+xml',
+            'video/mp4', 
+            'video/webm',
+            'video/quicktime',
+            'image/x-icon', 
+            'image/vnd.microsoft.icon', 
+            'image/ico'
+          ],
+          maximumSizeInBytes: 5 * 1024 * 1024 * 1024, // 5GB (Vercel Pro Limit)
+          tokenPayload: JSON.stringify({}),
+        };
+      },
+      onUploadCompleted: async ({ blob, tokenPayload }) => {
+        // Get notified of client upload completion
+        console.log('Blob upload completed', blob.url);
+      },
     });
 
-    console.log(`Saved file to blob: ${blob.url}`);
-
-    return NextResponse.json({ 
-      message: 'Success', 
-      url: blob.url 
-    });
+    return NextResponse.json(jsonResponse);
   } catch (error) {
-    console.log('Error occured ', error);
-    return NextResponse.json({ message: 'Failed', error: error.message }, { status: 500 });
+    console.log('Upload error', error);
+    return NextResponse.json(
+      { error: error.message },
+      { status: 400 }
+    );
   }
 }
