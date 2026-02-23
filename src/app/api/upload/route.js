@@ -27,10 +27,10 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Invalid file type. Only images (JPG, PNG, WebP, GIF, SVG), .ico and videos (MP4, WebM, MOV) are allowed.' }, { status: 400 });
   }
 
-  // Validate file size (e.g., 10MB limit)
-  const maxSize = 10 * 1024 * 1024;
+  // Validate file size (e.g., 25MB limit)
+  const maxSize = 25 * 1024 * 1024;
   if (file.size > maxSize) {
-    return NextResponse.json({ error: 'File too large. Maximum size is 10MB.' }, { status: 400 });
+    return NextResponse.json({ error: 'File too large. Maximum size is 25MB.' }, { status: 400 });
   }
 
   try {

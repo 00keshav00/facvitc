@@ -93,8 +93,8 @@ export default function MembersPage() {
         <div className="text-center text-[#bfc1c3] py-20 animate-pulse text-lg">Loading club directory...</div>
       ) : (
         <>
-          <MemberTable title="Lead Members" list={leads} />
-          <MemberTable title="General Members" list={general} />
+          <MemberTable title="Core" list={leads} />
+          <MemberTable title="Team" list={general} />
         </>
       )}
 

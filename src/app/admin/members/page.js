@@ -42,18 +42,19 @@ export default function MembersAdmin() {
           const parts = line.split(',');
           if (type === 'Lead') {
             const name = parts[0]?.trim();
-            const role = parts.slice(1).join(',').trim() || 'Lead Member';
-            return { name, role, type: 'Lead' };
+            const regNo = parts[1]?.trim();
+            const role = parts.slice(2).join(',').trim() || 'Core';
+            return { name, regNo, role, type: 'Lead' };
           } else {
             const regNo = parts[0]?.trim();
             const name = parts[1]?.trim();
-            const role = parts.slice(2).join(',').trim() || 'Member';
+            const role = parts.slice(2).join(',').trim() || 'Team';
             return { name, regNo, role, type: 'General' };
           }
         });
 
       if (data.length === 0) {
-        alert(`No valid members found to add. Ensure format is: ${type === 'Lead' ? 'Name, Role' : 'RegNo, Name, Role'}`);
+        alert(`No valid members found to add. Ensure format is: ${type === 'Lead' ? 'Name, RegNo, Role' : 'RegNo, Name, Role'}`);
         return;
       }
 
@@ -132,7 +133,7 @@ export default function MembersAdmin() {
         <button 
           onClick={() => { setEditingMember({}); setShowForm(true); }}
           className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-semibold transition-colors"
-        >+ Add {type} Member</button>
+        >+ Add {type === 'Lead' ? 'Core' : 'Team'}</button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 justify-between bg-[#1e1e1f] p-4 rounded-xl border border-[#3a3a3b]">
@@ -143,7 +144,7 @@ export default function MembersAdmin() {
               onClick={() => setType(t)}
               className={`px-4 py-2 rounded-lg font-semibold transition-colors ${type === t ? 'bg-white text-black' : 'bg-[#2d2e30] text-[#bfc1c3] hover:text-white'}`}
             >
-              {t} Members
+              {t === 'Lead' ? 'Core' : 'Team'}
             </button>
           ))}
         </div>
@@ -158,17 +159,17 @@ export default function MembersAdmin() {
       {showForm && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#1e1e1f] border border-[#3a3a3b] p-8 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <h3 className="text-2xl font-bold mb-6">{editingMember?._id ? 'Edit' : 'Add'} {type} Member</h3>
+            <h3 className="text-2xl font-bold mb-6">{editingMember?._id ? 'Edit' : 'Add'} {type === 'Lead' ? 'Core' : 'Team'}</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               {!editingMember?._id ? (
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">
-                    Bulk Add Members (One per line, Format: {type === 'Lead' ? 'Name, Role' : 'RegNo, Name, Text(e.g., Role or Department)'})
+                    Bulk Add Members (One per line, Format: {type === 'Lead' ? 'Name, RegNo, Role' : 'RegNo, Name, Text(e.g., Role or Department)'})
                   </label>
                   <textarea 
                     name="bulkMembers"
                     className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded h-40 font-mono text-sm"
-                    placeholder={type === 'Lead' ? "John Doe, President\nJane Smith, Vice President" : "21BCE0000, John Doe, Core Member - CSE\n21BCE0001, Jane Smith, FFCS Member"}
+                    placeholder={type === 'Lead' ? "John Doe, 21BCE0000, President\nJane Smith, 21BCE0001, Vice President" : "21BCE0000, John Doe, Team - CSE\n21BCE0001, Jane Smith, FFCS Member"}
                   />
                   <p className="text-xs text-[#bfc1c3] mt-2">Leave blank to add a single member using the form below instead.</p>
                 </div>

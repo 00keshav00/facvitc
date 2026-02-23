@@ -367,12 +367,12 @@ export default function HomeAdmin() {
              </div>
 
              <div className="flex justify-between items-center pt-4 border-t border-[#3a3a3b]">
-              <h3 className="text-lg font-bold">Dynamic Lead Members</h3>
+              <h3 className="text-lg font-bold">Dynamic Core</h3>
               <button 
                 type="button" 
                 onClick={() => setData([...safeMembers, { name: '', role: '', image: '', instagram: '', isFaculty: false, order: leadMembers.length }])}
                 className="bg-blue-600 px-3 py-1 rounded text-sm"
-              >Add Lead Member</button>
+              >Add Core</button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
