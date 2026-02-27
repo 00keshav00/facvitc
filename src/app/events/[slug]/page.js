@@ -60,13 +60,15 @@ export default async function EventPage({ params }) {
     timeline: years.map(y => ({
       year: y.year,
       title: y.title,
-      description: y.description, // Include the description here
+      description: y.description,
       images: [y.bannerMedia].filter(Boolean),
+      video: y.bannerVideo,
       blocks: y.sections.map(s => ({
         title: s.title,
         description: s.description,
         images: [s.mainImage, ...(s.subImages || [])].filter(Boolean),
-        template: s.layout // Map layout to template
+        video: s.video,
+        template: s.layout
       }))
     }))
   };

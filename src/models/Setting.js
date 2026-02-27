@@ -4,6 +4,7 @@ const SettingSchema = new mongoose.Schema({
   siteTitle: String,
   logo: String,
   favicon: String,
+  backgroundVideo: String,
   socialLinks: {
     instagram: String,
     facebook: String,

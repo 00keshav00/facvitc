@@ -158,13 +158,20 @@ export default function HomeAdmin() {
               ))}
             </div>
             <div>
-              <label className="block text-sm text-[#bfc1c3] mb-1">About Video</label>
-              <ImageUpload 
-                label="Upload MP4 Video" 
-                onUpload={(url) => setData({...data, video: url})} 
+              <label className="block text-sm text-[#bfc1c3] mb-1">About Video (YouTube Embed Link)</label>
+              <input 
+                className="w-full bg-[#1e1e1f] border border-[#3a3a3b] p-2 rounded text-[#e6e6e6]"
+                placeholder="https://www.youtube.com/embed/..."
+                value={data.video || ''}
+                onChange={(e) => setData({...data, video: e.target.value})}
               />
               {data.video && (
-                <video src={data.video} className="w-full max-w-xs mt-2 rounded border border-[#3a3a3b]" controls />
+                <iframe 
+                  src={data.video} 
+                  className="w-full max-w-xs mt-2 rounded border border-[#3a3a3b] aspect-video" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                ></iframe>
               )}
             </div>
             <button type="submit" className="bg-[#4a4a4b] px-6 py-2 rounded font-semibold">Save Changes</button>

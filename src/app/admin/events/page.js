@@ -148,8 +148,17 @@ export default function EventsAdmin() {
                     <input type="checkbox" checked={selectedYear.enabled} onChange={(e) => setSelectedYear({...selectedYear, enabled: e.target.checked})} id="enabled" />
                     <label htmlFor="enabled" className="text-sm">Enabled / Visible</label>
                   </div>
-                  <ImageUpload label="Banner Media (Image/Video)" onUpload={(url) => setSelectedYear({...selectedYear, bannerMedia: url})} />
+                  <ImageUpload label="Banner Media (Image)" onUpload={(url) => setSelectedYear({...selectedYear, bannerMedia: url})} />
                   {selectedYear.bannerMedia && <div className="text-xs truncate">{selectedYear.bannerMedia}</div>}
+                  <div>
+                    <label className="block text-sm text-[#bfc1c3] mb-1">Banner YouTube Video (Overrides Image)</label>
+                    <input 
+                      className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" 
+                      placeholder="https://www.youtube.com/embed/..." 
+                      value={selectedYear.bannerVideo || ''} 
+                      onChange={(e) => setSelectedYear({...selectedYear, bannerVideo: e.target.value})} 
+                    />
+                  </div>
                   <button onClick={handleUpdateYear} className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold">Save Settings</button>
                 </div>
              </div>
@@ -203,23 +212,37 @@ export default function EventsAdmin() {
                     </div>
 
                     <div className="space-y-4">
-                       <ImageUpload label="Main Media (Image or Video)" onUpload={(url) => {
+                       <ImageUpload label="Main Image" onUpload={(url) => {
                           const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, mainImage: url } : s);
                           setSelectedYear({...selectedYear, sections: newSections});
                        }} />
                        {section.mainImage && (
-                         section.mainImage.toLowerCase().endsWith('.mp4') || 
-                         section.mainImage.toLowerCase().endsWith('.webm') ||
-                         section.mainImage.toLowerCase().endsWith('.mov') ? (
-                           <video src={section.mainImage} className="w-full h-32 object-cover rounded" controls />
-                         ) : (
-                           <img src={section.mainImage} className="w-full h-32 object-cover rounded" />
-                         )
+                         <img src={section.mainImage} className="w-full h-32 object-cover rounded" />
                        )}
+                       <div>
+                         <label className="block text-sm text-[#bfc1c3] mb-1">Main YouTube Video (Overrides Image)</label>
+                         <input 
+                           className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded text-sm" 
+                           placeholder="https://www.youtube.com/embed/..." 
+                           value={section.video || ''} 
+                           onChange={(e) => {
+                             const newSections = selectedYear.sections.map((s, i) => i === idx ? { ...s, video: e.target.value } : s);
+                             setSelectedYear({...selectedYear, sections: newSections});
+                           }} 
+                         />
+                         {section.video && (
+                           <iframe 
+                             src={section.video} 
+                             className="w-full h-32 object-cover rounded mt-2" 
+                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                             allowFullScreen
+                           ></iframe>
+                         )}
+                       </div>
                        
                        <div>
-                         <label className="block text-sm text-[#bfc1c3] mb-1">Sub Media (Images or Videos)</label>
-                         <ImageUpload multiple={true} label="Add Sub Media" onUpload={(urls) => {
+                         <label className="block text-sm text-[#bfc1c3] mb-1">Sub Media (Images Only)</label>
+                         <ImageUpload multiple={true} label="Add Sub Images" onUpload={(urls) => {
                             const newUrls = Array.isArray(urls) ? urls : [urls];
                             setSelectedYear(prev => {
                                const newSections = prev.sections.map((s, i) => i === idx ? { ...s, subImages: [...(s.subImages || []), ...newUrls] } : s);
@@ -229,13 +252,7 @@ export default function EventsAdmin() {
                          <div className="flex gap-2 flex-wrap">
                            {(section.subImages || []).map((media, i) => (
                              <div key={i} className="relative">
-                               {media.toLowerCase().endsWith('.mp4') || 
-                                media.toLowerCase().endsWith('.webm') ||
-                                media.toLowerCase().endsWith('.mov') ? (
-                                 <video src={media} className="w-16 h-16 object-cover rounded" />
-                               ) : (
-                                 <img src={media} className="w-16 h-16 object-cover rounded" />
-                               )}
+                               <img src={media} className="w-16 h-16 object-cover rounded" />
                                <button 
                                 onClick={() => {
                                   const newSections = selectedYear.sections.map((s, si) => si === idx ? { ...s, subImages: s.subImages.filter((_, sidx) => sidx !== i) } : s);

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { upload } from '@vercel/blob/client';
 
 export default function ImageUpload({ onUpload, label, multiple = false }) {
   const [uploading, setUploading] = useState(false);
@@ -13,22 +12,32 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
     setUploading(true);
 
     try {
-      const maxSize = 50 * 1024 * 1024; // 50MB
+      // 50MB limit check remains for early validation
+      const maxSize = 50 * 1024 * 1024; 
 
       const uploadFile = async (file) => {
         if (file.size > maxSize) {
           throw new Error(`File "${file.name}" is too large. The maximum permitted size is 50MB.`);
         }
 
-        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const filename = Date.now() + '_' + safeName;
+        // 3. Replace logic with standard FormData upload
+        const formData = new FormData();
+        formData.append('file', file);
 
-        const newBlob = await upload(filename, file, {
-          access: 'public',
-          handleUploadUrl: '/api/upload',
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
         });
 
-        return newBlob.url;
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Upload failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // 10. Return the optimized blob URL from the response
+        return data.url;
       };
 
       if (multiple) {
@@ -50,10 +59,12 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
         if (url) onUpload(url);
       }
     } catch (error) {
+      // 4. Basic error handling
       console.error('Upload failed', error);
       alert(error.message || 'Upload failed');
     } finally {
       setUploading(false);
+      // Reset input so the same file can be selected again if needed
       e.target.value = null;
     }
   };

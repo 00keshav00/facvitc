@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import HoverYouTube from './HoverYouTube';
 
 const DescriptionBox = ({ title, description, className = "" }) => (
   <div className={`bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-xl flex flex-col justify-center h-full shadow-lg group hover:-translate-y-1 transition duration-300 ${className}`}>
@@ -24,7 +25,15 @@ const ImageBox = ({ src, className = "", onClick }) => (
   </div>
 );
 
-const MediaBox = ({ src, className = "", onClick }) => {
+const MediaBox = ({ src, youtubeUrl, className = "", onClick }) => {
+  if (youtubeUrl) {
+    return (
+      <div className={`relative rounded-xl overflow-hidden border border-white/10 shadow-lg bg-black ${className}`}>
+        <HoverYouTube url={youtubeUrl} className="w-full h-full" />
+      </div>
+    );
+  }
+
   if (!src) return null;
   const isVideo = src.toLowerCase().endsWith('.mp4') || 
                   src.toLowerCase().endsWith('.webm') || 
@@ -215,9 +224,9 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
       )}
 
       {/* Banner Media */}
-      {content.images?.[0] && (
+      {(content.video || content.images?.[0]) && (
         <div className="mb-12">
-          <MediaBox src={content.images[0]} className="w-full h-[400px] md:h-[600px]" onClick={handleImageClick} />
+          <MediaBox src={content.images?.[0]} youtubeUrl={content.video} className="w-full h-[400px] md:h-[600px]" onClick={handleImageClick} />
         </div>
       )}
 
@@ -232,14 +241,14 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {layout === 'TEXT_LEFT_IMAGE_RIGHT' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-2" />
-                  <MediaBox src={block.images?.[0]} className="h-[400px] md:col-span-1" onClick={handleImageClick} />
+                  <MediaBox src={block.images?.[0]} youtubeUrl={block.video} className="h-[400px] md:col-span-1" onClick={handleImageClick} />
                 </div>
               )}
 
               {/* 2. TEXT_RIGHT_IMAGE_LEFT */}
               {layout === 'TEXT_RIGHT_IMAGE_LEFT' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-                  <MediaBox src={block.images?.[0]} className="h-[400px] md:order-1 md:col-span-1" onClick={handleImageClick} />
+                  <MediaBox src={block.images?.[0]} youtubeUrl={block.video} className="h-[400px] md:order-1 md:col-span-1" onClick={handleImageClick} />
                   <DescriptionBox title={block.title} description={block.description} className="md:order-2 md:col-span-2" />
                 </div>
               )}
@@ -256,7 +265,7 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {/* 3. IMAGE_ONLY */}
               {layout === 'IMAGE_ONLY' && (
                 <div className="flex flex-col gap-4 max-w-4xl mx-auto w-full">
-                  <MediaBox src={block.images?.[0]} className="h-[500px] w-full" onClick={handleImageClick} />
+                  <MediaBox src={block.images?.[0]} youtubeUrl={block.video} className="h-[500px] w-full" onClick={handleImageClick} />
                   {hasSubImages && (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {block.images.slice(1).map((img, i) => (
@@ -270,7 +279,7 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {/* 4. SPLIT_WITH_STACK (Image Left) */}
               {layout === 'SPLIT_WITH_STACK' && (
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
-                  <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full" onClick={handleImageClick} />
+                  <MediaBox src={block.images?.[0]} youtubeUrl={block.video} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full" onClick={handleImageClick} />
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1" />
                   <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 md:grid-cols-3 gap-4">
                     {(block.images?.slice(1, 4) || []).map((img, i) => (
@@ -284,7 +293,7 @@ function TimelineContent({ content, openLightbox, setLightboxOpen }) {
               {layout === 'SPLIT_WITH_STACK_REVERSE' && (
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-6 h-auto md:h-[500px]">
                   <DescriptionBox title={block.title} description={block.description} className="md:col-span-3 md:row-span-1 md:order-1" />
-                  <MediaBox src={block.images?.[0]} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full md:order-2" onClick={handleImageClick} />
+                  <MediaBox src={block.images?.[0]} youtubeUrl={block.video} className="md:row-span-2 md:col-span-1 h-[300px] md:h-full md:order-2" onClick={handleImageClick} />
                   <div className="md:col-span-3 md:row-span-1 grid grid-cols-2 md:grid-cols-3 gap-4 md:order-3">
                     {(block.images?.slice(1, 4) || []).map((img, i) => (
                       <MediaBox key={i} src={img} className="h-full min-h-[150px]" onClick={handleImageClick} />

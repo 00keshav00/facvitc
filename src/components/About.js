@@ -1,32 +1,9 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
+import HoverYouTube from './HoverYouTube';
 
 export default function About({ title, text, images, video }) {
-  const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 1;
-    }
-  }, []);
-  const toggleMute = (e) => {
-    e.stopPropagation();
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
-
-  const handleMouseEnter = () => {
-    if (videoRef.current) videoRef.current.play();
-  };
-
-  const handleMouseLeave = () => {
-    if (videoRef.current) videoRef.current.pause();
-  };
-
   const defaultImages = ["/technoph.jpeg", "/vibe1.webp", "/ph4.jpeg", "/wall.webp"];
   const displayImages = images && images.length > 0 ? images : defaultImages;
 
@@ -41,24 +18,20 @@ export default function About({ title, text, images, video }) {
       <div className="about-grid w-full lg:flex-1 grid grid-cols-2 grid-rows-[140px_140px_140px] md:grid-rows-[200px_200px_200px] gap-4">
         <div 
           className="about-video-box col-span-1 row-span-2 relative overflow-hidden rounded-[18px] border border-[#5A3E2B] bg-black z-10 transition-all duration-350 hover:scale-[1.03] lg:hover:scale-[1.1] hover:z-20"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
         >
-          <video 
-            ref={videoRef}
-            id="aboutVideo" 
-            src={video || "/videos/background.mp4"} 
-            muted={isMuted} 
-            loop 
-            className="w-full h-full object-cover"
-            playsInline
-          ></video>
-          <button 
-            className="mute-btn absolute bottom-2.5 right-2.5 w-[34px] h-[34px] rounded-full border-none bg-[rgba(0,0,0,0.6)] text-white text-base cursor-pointer flex items-center justify-center backdrop-blur-md z-20 hover:bg-[rgba(0,0,0,0.8)]" 
-            onClick={toggleMute}
-          >
-            {isMuted ? '🔇' : '🔊'}
-          </button>
+          {video && video.includes('youtube') ? (
+            <HoverYouTube url={video} className="w-full h-full object-cover" />
+          ) : (
+            <video 
+              id="aboutVideo" 
+              src={video || "/videos/background.mp4"} 
+              autoPlay
+              muted
+              loop 
+              className="w-full h-full object-cover"
+              playsInline
+            ></video>
+          )}
         </div>
         {displayImages[0] && (
           <img 

@@ -66,6 +66,17 @@ export default function SettingsAdmin() {
              />
            </div>
 
+           <div className="mb-8">
+             <label className="block text-sm text-[#bfc1c3] mb-2 font-medium">Global Background Video (YouTube Embed Link)</label>
+             <input 
+               className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-3 rounded-lg text-sm transition-all focus:border-blue-500 outline-none" 
+               placeholder="https://www.youtube.com/embed/..."
+               value={data.backgroundVideo || ''} 
+               onChange={(e) => setData({...data, backgroundVideo: e.target.value})} 
+             />
+             <p className="text-xs text-[#bfc1c3] mt-2">Example: https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ</p>
+           </div>
+
            <div className="flex flex-col md:flex-row gap-8 items-start mb-8 border-b border-[#3a3a3b] pb-8">
               <div className="flex-1 space-y-4">
                 <ImageUpload label="Update Logo (Navbar)" onUpload={(url) => setData({...data, logo: url})} />

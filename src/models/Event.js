@@ -6,6 +6,8 @@ const EventYearSchema = new mongoose.Schema({
   title: String,
   description: String,
   enabled: { type: Boolean, default: true },
+  bannerMedia: String,
+  bannerVideo: String,
   sections: [{
     title: String,
     description: String,
