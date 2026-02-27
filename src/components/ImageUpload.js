@@ -13,11 +13,11 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
     setUploading(true);
 
     try {
-      const maxSize = 5 * 1024 * 1024 * 1024; // 5GB (Vercel Pro Limit)
+      const maxSize = 50 * 1024 * 1024; // 50MB
 
       const uploadFile = async (file) => {
         if (file.size > maxSize) {
-          throw new Error(`File "${file.name}" is too large. The highest permitted size from Vercel is 5GB (Pro).`);
+          throw new Error(`File "${file.name}" is too large. The maximum permitted size is 50MB.`);
         }
 
         const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');

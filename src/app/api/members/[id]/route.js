@@ -1,3 +1,4 @@
+import { del } from '@vercel/blob';
 import dbConnect from '@/lib/db';
 import Member from '@/models/Member';
 import { NextResponse } from 'next/server';
@@ -27,6 +28,9 @@ export async function DELETE(req, { params }) {
     const deletedMember = await Member.findByIdAndDelete(id);
     if (!deletedMember) {
       return NextResponse.json({ error: 'Member not found' }, { status: 404 });
+    }
+    if (deletedMember.image) {
+      await del(deletedMember.image).catch(err => console.error('Failed to delete blob:', err));
     }
     return NextResponse.json({ message: 'Member deleted' });
   } catch (error) {

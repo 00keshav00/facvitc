@@ -24,7 +24,8 @@ export async function POST(request) {
             'image/vnd.microsoft.icon', 
             'image/ico'
           ],
-          maximumSizeInBytes: 5 * 1024 * 1024 * 1024, // 5GB (Vercel Pro Limit)
+          maximumSizeInBytes: 50 * 1024 * 1024, // 50MB
+          cacheControlMaxAge: 31536000, // 1 year (public, max-age=31536000, immutable)
           tokenPayload: JSON.stringify({}),
         };
       },
