@@ -41,17 +41,17 @@ export default function SiteLayout({ children, settings }) {
         </div>
       ) : (
         <div className="site-background-video-container pointer-events-none absolute inset-0 w-full h-full -z-10">
+          <img src="/images/hero.jpg" alt="background placeholder" className="absolute inset-0 w-full h-full object-cover filter brightness-50" />
           <video 
             ref={videoRef}
             className="site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50 transition-opacity duration-[800ms] ease-in-out" 
             src="/videos/background.mp4" 
-            poster="/images/hero.jpg" 
             autoPlay 
             muted 
             playsInline 
             onTimeUpdate={(e) => {
               const video = e.target;
-              // 0.8 seconds before the video ends, start fading out
+              // 0.8 seconds before the video ends, start fading out to reveal the image underneath
               if (video.duration && video.currentTime >= video.duration - 0.8) {
                 video.style.opacity = '0';
               }

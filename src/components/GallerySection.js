@@ -133,7 +133,7 @@ export default function GallerySection({ preview, artwork }) {
                  const fallbackImg = item.cat === 'digital' ? '/mp1.jpg' : item.cat === 'sketch' ? '/ph4.jpeg' : item.cat === 'painting' ? '/p1.jpeg' : '/afc1.jpg';
                  return (
                  <SwiperSlide key={idx} data-name={item.cat} className="flex justify-center items-center cursor-pointer">
-                    <Link href={item.link} className="block w-full h-full">
+                    <Link href={item.link} className="block w-full h-full" scroll={false}>
                       <img 
                         src={previewItem?.frontImage || previewItem?.image || fallbackImg} 
                         alt={item.cat} 
