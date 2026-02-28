@@ -28,6 +28,7 @@ export async function POST(request: Request) {
     // Convert the File to a Buffer for Sharp processing
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    const originalSize = buffer.length;
 
     // 2, 3, 4, 5, 6, 7. Process the image with Sharp
     const optimizedBuffer = await sharp(buffer)
@@ -38,6 +39,10 @@ export async function POST(request: Request) {
       })
       .webp({ quality: 80 })      // 6, 7. Convert to WebP with quality 80
       .toBuffer();
+      
+    const optimizedSize = optimizedBuffer.length;
+    const compressionPercentage = ((originalSize - optimizedSize) / originalSize) * 100;
+    console.log(`[Upload Compression] Original: ${(originalSize / 1024).toFixed(2)} KB, Optimized: ${(optimizedSize / 1024).toFixed(2)} KB. Compressed by: ${compressionPercentage.toFixed(2)}%`);
 
     // Extract original name and replace extension with .webp
     const originalName = file.name || 'image';

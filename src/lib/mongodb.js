@@ -22,10 +22,14 @@ export async function connectMongoDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
+    }).catch(err => {
+      cached.promise = null;
+      throw err;
     });
   }
   cached.conn = await cached.promise;
