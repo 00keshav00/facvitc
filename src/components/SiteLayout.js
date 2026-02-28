@@ -40,23 +40,26 @@ export default function SiteLayout({ children, settings }) {
           ></iframe>
         </div>
       ) : (
-        <div className="site-background-video-container pointer-events-none absolute inset-0 w-full h-full -z-10">
+        <div className="site-background-video-container pointer-events-none absolute inset-0 w-full h-full -z-10 bg-black">
+          {/* Static image behind the video so the fade doesn't go to pure black */}
+          <img src="/images/hero.jpg" alt="background" className="absolute inset-0 w-full h-full object-cover filter brightness-50" />
           <video 
             ref={videoRef}
-            className="site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50" 
+            className="site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50 transition-opacity duration-700 ease-in-out" 
             src="/videos/background.mp4" 
-            poster="/images/hero.jpg"
             autoPlay 
             muted 
             loop
             playsInline 
             onTimeUpdate={(e) => {
               const video = e.target;
-              // If the video is about to hit the very end (which often contains a black frame in MP4s),
-              // instantly jump back to slightly after 0 to make the loop seamless.
-              if (video.duration && video.currentTime >= video.duration - 0.2) {
-                video.currentTime = 0.05;
-                video.play().catch(() => {});
+              // Fade out smoothly just before the end of the video
+              if (video.duration && video.currentTime >= video.duration - 0.5) {
+                video.style.opacity = '0';
+              } 
+              // Fade back in smoothly once it natively loops back to the beginning
+              else if (video.currentTime < 1) {
+                video.style.opacity = '1';
               }
             }}
           />
