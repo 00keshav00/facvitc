@@ -1,16 +1,27 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 
 export default function SiteLayout({ children, settings }) {
   const videoRef = useRef(null);
+  const contentRef = useRef(null);
+  const pathname = usePathname();
 
+  // Set video playback speed
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 1; // Set playback speed to 1x
     }
   }, []);
+
+  // Reset scroll position on route change
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
+  }, [pathname]);
 
   return (
     <div className="site">
@@ -33,10 +44,20 @@ export default function SiteLayout({ children, settings }) {
           loop 
           muted 
           playsInline 
+          onTimeUpdate={(e) => {
+            const video = e.target;
+            // When the video is within 0.1 seconds of ending, add a class to trigger the blink
+            if (video.duration - video.currentTime < 0.1) {
+              video.style.opacity = '0';
+              setTimeout(() => {
+                video.style.opacity = '1';
+              }, 1000); // 1000ms = 1 sec blink duration
+            }
+          }}
         />
       )}
       <Navbar settings={settings} />
-      <main className="site-content">
+      <main ref={contentRef} className="site-content">
         {children}
       </main>
     </div>

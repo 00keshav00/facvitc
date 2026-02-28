@@ -28,7 +28,7 @@ export default function Login() {
         return;
       }
 
-      router.replace('/admin');
+      window.location.href = '/admin';
     } catch (err) {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
