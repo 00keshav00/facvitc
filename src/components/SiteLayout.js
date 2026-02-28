@@ -19,7 +19,12 @@ export default function SiteLayout({ children, settings }) {
   // Reset scroll position on route change
   useEffect(() => {
     if (contentRef.current) {
-      contentRef.current.scrollTop = 0;
+      setTimeout(() => {
+        if (contentRef.current) {
+          contentRef.current.scrollTop = 0;
+        }
+        window.scrollTo(0, 0);
+      }, 10);
     }
   }, [pathname]);
 
@@ -35,26 +40,31 @@ export default function SiteLayout({ children, settings }) {
           ></iframe>
         </div>
       ) : (
-        <video 
-          ref={videoRef}
-          className="site-background-video" 
-          src="/videos/background.mp4" 
-          poster="/images/hero.jpg" 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
-          onTimeUpdate={(e) => {
-            const video = e.target;
-            // When the video is within 0.1 seconds of ending, add a class to trigger the blink
-            if (video.duration - video.currentTime < 0.1) {
-              video.style.opacity = '0';
-              setTimeout(() => {
-                video.style.opacity = '1';
-              }, 1000); // 1000ms = 1 sec blink duration
-            }
-          }}
-        />
+        <div className="site-background-video-container pointer-events-none absolute inset-0 w-full h-full -z-10">
+          <video 
+            ref={videoRef}
+            className="site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50 transition-opacity duration-[800ms] ease-in-out" 
+            src="/videos/background.mp4" 
+            poster="/images/hero.jpg" 
+            autoPlay 
+            muted 
+            playsInline 
+            onTimeUpdate={(e) => {
+              const video = e.target;
+              // 0.8 seconds before the video ends, start fading out
+              if (video.duration && video.currentTime >= video.duration - 0.8) {
+                video.style.opacity = '0';
+              }
+            }}
+            onEnded={(e) => {
+              const video = e.target;
+              // When it actually ends, reset to start, fade back in, and play
+              video.currentTime = 0;
+              video.style.opacity = '1';
+              video.play().catch(() => {});
+            }}
+          />
+        </div>
       )}
       <Navbar settings={settings} />
       <main ref={contentRef} className="site-content">

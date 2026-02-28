@@ -72,17 +72,17 @@ export default function HoverYouTube({ url, className }) {
     >
       <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
       {/* 
-        By making the container 140% the size of the box and centering it, 
+        By making the container 180% the size of the box and centering it, 
         we naturally push the YouTube logo, title, and any black bars outside the visible area, 
         forcing YouTube to render at a higher resolution instead of using pixelated CSS scaling.
       */}
-      <div className="absolute top-1/2 left-1/2 w-[140%] h-[140%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+      <div className="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
         <YouTube 
           videoId={videoId} 
           opts={opts} 
           onReady={onReady} 
           className="w-full h-full"
-          iframeClassName="w-full h-full object-cover" 
+          iframeClassName="w-full h-full object-cover scale-[1.05]" 
         />
       </div>
     </div>
