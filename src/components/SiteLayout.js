@@ -1,19 +1,22 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 
 export default function SiteLayout({ children, settings }) {
-  const videoRef = useRef(null);
   const contentRef = useRef(null);
   const pathname = usePathname();
 
+  // Dual video references for seamless loop crossfading
+  const video1Ref = useRef(null);
+  const video2Ref = useRef(null);
+  const [activeVid, setActiveVid] = useState(1);
+
   // Set video playback speed
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 1; // Set playback speed to 1x
-    }
+    if (video1Ref.current) video1Ref.current.playbackRate = 1;
+    if (video2Ref.current) video2Ref.current.playbackRate = 1;
   }, []);
 
   // Reset scroll position on route change
@@ -41,25 +44,48 @@ export default function SiteLayout({ children, settings }) {
         </div>
       ) : (
         <div className="site-background-video-container pointer-events-none absolute inset-0 w-full h-full -z-10 bg-black">
-          {/* Static image behind the video so the fade doesn't go to pure black */}
+          {/* Static image behind the video */}
           <img src="/images/hero.jpg" alt="background" className="absolute inset-0 w-full h-full object-cover filter brightness-50" />
+          
           <video 
-            ref={videoRef}
-            className="site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50 transition-opacity duration-700 ease-in-out" 
+            ref={video1Ref}
+            className={`site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50 transition-opacity duration-500 ease-in-out ${activeVid === 1 ? 'opacity-100' : 'opacity-0'}`} 
             src="/videos/background.mp4" 
             autoPlay 
             muted 
-            loop
             playsInline 
             onTimeUpdate={(e) => {
               const video = e.target;
-              // Fade out smoothly just before the end of the video
+              // 0.5 seconds before this video ends, start the other video and trigger crossfade
               if (video.duration && video.currentTime >= video.duration - 0.5) {
-                video.style.opacity = '0';
-              } 
-              // Fade back in smoothly once it natively loops back to the beginning
-              else if (video.currentTime < 1) {
-                video.style.opacity = '1';
+                if (activeVid !== 2) {
+                  setActiveVid(2);
+                  if (video2Ref.current) {
+                    video2Ref.current.currentTime = 0;
+                    video2Ref.current.play().catch(() => {});
+                  }
+                }
+              }
+            }}
+          />
+          
+          <video 
+            ref={video2Ref}
+            className={`site-background-video absolute inset-0 w-full h-full object-cover filter brightness-50 transition-opacity duration-500 ease-in-out ${activeVid === 2 ? 'opacity-100' : 'opacity-0'}`} 
+            src="/videos/background.mp4" 
+            muted 
+            playsInline 
+            onTimeUpdate={(e) => {
+              const video = e.target;
+              // 0.5 seconds before this video ends, start the other video and trigger crossfade
+              if (video.duration && video.currentTime >= video.duration - 0.5) {
+                if (activeVid !== 1) {
+                  setActiveVid(1);
+                  if (video1Ref.current) {
+                    video1Ref.current.currentTime = 0;
+                    video1Ref.current.play().catch(() => {});
+                  }
+                }
               }
             }}
           />
