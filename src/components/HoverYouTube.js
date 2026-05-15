@@ -106,10 +106,11 @@ export default function HoverYouTube({ url, className }) {
       <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
       
       {/* 
-        Ultra-aggressive scaling (250%) and state-based visibility ensure that YouTube's 
-        internal UI elements (play buttons, titles, etc.) are pushed far off-screen.
+        Standard layout without scaling. The play icon will be visible 
+        in the center during the initial flash, but we use showVideo 
+        delay to minimize this.
       */}
-      <div className={`absolute top-1/2 left-1/2 w-[250%] h-[250%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`w-full h-full absolute inset-0 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
         <YouTube 
           videoId={videoId} 
           opts={opts} 
