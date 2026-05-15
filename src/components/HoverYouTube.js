@@ -12,13 +12,17 @@ export default function HoverYouTube({ url, className }) {
   const getVideoId = (url) => {
     if (!url) return null;
     const match = url.match(/\/embed\/([^?]+)/);
-    return match ? match[1] : null;
+    if (match) return match[1];
+    
+    // Also try to match regular watch URLs
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match2 = url.match(regExp);
+    return (match2 && match2[2].length === 11) ? match2[2] : null;
   };
 
   const videoId = getVideoId(url);
 
   if (!videoId) {
-    // Fallback if the URL isn't a standard embed link
     return (
       <iframe 
         src={url} 
@@ -37,24 +41,29 @@ export default function HoverYouTube({ url, className }) {
       controls: 0,
       modestbranding: 1,
       rel: 0,
-      mute: 1, // Must be muted to autoplay consistently on hover
-      loop: 1,
-      playlist: videoId, // Required for loop to work
-      vq: 'hd1080', // Hint to YouTube to prefer 1080p quality
+      mute: 1,
+      // Removed playlist/loop to avoid the "next/previous" buttons in the UI
       disablekb: 1,
       fs: 0,
       iv_load_policy: 3,
-      playsinline: 1
+      playsinline: 1,
+      vq: 'hd1080'
     },
   };
 
   const onReady = (event) => {
     playerRef.current = event.target;
     setIsReady(true);
-    // Small delay to ensure the initial player UI (buttons/title) has been suppressed or clipped
-    setTimeout(() => {
+  };
+
+  const onStateChange = (event) => {
+    // event.data: 1 = playing, 2 = paused, 3 = buffering, 0 = ended
+    if (event.data === 1) {
+      // Only show the video once it has actually started playing to hide the initial UI flash
       setShowVideo(true);
-    }, 600);
+    } else if (event.data === 2 || event.data === 0) {
+      setShowVideo(false);
+    }
   };
 
   const handleMouseEnter = () => {
@@ -66,7 +75,13 @@ export default function HoverYouTube({ url, className }) {
   const handleMouseLeave = () => {
     if (isReady && playerRef.current) {
       playerRef.current.pauseVideo();
+      setShowVideo(false);
     }
+  };
+
+  const handleEnd = (event) => {
+    // Manual loop to avoid using the 'playlist' parameter
+    event.target.playVideo();
   };
 
   return (
@@ -75,19 +90,30 @@ export default function HoverYouTube({ url, className }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Background Thumbnail Placeholder */}
+      <img 
+        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+        alt="thumbnail"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+        style={{ opacity: showVideo ? 0 : 1 }}
+      />
+
       <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
+      
       {/* 
-        By making the container 180% the size of the box and centering it, 
-        we naturally push the YouTube logo, title, and any black bars outside the visible area, 
-        forcing YouTube to render at a higher resolution instead of using pixelated CSS scaling.
+        Aggressive scaling and state-based visibility ensure that YouTube's 
+        internal UI elements (play buttons, titles, etc.) are either clipped 
+        or hidden during transitions.
       */}
-      <div className={`absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
         <YouTube 
           videoId={videoId} 
           opts={opts} 
           onReady={onReady} 
+          onStateChange={onStateChange}
+          onEnd={handleEnd}
           className="w-full h-full"
-          iframeClassName="w-full h-full object-cover scale-[1.05]" 
+          iframeClassName="w-full h-full object-cover" 
         />
       </div>
     </div>

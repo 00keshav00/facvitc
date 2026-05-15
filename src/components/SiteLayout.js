@@ -37,6 +37,9 @@ export default function SiteLayout({ children, settings }) {
     <div className="site">
       {settings?.backgroundVideo && settings.backgroundVideo.includes('youtube') ? (
         <div className="site-background-video pointer-events-none overflow-hidden bg-black">
+          {/* Static image behind the video to show while loading */}
+          <img src="/images/hero.jpg" alt="background" className="absolute inset-0 w-full h-full object-cover filter brightness-50" />
+          
           {/* Extract video ID to pass into playlist for seamless YouTube looping */}
           {(() => {
             const videoId = settings.backgroundVideo.split('/embed/')[1]?.split('?')[0];
@@ -49,8 +52,7 @@ export default function SiteLayout({ children, settings }) {
                 modestbranding: 1,
                 rel: 0,
                 mute: 1,
-                loop: 1,
-                playlist: videoId,
+                // Removed playlist/loop to avoid the "next/previous" buttons in the UI
                 disablekb: 1,
                 fs: 0,
                 iv_load_policy: 3,
@@ -61,12 +63,20 @@ export default function SiteLayout({ children, settings }) {
 
             return (
               <div className={`w-full h-full absolute inset-0 transition-opacity duration-1000 ${showBg ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2">
                   <YouTube 
                     videoId={videoId} 
                     opts={opts} 
-                    onReady={() => {
-                      setTimeout(() => setShowBg(true), 1200);
+                    onStateChange={(e) => {
+                      // 1 = PLAYING
+                      if (e.data === 1) {
+                        // Extra delay to ensure YouTube's initial 5-second UI flash is gone
+                        setTimeout(() => setShowBg(true), 2500);
+                      }
+                    }}
+                    onEnd={(e) => {
+                      // Manual loop to avoid using the 'playlist' parameter
+                      e.target.playVideo();
                     }}
                     className="w-full h-full"
                     iframeClassName="w-full h-full object-cover" 
