@@ -59,9 +59,14 @@ export default function HoverYouTube({ url, className }) {
   const onStateChange = (event) => {
     // event.data: 1 = playing, 2 = paused, 3 = buffering, 0 = ended
     if (event.data === 1) {
-      // Only show the video once it has actually started playing to hide the initial UI flash
-      setShowVideo(true);
-    } else if (event.data === 2 || event.data === 0) {
+      // Delay the reveal until after the initial UI flash (play icon) is likely gone or clipped
+      setTimeout(() => {
+        // Double check we are still hovering (player is playing) before showing
+        if (playerRef.current && playerRef.current.getPlayerState() === 1) {
+          setShowVideo(true);
+        }
+      }, 1200);
+    } else {
       setShowVideo(false);
     }
   };
@@ -75,8 +80,8 @@ export default function HoverYouTube({ url, className }) {
   const handleMouseLeave = () => {
     if (isReady && playerRef.current) {
       playerRef.current.pauseVideo();
-      setShowVideo(false);
     }
+    setShowVideo(false);
   };
 
   const handleEnd = (event) => {
@@ -101,11 +106,10 @@ export default function HoverYouTube({ url, className }) {
       <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
       
       {/* 
-        Aggressive scaling and state-based visibility ensure that YouTube's 
-        internal UI elements (play buttons, titles, etc.) are either clipped 
-        or hidden during transitions.
+        Ultra-aggressive scaling (250%) and state-based visibility ensure that YouTube's 
+        internal UI elements (play buttons, titles, etc.) are pushed far off-screen.
       */}
-      <div className={`absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute top-1/2 left-1/2 w-[250%] h-[250%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
         <YouTube 
           videoId={videoId} 
           opts={opts} 
