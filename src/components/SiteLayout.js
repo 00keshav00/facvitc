@@ -62,24 +62,24 @@ export default function SiteLayout({ children, settings }) {
             };
 
             return (
-              <div className={`w-full h-full absolute inset-0 transition-opacity duration-1000 ${showBg ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2">
+              <div className={`w-full h-full absolute inset-0 transition-opacity duration-1500 ${showBg ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 scale-[1.35] sm:scale-[1.15]">
                   <YouTube 
                     videoId={videoId} 
                     opts={opts} 
                     onStateChange={(e) => {
                       // 1 = PLAYING
                       if (e.data === 1) {
-                        // Extra delay to ensure YouTube's initial 5-second UI flash is gone
-                        setTimeout(() => setShowBg(true), 2500);
+                        // Increased delay to 4s to ensure the initial 5s center-play icon is gone
+                        // YouTube's 'modestbranding' and 'controls=0' still flash the center icon for ~3-5s
+                        setTimeout(() => setShowBg(true), 4000);
                       }
                     }}
                     onEnd={(e) => {
-                      // Manual loop to avoid using the 'playlist' parameter
                       e.target.playVideo();
                     }}
                     className="w-full h-full"
-                    iframeClassName="w-full h-full object-cover" 
+                    iframeClassName="w-full h-full pointer-events-none" 
                   />
                 </div>
               </div>
