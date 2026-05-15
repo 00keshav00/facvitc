@@ -34,14 +34,19 @@ export default function SiteLayout({ children, settings }) {
   return (
     <div className="site">
       {settings?.backgroundVideo && settings.backgroundVideo.includes('youtube') ? (
-        <div className="site-background-video pointer-events-none">
+        <div className="site-background-video pointer-events-none overflow-hidden bg-black">
           {/* Extract video ID to pass into playlist for seamless YouTube looping */}
-          <iframe
-            src={`${settings.backgroundVideo}${settings.backgroundVideo.includes('?') ? '&' : '?'}autoplay=1&mute=1&loop=1&playlist=${settings.backgroundVideo.split('/embed/')[1]?.split('?')[0]}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
-            className="w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+          {(() => {
+            const videoId = settings.backgroundVideo.split('/embed/')[1]?.split('?')[0];
+            return (
+              <iframe
+                src={`${settings.backgroundVideo}${settings.backgroundVideo.includes('?') ? '&' : '?'}autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1`}
+                className="w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.2]"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            );
+          })()}
         </div>
       ) : (
         <div className="site-background-video-container pointer-events-none absolute inset-0 w-full h-full -z-10 bg-black">
