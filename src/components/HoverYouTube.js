@@ -6,6 +6,7 @@ import YouTube from 'react-youtube';
 export default function HoverYouTube({ url, className }) {
   const playerRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   // Extract video ID from embed URL
   const getVideoId = (url) => {
@@ -50,6 +51,10 @@ export default function HoverYouTube({ url, className }) {
   const onReady = (event) => {
     playerRef.current = event.target;
     setIsReady(true);
+    // Small delay to ensure the initial player UI (buttons/title) has been suppressed or clipped
+    setTimeout(() => {
+      setShowVideo(true);
+    }, 600);
   };
 
   const handleMouseEnter = () => {
@@ -66,7 +71,7 @@ export default function HoverYouTube({ url, className }) {
 
   return (
     <div 
-      className={`${className} relative overflow-hidden group cursor-pointer`}
+      className={`${className} relative overflow-hidden group cursor-pointer bg-black`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -76,7 +81,7 @@ export default function HoverYouTube({ url, className }) {
         we naturally push the YouTube logo, title, and any black bars outside the visible area, 
         forcing YouTube to render at a higher resolution instead of using pixelated CSS scaling.
       */}
-      <div className="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+      <div className={`absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
         <YouTube 
           videoId={videoId} 
           opts={opts} 

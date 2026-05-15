@@ -2,11 +2,13 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import YouTube from 'react-youtube';
 import Navbar from './Navbar';
 
 export default function SiteLayout({ children, settings }) {
   const contentRef = useRef(null);
   const pathname = usePathname();
+  const [showBg, setShowBg] = useState(false);
 
   // Dual video references for seamless loop crossfading
   const video1Ref = useRef(null);
@@ -38,13 +40,39 @@ export default function SiteLayout({ children, settings }) {
           {/* Extract video ID to pass into playlist for seamless YouTube looping */}
           {(() => {
             const videoId = settings.backgroundVideo.split('/embed/')[1]?.split('?')[0];
+            const opts = {
+              height: '100%',
+              width: '100%',
+              playerVars: {
+                autoplay: 1,
+                controls: 0,
+                modestbranding: 1,
+                rel: 0,
+                mute: 1,
+                loop: 1,
+                playlist: videoId,
+                disablekb: 1,
+                fs: 0,
+                iv_load_policy: 3,
+                playsinline: 1,
+                vq: 'hd1080'
+              },
+            };
+
             return (
-              <iframe
-                src={`${settings.backgroundVideo}${settings.backgroundVideo.includes('?') ? '&' : '?'}autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1`}
-                className="w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[1.2]"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              <div className={`w-full h-full absolute inset-0 transition-opacity duration-1000 ${showBg ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2">
+                  <YouTube 
+                    videoId={videoId} 
+                    opts={opts} 
+                    onReady={() => {
+                      setTimeout(() => setShowBg(true), 1200);
+                    }}
+                    className="w-full h-full"
+                    iframeClassName="w-full h-full object-cover" 
+                  />
+                </div>
+              </div>
             );
           })()}
         </div>
