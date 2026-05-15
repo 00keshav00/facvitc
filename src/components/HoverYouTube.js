@@ -106,11 +106,10 @@ export default function HoverYouTube({ url, className }) {
       <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
       
       {/* 
-        Standard layout without scaling. The play icon will be visible 
-        in the center during the initial flash, but we use showVideo 
-        delay to minimize this.
+        Moderate scaling (150%) to hide the center play button 
+        without extreme cropping.
       */}
-      <div className={`w-full h-full absolute inset-0 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute top-1/2 left-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
         <YouTube 
           videoId={videoId} 
           opts={opts} 
