@@ -94,21 +94,24 @@ export default function MembersAdmin() {
       const bulkText = formData.get('bulkMembers');
       const data = bulkText.split('\n')
         .map(line => line.trim())
-        .filter(line => line.length > 0 && line.includes(','))
+        .filter(line => line.length > 0)
         .map(line => {
-          const parts = line.split(',');
-          const name = parts[0]?.trim();
-          const role = parts.slice(1).join(',').trim() || 'Core';
+          const parts = line.split(',').map(p => p.trim());
+          const name = parts[0] || '';
+          const role = parts[1] || 'Core';
+          const bio = parts[2] || '';
           return { 
             name, 
             role, 
+            bio,
             type: 'Lead',
             year: selectedYear
           };
-        });
+        })
+        .filter(item => item.name !== '');
 
       if (data.length === 0) {
-        alert('No valid members found to add. Format: Name, Role');
+        alert('No valid members found to add. Format: Name, Role, Bio (optional)');
         return;
       }
 
@@ -259,26 +262,32 @@ export default function MembersAdmin() {
             <h3 className="text-2xl font-bold mb-6 text-white">{editingMember?._id ? 'Edit' : 'Add'} Member to {selectedYear}</h3>
             <form onSubmit={handleSubmitMember} className="space-y-4">
               {!editingMember?._id ? (
-                <div>
-                  <label className="block text-sm text-[#bfc1c3] mb-1">
-                    Bulk Add Members (One per line, Format: Name, Role)
+                <div className="p-4 bg-blue-600/10 border border-blue-500/30 rounded-lg mb-6">
+                  <label className="block text-sm font-bold text-blue-400 mb-2">
+                    Bulk Upload (One card per line)
                   </label>
+                  <p className="text-xs text-[#bfc1c3] mb-3">Format: <code className="bg-black/30 px-1 rounded text-white">Name, Role, Bio (optional)</code></p>
                   <textarea 
                     name="bulkMembers"
-                    className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded h-40 font-mono text-sm outline-none focus:border-blue-500"
-                    placeholder="John Doe, President&#10;Jane Smith, Vice President"
+                    className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-3 rounded h-40 font-mono text-sm outline-none focus:border-blue-500"
+                    placeholder="John Doe, President, Dedicated leader since 2024&#10;Jane Smith, Vice President"
                   />
+                  <div className="mt-2 flex items-center gap-2">
+                     <div className="h-[1px] bg-[#3a3a3b] flex-1"></div>
+                     <span className="text-[10px] uppercase font-bold text-gray-500">OR FILL INDIVIDUALLY BELOW</span>
+                     <div className="h-[1px] bg-[#3a3a3b] flex-1"></div>
+                  </div>
                 </div>
               ) : null}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Full Name</label>
-                  <input name="name" required={!editingMember?._id || !!editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded outline-none focus:border-blue-500" defaultValue={editingMember?.name} />
+                  <input name="name" required={!editingMember?._id ? false : true} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded outline-none focus:border-blue-500" defaultValue={editingMember?.name} />
                 </div>
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Role / Position</label>
-                  <input name="role" required={!editingMember?._id || !!editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded outline-none focus:border-blue-500" defaultValue={editingMember?.role} />
+                  <input name="role" required={!editingMember?._id ? false : true} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded outline-none focus:border-blue-500" defaultValue={editingMember?.role} />
                 </div>
               </div>
 
@@ -315,7 +324,7 @@ export default function MembersAdmin() {
               </div>
 
               <div className="flex gap-4 pt-4">
-                <button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 rounded font-bold transition-colors shadow-lg">Save Member</button>
+                <button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 rounded font-bold transition-colors shadow-lg">Save Member(s)</button>
                 <button type="button" onClick={() => setShowForm(false)} className="flex-1 bg-[#2d2e30] hover:bg-[#3a3a3b] py-2 rounded font-bold transition-colors">Cancel</button>
               </div>
             </form>
@@ -337,7 +346,7 @@ export default function MembersAdmin() {
                    <img src={member.image} alt={member.name} className="w-16 h-16 rounded-full object-cover border-2 border-[#3a3a3b]" />
                 ) : (
                    <div className="w-16 h-16 rounded-full bg-[#2d2e30] border-2 border-[#3a3a3b] flex items-center justify-center text-xl font-bold text-[#bfc1c3]">
-                      {member.name[0]}
+                      {member.name ? member.name[0] : '?'}
                    </div>
                 )}
                 <div className="flex-1 min-w-0">
