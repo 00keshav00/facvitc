@@ -8,7 +8,9 @@ import { useSession, signOut } from 'next-auth/react';
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const sessionData = useSession();
+  const session = sessionData?.data;
+  const status = sessionData?.status || 'loading';
 
   // Protect all admin routes
   React.useEffect(() => {
