@@ -5,22 +5,20 @@ import React, { useState } from 'react';
 export default function ImageUpload({ onUpload, label, multiple = false }) {
   const [uploading, setUploading] = useState(false);
 
-  const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files);
+  const handleFileChange = async (event) => {
+    const files = Array.from(event.target.files);
     if (!files || files.length === 0) return;
 
     setUploading(true);
 
     try {
-      // 50MB limit check remains for early validation
       const maxSize = 50 * 1024 * 1024; 
 
       const uploadFile = async (file) => {
         if (file.size > maxSize) {
-          throw new Error(`File "${file.name}" is too large. The maximum permitted size is 50MB.`);
+          throw new Error(`File "${file.name}" is too large. Max size is 50MB.`);
         }
 
-        // 3. Replace logic with standard FormData upload
         const formData = new FormData();
         formData.append('file', file);
 
@@ -35,8 +33,6 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
         }
 
         const data = await response.json();
-        
-        // 10. Return the optimized blob URL from the response
         return data.url;
       };
 
@@ -48,30 +44,29 @@ export default function ImageUpload({ onUpload, label, multiple = false }) {
             if (url) uploadedUrls.push(url);
           } catch (err) {
             console.error(err);
-            alert(err.message);
           }
         }
-        if (uploadedUrls.length > 0) {
+        if (uploadedUrls.length > 0 && typeof onUpload === 'function') {
           onUpload(uploadedUrls);
         }
       } else {
         const url = await uploadFile(files[0]);
-        if (url) onUpload(url);
+        if (url && typeof onUpload === 'function') {
+          onUpload(url);
+        }
       }
     } catch (error) {
-      // 4. Basic error handling
       console.error('Upload failed', error);
       alert(error.message || 'Upload failed');
     } finally {
       setUploading(false);
-      // Reset input so the same file can be selected again if needed
-      e.target.value = null;
+      if (event.target) event.target.value = null;
     }
   };
 
   return (
     <div className="mb-4">
-      <label className="block mb-2 text-sm text-[#bfc1c3]">{label}</label>
+      {label && <label className="block mb-2 text-sm text-[#bfc1c3]">{label}</label>}
       <input 
         type="file" 
         multiple={multiple}
