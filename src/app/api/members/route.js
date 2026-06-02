@@ -6,8 +6,12 @@ export async function GET(req) {
   await dbConnect();
   const { searchParams } = new URL(req.url);
   const type = searchParams.get('type');
+  const year = searchParams.get('year');
   
-  const query = type ? { type } : {};
+  const query = {};
+  if (type) query.type = type;
+  if (year) query.year = year;
+
   try {
     const members = await Member.find(query).sort({ order: 1 });
     return NextResponse.json(members);

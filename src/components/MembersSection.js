@@ -94,7 +94,7 @@ export default function MembersSection({ members = [] }) {
 
       <div className="members-cta flex justify-center my-8">
         <Link href="/members" className="members-btn px-6 py-2.5 rounded-lg border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.04)] text-[#e6e6e6] font-semibold transition-all duration-300 shadow-xl hover:bg-[rgba(255,255,255,0.08)] hover:-translate-y-0.5">
-          View All FAC Members
+          View FAC Club Leads
         </Link>
       </div>
 
