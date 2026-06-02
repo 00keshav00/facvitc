@@ -13,28 +13,16 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        console.log("Attempting to authorize user:", credentials.email);
         try {
           await connectMongoDB();
           const user = await User.findOne({ email: credentials.email });
-
-          if (!user) {
-            console.log("Authorization failed: User not found.");
-            return null;
-          }
-
-          console.log("User found. Comparing passwords...");
+          if (!user) return null;
           const passwordsMatch = await bcrypt.compare(credentials.password, user.password);
-
           if (passwordsMatch) {
-            console.log("Authorization successful.");
             return { id: user._id, name: "Admin", email: user.email };
-          } else {
-            console.log("Authorization failed: Passwords do not match.");
-            return null;
           }
+          return null;
         } catch (error) {
-          console.error("Error in authorize function:", error);
           return null;
         }
       }
@@ -45,14 +33,21 @@ export const authOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 3600, // 1 hour for security
+    maxAge: 0, // Enforce session-only cookies (logout on browser close)
   },
-  jwt: {
-     maxAge: 3600,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

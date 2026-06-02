@@ -97,19 +97,17 @@ export default function MembersAdmin() {
         .map(line => {
           const parts = line.split(',');
           const name = parts[0]?.trim();
-          const regNo = parts[1]?.trim();
-          const role = parts.slice(2).join(',').trim() || (selectedYear === 'General' ? 'Team' : 'Core');
+          const role = parts.slice(1).join(',').trim() || 'Core';
           return { 
             name, 
-            regNo, 
             role, 
-            type: selectedYear === 'General' ? 'General' : 'Lead',
-            year: selectedYear === 'General' ? '' : selectedYear
+            type: 'Lead',
+            year: selectedYear
           };
         });
 
       if (data.length === 0) {
-        alert('No valid members found to add. Format: Name, RegNo, Role');
+        alert('No valid members found to add. Format: Name, Role');
         return;
       }
 
@@ -133,8 +131,8 @@ export default function MembersAdmin() {
     }
 
     const data = Object.fromEntries(formData.entries());
-    data.type = selectedYear === 'General' ? 'General' : 'Lead';
-    data.year = selectedYear === 'General' ? '' : selectedYear;
+    data.type = 'Lead';
+    data.year = selectedYear;
     
     // Convert social links
     data.socialLinks = {
@@ -209,17 +207,11 @@ export default function MembersAdmin() {
             </button>
           </div>
         ))}
-        <button 
-          onClick={() => setSelectedYear('General')}
-          className={`px-4 py-2 rounded-t-lg font-semibold transition-colors ${selectedYear === 'General' ? 'bg-blue-600 text-white' : 'text-[#bfc1c3] hover:text-white'}`}
-        >
-          General Members
-        </button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 justify-between bg-[#1e1e1f] p-4 rounded-xl border border-[#3a3a3b]">
         <h3 className="text-xl font-bold">
-          {selectedYear === 'General' ? 'General Members' : `Leads for ${selectedYear}`}
+          Leads for {selectedYear}
         </h3>
         <input 
           placeholder="Search by name or role..." 
@@ -265,12 +257,12 @@ export default function MembersAdmin() {
               {!editingMember?._id ? (
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">
-                    Bulk Add Members (One per line, Format: Name, RegNo, Role)
+                    Bulk Add Members (One per line, Format: Name, Role)
                   </label>
                   <textarea 
                     name="bulkMembers"
                     className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded h-40 font-mono text-sm"
-                    placeholder="John Doe, 21BCE0000, President\nJane Smith, 21BCE0001, Vice President"
+                    placeholder="John Doe, President\nJane Smith, Vice President"
                   />
                 </div>
               ) : null}
@@ -279,10 +271,6 @@ export default function MembersAdmin() {
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Full Name</label>
                   <input name="name" required={!!editingMember?._id} className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" defaultValue={editingMember?.name} />
-                </div>
-                <div>
-                  <label className="block text-sm text-[#bfc1c3] mb-1">Reg No</label>
-                  <input name="regNo" className="w-full bg-[#2d2e30] border border-[#3a3a3b] p-2 rounded" defaultValue={editingMember?.regNo} />
                 </div>
                 <div>
                   <label className="block text-sm text-[#bfc1c3] mb-1">Role / Position</label>
@@ -297,9 +285,13 @@ export default function MembersAdmin() {
               <div>
                 <label className="block text-sm text-[#bfc1c3] mb-1">Profile Image</label>
                 <ImageUpload 
-                  value={editingMember?.image} 
-                  onChange={(url) => setEditingMember({...editingMember, image: url})} 
+                  onUpload={(url) => setEditingMember({...editingMember, image: url})} 
                 />
+                {editingMember?.image && (
+                   <div className="mt-2 relative w-20 h-20">
+                      <img src={editingMember.image} className="w-full h-full object-cover rounded" />
+                   </div>
+                )}
               </div>
 
               <div>
@@ -356,7 +348,6 @@ export default function MembersAdmin() {
                       <button onClick={() => handleDeleteMember(member._id)} className="p-1 hover:bg-red-600/20 text-red-500 rounded"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
                     </div>
                   </div>
-                  {member.regNo && <p className="text-[#bfc1c3] text-xs mt-1">{member.regNo}</p>}
                 </div>
               </div>
               <p className="text-[#bfc1c3] text-sm line-clamp-2 mb-4 italic">"{member.bio || 'No bio...'}"</p>

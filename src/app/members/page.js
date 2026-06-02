@@ -85,60 +85,62 @@ export default function ClubLeadsPage() {
 
   return (
     <div className="leads-page min-h-screen bg-black/60 backdrop-blur-sm text-[#e6e6e6] flex flex-col relative">
-      {/* Background Video Placeholder - Assuming it's handled by a parent or global layout */}
-      
       <div className="py-16 px-6 md:px-14 z-10">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">FAC Club Leads</h1>
-          <p className="text-[#bfc1c3] text-center mb-16 max-w-2xl mx-auto">
+        <div className="max-w-7xl mx-auto text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">FAC Club Leads</h1>
+          <p className="text-[#bfc1c3] max-w-2xl mx-auto italic">
             Honoring the dedicated individuals who have led the Fine Arts Club through the years.
           </p>
+        </div>
 
-          {loading ? (
+        {loading ? (
             <div className="flex justify-center py-20">
                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-          ) : data.length === 0 ? (
+        ) : data.length === 0 ? (
             <div className="text-center py-20 text-[#bfc1c3]">No lead records found.</div>
-          ) : (
-            <div className="space-y-12">
-              {/* Timeline Bar */}
-              <div className="timeline-bar-wrap flex justify-center sticky top-24 z-20">
-                <div className="timeline-bar flex gap-2 p-2 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-2xl">
-                  {data.map((group) => (
-                    <button
-                      key={group.year}
-                      onClick={() => setActiveYear(group.year)}
-                      className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeYear === group.year ? 'bg-blue-600 text-white shadow-lg' : 'text-[#bfc1c3] hover:text-white hover:bg-white/5'}`}
-                    >
-                      {group.year}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Cards Section */}
-              <div className="year-section pt-8">
-                {activeGroup && (
-                  <div className="flex flex-wrap gap-8 justify-center">
-                    {activeGroup.leads.map((lead) => (
-                      <MemberCard 
-                        key={lead._id}
-                        img={lead.image}
-                        name={lead.name}
-                        role={lead.role}
-                        quote={lead.bio}
-                        instagram={lead.socialLinks?.instagram}
-                        linkedin={lead.socialLinks?.linkedin}
-                        other={lead.socialLinks?.otherLink}
-                      />
-                    ))}
-                  </div>
-                )}
+        ) : (
+          <div className="space-y-12">
+            {/* Events-style Timeline Bar */}
+            <div className="flex justify-center sticky top-24 z-20">
+              <div className="flex flex-wrap justify-center gap-3 p-3 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-2xl overflow-x-auto max-w-full no-scrollbar">
+                {data.map((group) => (
+                  <button
+                    key={group.year}
+                    onClick={() => setActiveYear(group.year)}
+                    className={`px-8 py-2.5 rounded-full text-sm font-bold tracking-wide uppercase transition-all duration-300 ${
+                      activeYear === group.year 
+                      ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] scale-105' 
+                      : 'bg-white/5 text-[#bfc1c3] hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {group.year}
+                  </button>
+                ))}
               </div>
             </div>
-          )}
-        </div>
+
+            {/* Cards Section */}
+            <div className="year-section pt-10">
+              {activeGroup && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+                  {activeGroup.leads.map((lead) => (
+                    <MemberCard 
+                      key={lead._id}
+                      img={lead.image}
+                      name={lead.name}
+                      role={lead.role}
+                      quote={lead.bio}
+                      instagram={lead.socialLinks?.instagram}
+                      linkedin={lead.socialLinks?.linkedin}
+                      other={lead.socialLinks?.otherLink}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mt-auto z-10">
