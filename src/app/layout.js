@@ -2,6 +2,7 @@ import "./globals.css";
 import SiteLayout from "@/components/SiteLayout";
 import dbConnect from "@/lib/db";
 import Setting from "@/models/Setting";
+import { Providers } from "@/components/Providers";
 
 export async function generateMetadata() {
   const settings = await getSettings();
@@ -39,9 +40,11 @@ export default async function RootLayout({ children }) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
       </head>
       <body>
-        <SiteLayout settings={settings}>
-          {children}
-        </SiteLayout>
+        <Providers>
+          <SiteLayout settings={settings}>
+            {children}
+          </SiteLayout>
+        </Providers>
       </body>
     </html>
   );
