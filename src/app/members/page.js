@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Footer from '@/components/Footer';
-import { FaInstagram, FaLinkedin, FaYoutube, FaLink } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaLink } from 'react-icons/fa';
 
 export const dynamic = 'force-dynamic';
 
-const MemberCard = ({ img, name, role, quote, instagram, linkedin, youtube, other }) => {
+const MemberCard = ({ img, name, role, quote, instagram, linkedin, other }) => {
   return (
-    <div className={`test-card w-[calc(100%)] sm:w-[300px] md:w-[320px] bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-[10px] overflow-hidden transition-all duration-300 shadow-xl flex flex-col hover:-translate-y-1.5 hover:shadow-2xl`}>
+    <div className="test-card w-[calc(100%)] sm:w-[300px] md:w-[320px] bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-[10px] overflow-hidden transition-all duration-300 shadow-xl flex flex-col hover:-translate-y-1.5 hover:shadow-2xl">
       <div className="member-image w-full h-48 sm:h-[240px] overflow-hidden">
         <img src={img || '/placeholder_member.jpg'} alt={name} loading="lazy" className="w-full h-full object-cover" />
       </div>
@@ -49,6 +49,7 @@ const MemberCard = ({ img, name, role, quote, instagram, linkedin, youtube, othe
 export default function ClubLeadsPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeYear, setActiveYear] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -68,6 +69,9 @@ export default function ClubLeadsPage() {
         })).filter(g => g.leads.length > 0);
 
         setData(grouped);
+        if (grouped.length > 0) {
+          setActiveYear(grouped[0].year);
+        }
       } catch (error) {
         console.error('Failed to fetch leads:', error);
       } finally {
@@ -77,9 +81,13 @@ export default function ClubLeadsPage() {
     fetchData();
   }, []);
 
+  const activeGroup = data.find(g => g.year === activeYear);
+
   return (
-    <div className="leads-page min-h-screen bg-[#0a0a0a] text-[#e6e6e6] flex flex-col">
-      <div className="py-16 px-6 md:px-14">
+    <div className="leads-page min-h-screen bg-black/60 backdrop-blur-sm text-[#e6e6e6] flex flex-col relative">
+      {/* Background Video Placeholder - Assuming it's handled by a parent or global layout */}
+      
+      <div className="py-16 px-6 md:px-14 z-10">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">FAC Club Leads</h1>
           <p className="text-[#bfc1c3] text-center mb-16 max-w-2xl mx-auto">
@@ -93,16 +101,27 @@ export default function ClubLeadsPage() {
           ) : data.length === 0 ? (
             <div className="text-center py-20 text-[#bfc1c3]">No lead records found.</div>
           ) : (
-            <div className="space-y-24">
-              {data.map((group, idx) => (
-                <div key={group.year} className="year-section">
-                  <div className="flex items-center gap-6 mb-10">
-                    <h2 className="text-3xl font-bold text-white shrink-0">{group.year}</h2>
-                    <div className="h-[1px] bg-gradient-to-r from-[rgba(255,255,255,0.1)] to-transparent w-full"></div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-8 justify-center sm:justify-start">
-                    {group.leads.map((lead) => (
+            <div className="space-y-12">
+              {/* Timeline Bar */}
+              <div className="timeline-bar-wrap flex justify-center sticky top-24 z-20">
+                <div className="timeline-bar flex gap-2 p-2 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-2xl">
+                  {data.map((group) => (
+                    <button
+                      key={group.year}
+                      onClick={() => setActiveYear(group.year)}
+                      className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeYear === group.year ? 'bg-blue-600 text-white shadow-lg' : 'text-[#bfc1c3] hover:text-white hover:bg-white/5'}`}
+                    >
+                      {group.year}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cards Section */}
+              <div className="year-section pt-8">
+                {activeGroup && (
+                  <div className="flex flex-wrap gap-8 justify-center">
+                    {activeGroup.leads.map((lead) => (
                       <MemberCard 
                         key={lead._id}
                         img={lead.image}
@@ -115,14 +134,14 @@ export default function ClubLeadsPage() {
                       />
                     ))}
                   </div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      <div className="mt-auto">
+      <div className="mt-auto z-10">
         <Footer />
       </div>
     </div>
