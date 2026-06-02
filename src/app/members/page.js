@@ -19,12 +19,12 @@ const MemberCard = ({ img, name, role, quote, instagram, linkedin, other }) => {
           </strong>
           <div className="flex gap-2 shrink-0">
             {instagram && (
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-pink-500 transition-colors">
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
                 <FaInstagram size={16} />
               </a>
             )}
             {linkedin && (
-              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-blue-500 transition-colors">
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-[#bfc1c3] hover:text-white transition-colors">
                 <FaLinkedin size={16} />
               </a>
             )}
@@ -35,10 +35,10 @@ const MemberCard = ({ img, name, role, quote, instagram, linkedin, other }) => {
             )}
           </div>
         </div>
-        <span className="role text-[13px] font-semibold text-blue-400 truncate">{role}</span>
+        <span className="role text-[12px] font-bold text-[#bfc1c3] truncate uppercase tracking-widest opacity-80">{role}</span>
       </div>
       {quote && (
-        <div className="quote px-[18px] pb-[18px] text-[#bfc1c3] text-[14px] leading-relaxed line-clamp-3 italic">
+        <div className="quote px-[18px] pb-[18px] text-[#bfc1c3] text-[14px] leading-relaxed line-clamp-3 italic opacity-70">
           "{quote}"
         </div>
       )}
@@ -84,46 +84,51 @@ export default function ClubLeadsPage() {
   const activeGroup = data.find(g => g.year === activeYear);
 
   return (
-    <div className="leads-page min-h-screen bg-black/60 backdrop-blur-sm text-[#e6e6e6] flex flex-col relative">
+    <div className="leads-page min-h-screen bg-black/60 backdrop-blur-sm text-[#e6e6e6] flex flex-col relative no-scrollbar">
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
       <div className="py-16 px-6 md:px-14 z-10">
         <div className="max-w-7xl mx-auto text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">FAC Club Leads</h1>
-          <p className="text-[#bfc1c3] max-w-2xl mx-auto italic">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">FAC Club Leads</h1>
+          <p className="text-[#bfc1c3] max-w-2xl mx-auto italic text-lg opacity-80">
             Honoring the dedicated individuals who have led the Fine Arts Club through the years.
           </p>
         </div>
 
         {loading ? (
             <div className="flex justify-center py-20">
-               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+               <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-white/40"></div>
             </div>
         ) : data.length === 0 ? (
             <div className="text-center py-20 text-[#bfc1c3]">No lead records found.</div>
         ) : (
-          <div className="space-y-12">
-            {/* Events-style Timeline Bar */}
-            <div className="flex justify-center sticky top-24 z-20">
-              <div className="flex flex-wrap justify-center gap-3 p-3 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-2xl overflow-x-auto max-w-full no-scrollbar">
+          <div className="space-y-16">
+            {/* Events-style Timeline Bar (Neutral Theme, Non-sticky) */}
+            <div className="flex justify-center z-50">
+              <nav className="flex flex-wrap justify-center gap-4 p-4 bg-black/40 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl overflow-x-auto max-w-full no-scrollbar">
                 {data.map((group) => (
                   <button
                     key={group.year}
                     onClick={() => setActiveYear(group.year)}
-                    className={`px-8 py-2.5 rounded-full text-sm font-bold tracking-wide uppercase transition-all duration-300 ${
-                      activeYear === group.year 
-                      ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] scale-105' 
-                      : 'bg-white/5 text-[#bfc1c3] hover:text-white hover:bg-white/10'
-                    }`}
+                    className={`px-6 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap border border-transparent
+                      ${String(activeYear) === String(group.year) 
+                        ? 'bg-[#3a3a3b] text-white shadow-lg border-white/10 scale-105' 
+                        : 'text-[#bfc1c3] hover:text-white hover:bg-white/5'
+                      }`}
                   >
                     {group.year}
                   </button>
                 ))}
-              </div>
+              </nav>
             </div>
 
             {/* Cards Section */}
-            <div className="year-section pt-10">
+            <div className="year-section pb-20">
               {activeGroup && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 justify-items-center">
                   {activeGroup.leads.map((lead) => (
                     <MemberCard 
                       key={lead._id}

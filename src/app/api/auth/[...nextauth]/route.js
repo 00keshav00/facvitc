@@ -33,7 +33,7 @@ export const authOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // 24 hours session duration (validity)
+    maxAge: 3600, // 1 hour token life
   },
   cookies: {
     sessionToken: {
@@ -43,7 +43,7 @@ export const authOptions = {
         sameSite: 'lax',
         path: '/',
         secure: process.env.NODE_ENV === 'production',
-        // Omitting maxAge makes it a "Session Cookie" (clears on browser close)
+        // Omitting maxAge and expires makes it a session-only cookie
       },
     },
   },

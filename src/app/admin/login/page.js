@@ -28,6 +28,7 @@ export default function Login() {
         return;
       }
 
+      sessionStorage.setItem('admin_session_active', 'true');
       window.location.href = '/admin';
     } catch (err) {
       setError(err.message || 'An unexpected error occurred.');

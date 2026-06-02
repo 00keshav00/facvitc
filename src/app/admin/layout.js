@@ -12,17 +12,29 @@ export default function AdminLayout({ children }) {
   const session = sessionData?.data;
   const status = sessionData?.status || 'loading';
 
-  // Protect all admin routes
+  // Strict Security: Logout on browser close or refresh (simulated via sessionStorage)
   React.useEffect(() => {
-    if (status === 'unauthenticated' && pathname !== '/admin/login') {
-      router.push('/admin/login');
+    // Check if we are on the client and status is loaded
+    if (typeof window !== 'undefined' && status !== 'loading') {
+      const isSessionFlagActive = sessionStorage.getItem('admin_session_active');
+      
+      if (status === 'authenticated') {
+        if (!isSessionFlagActive) {
+          // If authenticated but no sessionStorage flag, it's a new tab/fresh window
+          // Force logout to satisfy "login every time" requirement
+          signOut({ redirect: true, callbackUrl: '/admin/login' });
+        }
+      } else if (status === 'unauthenticated' && pathname !== '/admin/login') {
+        // If logged out and trying to access admin, redirect to login
+        router.push('/admin/login');
+      }
     }
   }, [status, pathname, router]);
 
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center h-screen bg-[#1a1a1a] text-[#e6e6e6]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white/20"></div>
       </div>
     );
   }
@@ -82,7 +94,10 @@ export default function AdminLayout({ children }) {
           </Link>
 
           <button 
-            onClick={() => signOut({ callbackUrl: '/admin/login' })}
+            onClick={() => {
+              sessionStorage.removeItem('admin_session_active');
+              signOut({ callbackUrl: '/admin/login' });
+            }}
             className="w-full text-left px-4 py-2 rounded-md text-red-400 hover:bg-red-400/10 transition-colors mt-4"
           >
             Logout
