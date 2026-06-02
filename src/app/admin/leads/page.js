@@ -19,7 +19,7 @@ export default function MembersAdmin() {
   }, []);
 
   useEffect(() => {
-    if (selectedYear || selectedYear === 'General') {
+    if (selectedYear) {
       fetchMembers();
     }
   }, [selectedYear]);
@@ -31,8 +31,6 @@ export default function MembersAdmin() {
       setYears(data);
       if (data.length > 0 && !selectedYear) {
         setSelectedYear(data[0].year);
-      } else if (data.length === 0 && !selectedYear) {
-        setSelectedYear('General');
       }
     } catch (err) {
       console.error(err);
@@ -42,12 +40,7 @@ export default function MembersAdmin() {
   const fetchMembers = async () => {
     setLoading(true);
     try {
-      let url = '/api/members';
-      if (selectedYear === 'General') {
-        url += '?type=General';
-      } else if (selectedYear) {
-        url += `?type=Lead&year=${selectedYear}`;
-      }
+      let url = `/api/members?type=Lead&year=${selectedYear}`;
       const res = await fetch(url);
       const json = await res.json();
       setMembers(json);
