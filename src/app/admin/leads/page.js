@@ -76,12 +76,16 @@ export default function MembersAdmin() {
   const handleDeleteYear = async (id, yearName) => {
     if (!confirm(`Are you sure you want to delete year ${yearName}? members will no longer be grouped under this year.`)) return;
     try {
-      const res = await console.log("Deleting year ID:", id); fetch(`/api/years/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/years/${id}`, { method: 'DELETE' });
       if (res.ok) {
         fetchYears();
+      } else {
+        const data = await res.json();
+        alert(`Delete failed: ${data.error || res.statusText}`);
       }
     } catch (err) {
-      alert('Delete failed');
+      console.error('Delete error:', err);
+      alert('Delete failed: Network error or server crash');
     }
   };
 
