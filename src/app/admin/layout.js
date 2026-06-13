@@ -19,7 +19,7 @@ export default function AdminLayout({ children }) {
       const isSessionFlagActive = sessionStorage.getItem('admin_session_active');
       
       if (status === 'authenticated') {
-        if (!isSessionFlagActive) {
+        if (!isSessionFlagActive && pathname !== '/admin/login') {
           // If authenticated but no sessionStorage flag, it's a new tab/fresh window
           // Force logout to satisfy "login every time" requirement
           signOut({ redirect: true, callbackUrl: '/admin/login' });
