@@ -3,7 +3,7 @@ import LeadYear from '@/models/LeadYear';
 import { NextResponse } from 'next/server';
 
 export async function DELETE(req, { params }) {
-  await dbConnect();
+  await dbConnect(); console.log("DELETE Params:", params);
   try {
     const { id } = params;
     await LeadYear.findByIdAndDelete(id);
@@ -14,7 +14,7 @@ export async function DELETE(req, { params }) {
 }
 
 export async function PUT(req, { params }) {
-  await dbConnect();
+  await dbConnect(); console.log("DELETE Params:", params);
   try {
     const { id } = params;
     const body = await req.json();
