@@ -76,7 +76,7 @@ export default function MembersAdmin() {
   const handleDeleteYear = async (id, yearName) => {
     if (!confirm(`Are you sure you want to delete year ${yearName}? members will no longer be grouped under this year.`)) return;
     try {
-      const res = await fetch(`/api/years/${id}`, { method: 'DELETE' });
+      const res = await console.log("Deleting year ID:", id); fetch(`/api/years/${id}`, { method: 'DELETE' });
       if (res.ok) {
         fetchYears();
       }
